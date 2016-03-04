@@ -24,16 +24,18 @@
 			                <tr>
 			                    <td><a href="{{ url('account', $item->id) }}">{{ $item->rekeningnummer }}</a></td><td>{{ $item->omschrijving }}</td><td>{{ $item->bank }}</td>
 			                    <td>
-			                        <a href="{{ url('account/' . $item->id . '/edit') }}">
-			                            <button type="submit" class="btn btn-primary btn-xs">Update</button>
-			                        </a> /
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
 			                            'url' => ['account', $item->id],
 			                            'style' => 'display:inline',
 			                            'data-confirm' => 'Are you sure you want to delete this item?'
 			                        ]) !!}
-			                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
+				                    	<div class="btn-group btn-group-xs">
+					                        <a class="btn btn-default btn-xs" href="{{ url('account/' . $item->id . '/edit') }}">
+					                            <i class="fa fa-fw fa-pencil"></i>
+					                        </a>
+				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
+					                    </div>
 			                        {!! Form::close() !!}
 			                    </td>
 			                </tr>

@@ -20,22 +20,22 @@
 			                </tr>
 			            </thead>
 			            <tbody>
-			            {{-- */$x=0;/* --}}
 			            @foreach($workinghours as $item)
-			                {{-- */$x++;/* --}}
 			                <tr>
 			                    <td><a href="{{ url('workinghours', $item->id) }}">{{ $item->datum }}</a></td><td>{{ $item->begintijd }}</td><td>{{ $item->eindtijd }}</td>
 			                    <td>
-			                        <a href="{{ url('workinghours/' . $item->id . '/edit') }}">
-			                            <button type="submit" class="btn btn-primary btn-xs">Update</button>
-			                        </a> /
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
-			                            'url' => ['workinghours', $item->id],
+			                            'url' => ['workinghours/', $item->id],
 			                            'style' => 'display:inline',
 			                            'data-confirm' => 'Are you sure you want to delete this item?'
 			                        ]) !!}
-			                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
+				                    	<div class="btn-group btn-group-xs">
+					                        <a class="btn btn-default btn-xs" href="{{ url('workinghours/' . $item->id . '/edit') }}">
+					                            <i class="fa fa-fw fa-pencil"></i>
+					                        </a>
+				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
+					                    </div>
 			                        {!! Form::close() !!}
 			                    </td>
 			                </tr>
