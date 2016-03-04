@@ -2,9 +2,10 @@
 
 namespace Weboffice;
 
+use Baum\Node;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Post extends Node
 {
 
     /**
@@ -21,6 +22,21 @@ class Post extends Model
      */
     protected $fillable = ['nummer', 'omschrijving', 'percentage_aftrekbaar', 'post_type_id'];
 
+    /**
+     * Column name for the right index.
+     *
+     * @var string
+     */
+    protected $rightColumn = 'rght';
+    
+    /**
+     * Column to perform the default sorting
+     *
+     * @var string
+     */
+    protected $orderColumn = 'nummer';
+    
+    
     /**
      * Returns a description for the current post
      * @return string

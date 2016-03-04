@@ -4,53 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "53246f795f285eeefa914a86adb7d220",
-    "content-hash": "f758912c97af39005050465a79210047",
+    "hash": "5d15194895cd38814a695b74accd3d50",
+    "content-hash": "205394e82286577aea52b0f712b6286b",
     "packages": [
-        {
-            "name": "appzcoder/crud-generator",
-            "version": "v1.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/appzcoder/crud-generator.git",
-                "reference": "4363192ba2c910057088a48a42fecd719eb0c262"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/appzcoder/crud-generator/zipball/4363192ba2c910057088a48a42fecd719eb0c262",
-                "reference": "4363192ba2c910057088a48a42fecd719eb0c262",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "~5.1",
-                "php": ">=5.5.9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Appzcoder\\CrudGenerator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sohel Amin",
-                    "email": "sohelamincse@gmail.com",
-                    "homepage": "http://www.appzcoder.com"
-                }
-            ],
-            "description": "Laravel 5 CRUD Generator",
-            "keywords": [
-                "crud",
-                "crud generator",
-                "laravel",
-                "laravel crud generator"
-            ],
-            "time": "2016-02-06 19:14:18"
-        },
         {
             "name": "classpreloader/classpreloader",
             "version": "3.0.0",
@@ -204,6 +160,66 @@
                 "string"
             ],
             "time": "2015-11-06 14:35:42"
+        },
+        {
+            "name": "gazsp/baum",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gazsp/baum.git",
+                "reference": "f7cbbf06832acc4162ec12f6b026264f8b24d8f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gazsp/baum/zipball/f7cbbf06832acc4162ec12f6b026264f8b24d8f1",
+                "reference": "f7cbbf06832acc4162ec12f6b026264f8b24d8f1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "5.2.*",
+                "illuminate/database": "5.2.*@dev",
+                "illuminate/events": "5.2.*",
+                "illuminate/filesystem": "5.2.*",
+                "illuminate/support": "5.2.*",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "d11wtq/boris": "~1.0.10",
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "4.*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Baum": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Estanislau Trepat",
+                    "email": "estanis@etrepat.com",
+                    "homepage": "http://etrepat.com"
+                },
+                {
+                    "name": "Gary Pearman",
+                    "email": "gaz@red-robot.co.uk",
+                    "homepage": "http://red-robot.co.uk"
+                }
+            ],
+            "description": "Baum is an implementation of the Nested Set pattern for Eloquent models.",
+            "keywords": [
+                "database",
+                "eloquent",
+                "laravel",
+                "laravel 5",
+                "nested set"
+            ],
+            "time": "2016-01-05 22:13:11"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1877,6 +1893,50 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "appzcoder/crud-generator",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/appzcoder/crud-generator.git",
+                "reference": "4363192ba2c910057088a48a42fecd719eb0c262"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/appzcoder/crud-generator/zipball/4363192ba2c910057088a48a42fecd719eb0c262",
+                "reference": "4363192ba2c910057088a48a42fecd719eb0c262",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.1",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Appzcoder\\CrudGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sohel Amin",
+                    "email": "sohelamincse@gmail.com",
+                    "homepage": "http://www.appzcoder.com"
+                }
+            ],
+            "description": "Laravel 5 CRUD Generator",
+            "keywords": [
+                "crud",
+                "crud generator",
+                "laravel",
+                "laravel crud generator"
+            ],
+            "time": "2016-02-06 19:14:18"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",

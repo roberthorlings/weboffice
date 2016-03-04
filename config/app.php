@@ -154,6 +154,11 @@ return [
     	Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
     	Collective\Html\HtmlServiceProvider::class,
     		
+    	/*
+    	 * Nested sets
+    	 */
+    	Baum\Providers\BaumServiceProvider::class,
+    		
         /*
          * Application Service Providers...
          */
