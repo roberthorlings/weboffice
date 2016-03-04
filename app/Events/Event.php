@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace Weboffice\Events;
 
 abstract class Event
 {

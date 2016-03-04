@@ -148,13 +148,19 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+    	/*
+    	 * CRUD generation and HTML
+    	 */
+    	Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
+    	Collective\Html\HtmlServiceProvider::class,
+    		
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Weboffice\Providers\AppServiceProvider::class,
+        Weboffice\Providers\AuthServiceProvider::class,
+        Weboffice\Providers\EventServiceProvider::class,
+        Weboffice\Providers\RouteServiceProvider::class,
 
     ],
 
@@ -201,7 +207,9 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-
+    		
+    	'Form'      => Collective\Html\FormFacade::class,
+    	'HTML'      => Collective\Html\HtmlFacade::class,    		
     ],
 
 ];

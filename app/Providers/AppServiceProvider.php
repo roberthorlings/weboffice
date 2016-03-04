@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Weboffice\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
