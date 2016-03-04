@@ -1,0 +1,34 @@
+@extends('layouts/adminlte')
+
+@section('content')
+
+    {!! Form::model($%%crudNameSingular%%, [
+        'method' => 'PATCH',
+        'url' => ['%%routeGroup%%%%crudName%%', $%%crudNameSingular%%->id],
+        'class' => 'form-horizontal'
+    ]) !!}
+	<div class="box">
+	  <div class="box-header with-border">
+	    <h3 class="box-title">Edit %%modelName%%</h3>
+	  </div><!-- /.box-header -->
+	  <div class="box-body">
+
+		    %%formFieldsHtml%%
+		
+		    @if ($errors->any())
+		        <ul class="alert alert-danger">
+		            @foreach ($errors->all() as $error)
+		                <li>{{ $error }}</li>
+		            @endforeach
+		        </ul>
+		    @endif
+	    
+	  </div><!-- /.box-body -->
+	  <div class="box-footer">
+            {!! Form::submit('Update', ['class' => 'btn btn-primary form-control']) !!}
+	  </div><!-- box-footer -->
+	</div><!-- /.box -->
+
+    {!! Form::close() !!}
+
+@endsection
