@@ -30,11 +30,5 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');
 	Route::resource('post', 'PostController');
-});
-
-Route::group(['middleware' => ['web']], function () {
-	Route::resource('post', 'PostController');
-});
-Route::group(['middleware' => ['web']], function () {
-	Route::resource('post', 'PostController');
+	Route::resource('account', 'AccountController');
 });
