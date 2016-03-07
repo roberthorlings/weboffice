@@ -25,24 +25,30 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
+        
+        <li>
+          <a href="{{ url( 'workinghours' )}}">
+            <i class="fa fa-clock-o"></i> <span>Working hours</span>
+          </a>
+        </li>        
 
         <li class="active treeview">
           <a href="#">
             <i class="fa fa-eur"></i> <span>Finances</span> <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ url( 'transaction/index' )}}"><i class="fa fa-circle-o"></i> Transactions</a></li>
-            <li><a href="{{ url( 'entries/index' )}}"><i class="fa fa-circle-o"></i> Entries</a></li>
-            <li><a href="{{ url( 'results/index' )}}"><i class="fa fa-circle-o"></i> Results</a></li>
-            <li><a href="{{ url( 'balance/index' )}}"><i class="fa fa-circle-o"></i> Balance</a></li>
-            <li><a href="{{ url( 'amounts_due/index' )}}"><i class="fa fa-circle-o"></i> Amounts due</a></li>
+            <li><a href="{{ url( 'transaction' )}}"><i class="fa fa-circle-o"></i> Transactions</a></li>
+            <li><a href="{{ url( 'statement' )}}"><i class="fa fa-circle-o"></i> Statement</a></li>
+            <li><a href="{{ url( 'results' )}}"><i class="fa fa-circle-o"></i> Results</a></li>
+            <li><a href="{{ url( 'balance' )}}"><i class="fa fa-circle-o"></i> Balance</a></li>
+            <li><a href="{{ url( 'amounts_due' )}}"><i class="fa fa-circle-o"></i> Amounts due</a></li>
             
            	<li> 
                   <a href="#"><i class="fa fa-circle-o"></i> More <i class="fa fa-angle-left pull-right"></i></a>
                   <ul class="treeview-menu">
-		            <li><a href="{{ url( 'asset/index' )}}"><i class="fa fa-circle-o"></i> Assets</a></li>
-		            <li><a href="{{ url( 'ledger/index' )}}"><i class="fa fa-circle-o"></i> Ledgers</a></li>
-		            <li><a href="{{ url( 'travel/index' )}}"><i class="fa fa-circle-o"></i> Travel registration</a></li>
+		            <li><a href="{{ url( 'asset' )}}"><i class="fa fa-circle-o"></i> Assets</a></li>
+		            <li><a href="{{ url( 'ledger' )}}"><i class="fa fa-circle-o"></i> Ledgers</a></li>
+		            <li><a href="{{ url( 'travel' )}}"><i class="fa fa-circle-o"></i> Travel registration</a></li>
 		            <li><a href="{{ url( 'transaction/import' )}}"><i class="fa fa-circle-o"></i> Import</a></li>
                   </ul>
             </li>
@@ -54,8 +60,8 @@
             <i class="fa fa-file-text-o"></i> <span>Documents</span> <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ url( 'invoice/index' )}}"><i class="fa fa-circle-o"></i> Invoices</a></li>
-            <li><a href="{{ url( 'quote/index' )}}"><i class="fa fa-circle-o"></i> Quotes</a></li>
+            <li><a href="{{ url( 'invoice' )}}"><i class="fa fa-circle-o"></i> Invoices</a></li>
+            <li><a href="{{ url( 'quote' )}}"><i class="fa fa-circle-o"></i> Quotes</a></li>
             <li><a href="{{ url( 'invoice/project' )}}"><i class="fa fa-circle-o"></i> Add project invoice</a></li>
             <li><a href="{{ url( 'invoice/add' )}}"><i class="fa fa-circle-o"></i> Add normal invoice</a></li>
             
@@ -71,19 +77,13 @@
           </ul>
         </li>
         
-        <li>
-          <a href="{{ url( 'invoice/index' )}}">
-            <i class="fa fa-clock-o"></i> <span>Hours</span>
-          </a>
-        </li>        
-        
         <li class="treeview">
           <a href="#">
             <i class="fa fa-file-text-o"></i> <span>CRM</span> <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ url( 'relation/index' )}}"><i class="fa fa-circle-o"></i> Relations</a></li>
-            <li><a href="{{ url( 'project/index' )}}"><i class="fa fa-circle-o"></i> Projects</a></li>
+            <li><a href="{{ url( 'relation' )}}"><i class="fa fa-circle-o"></i> Relations</a></li>
+            <li><a href="{{ url( 'project' )}}"><i class="fa fa-circle-o"></i> Projects</a></li>
           </ul>
         </li>
                 
@@ -92,7 +92,7 @@
             <i class="fa fa-ellipsis-v"></i> <span>Other</span> <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{ url( 'export/index' )}}"><i class="fa fa-circle-o"></i> Export</a></li>
+            <li><a href="{{ url( 'export' )}}"><i class="fa fa-circle-o"></i> Export</a></li>
             <li><a href="{{ url( 'export/year/2015' )}}"><i class="fa fa-circle-o"></i> Overview 2015</a></li>
           </ul>
         </li>        

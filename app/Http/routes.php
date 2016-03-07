@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +24,10 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
+	// Home page
+	Route::get('/', 'DashboardController@index');
+	
+	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');
 	Route::resource('post', 'PostController');
@@ -42,4 +43,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('configuration', 'ConfigurationController');
 	Route::resource('statement', 'StatementController');
 	Route::resource('asset', 'AssetController');
+	
+	// Update the chosen date range
+	Route::post('/daterange', ['uses' => 'DashboardController@dateRange', 'as' => 'daterange']);	
 });

@@ -1,3 +1,7 @@
 @CHARSET "UTF-8";
 
+/* Remove margin from pagination buttons */
 .pagination-footer .pagination { margin-top: 0; margin-bottom: 0; }
+
+/* Date range picker */
+.date-range-button { color: white; }

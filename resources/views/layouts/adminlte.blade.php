@@ -20,6 +20,8 @@
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/iCheck/flat/blue.css") }}">
   
+  <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css") }}">
+  
   <!-- Custom css -->
   <link rel="stylesheet" href="{{ asset("/assets/css/weboffice.css") }}">
   
@@ -60,8 +62,7 @@
 <!-- jQuery 2.1.4 -->
 <script src="{{ asset ("/bower_components/admin-lte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script src="{{ asset ("/bower_components/admin-lte/plugins/jQueryUI/jquery-ui.min.js") }}"></script>
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
@@ -74,7 +75,26 @@
 <!-- FastClick -->
 <script src="plugins/fastclick/fastclick.js"></script>
 
+<!-- Date range picker scripts -->
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/daterangepicker/moment.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/daterangepicker/daterangepicker.js") }}"></script>
+
+<!-- Application specific scripts -->
 <script src="{{ asset ("/assets/js/modal-confirm.js") }}"></script>
+<script src="{{ asset ("/assets/js/date-range.js") }}"></script>
+
+<script type="text/javascript">
+    // date range picker configuration:
+    var dateRangeConfig = {
+        startDate: moment("{{ $daterangeStart->format('Y-m-d') }}"),
+        endDate: moment("{{ $daterangeEnd->format('Y-m-d') }}"),
+        linkTitle: "{{ $daterangeStart->toFormattedDateString() }} - {{ $daterangeEnd->toFormattedDateString() }}",
+        URL: "{{ route('daterange') }}",
+        firstDate: moment("{{ $daterangeFirst->format('Y-m-d') }}"),
+    };
+
+    var token = "{{ csrf_token() }}";
+</script>
 
 </body>
 </html>
