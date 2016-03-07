@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-
+	const STATUS_NIETBEGONNEN = 0;
+	const STATUS_OFFERTEVERSTUURD = 1;
+	const STATUS_ACTIEF = 2;
+	const STATUS_FACTUURVERSTUURD = 3;
+	const STATUS_AFGEROND = 4;
+	const STATUS_OFFERTEAFGEWEZEN = 5;
+	
     /**
      * The database table used by the model.
      *

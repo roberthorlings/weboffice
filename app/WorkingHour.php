@@ -20,7 +20,7 @@ class WorkingHour extends Model
      *
      * @var array
      */
-    protected $fillable = ['datum', 'begintijd', 'eindtijd', 'opmerkingen', 'kilometers', 'pauze'];
+    protected $fillable = ['datum', 'begintijd', 'eindtijd', 'opmerkingen', 'kilometers', 'pauze', 'relatie_id', 'project_id'];
     
     /**
      * Make sure the date is returned as Carbon object
@@ -121,6 +121,14 @@ class WorkingHour extends Model
     		case 'begintijd':
     		case 'eindtijd':
     			return $this->{$field}->format('Hi');
+    		case 'relation_project':
+    			if( $this->relatie_id && $this->project_id ) {
+    				return 'project.' . $this->relatie_id . '.' . $this->project_id;
+    			} elseif( $this->relatie_id ) {
+    				return 'klant.' . $this->relatie_id;
+    			} else {
+    				return null;
+    			}
     		default:
     			return $this->{$field};
     	}

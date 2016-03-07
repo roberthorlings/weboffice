@@ -82,6 +82,7 @@
 <!-- Application specific scripts -->
 <script src="{{ asset ("/assets/js/modal-confirm.js") }}"></script>
 <script src="{{ asset ("/assets/js/date-range.js") }}"></script>
+<script src="{{ asset ("/assets/js/relation-project-select.js") }}"></script>
 
 <script type="text/javascript">
     // date range picker configuration:

@@ -16,7 +16,7 @@
 			        <table class="table table-bordered table-striped table-hover">
 			            <thead>
 			                <tr>
-			                    <th>Datum</th><th>Duur</th><th>Klant</th><th>Opmerkingen</th><th>Actions</th>
+			                    <th>Datum</th><th>Duur</th><th>Klant</th><th>Opmerkingen</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>

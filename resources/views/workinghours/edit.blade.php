@@ -12,8 +12,13 @@
 	    <h3 class="box-title">Edit Workinghour</h3>
 	  </div><!-- /.box-header -->
 	  <div class="box-body">
-
-		                <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
+		    <div class="form-group">
+                {!! Form::label('relation_project', 'Klant: ', ['class' => 'col-sm-3 control-label']) !!}
+                <div class="col-sm-6">
+                    {!! Form::relationProjectSelect('relation_project', $relations, null, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+		    <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
                 {!! Form::label('datum', 'Datum: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {!! Form::text('datum', null, ['class' => 'form-control', 'required' => 'required']) !!}

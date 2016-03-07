@@ -3,6 +3,7 @@
 namespace Weboffice\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Form;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+		Form::component('relationProjectSelect', 'components.selectRelationProject', ['name', 'relations', 'value', 'attributes']);
     }
 
     /**

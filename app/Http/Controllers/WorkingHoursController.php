@@ -6,6 +6,8 @@ use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
 use Weboffice\WorkingHour;
+use Weboffice\Relation;
+use Weboffice\Repositories\RelationRepository;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
@@ -22,9 +24,11 @@ class WorkingHoursController extends Controller
     {
         $query = WorkingHour::orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
         
-        // Apply filtering
+        // Apply filtering on date
+        $query->where( 'datum', '>=', Session::get('start'));
+        $query->where( 'datum', '<=', Session::get('end'));
         
-        $workinghours = $query->paginate(15);
+        $workinghours = $query->paginate(30);
 
         return view('workinghours.index', compact('workinghours'));
     }
@@ -34,9 +38,10 @@ class WorkingHoursController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(RelationRepository $repository)
     {
-        return view('workinghours.create');
+    	$relations = $repository->getRelationsForWorkingHourEntry();
+    	return view('workinghours.create', compact( 'relations'));
     }
 
     /**
@@ -76,11 +81,14 @@ class WorkingHoursController extends Controller
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, RelationRepository $repository)
     {
         $workinghour = WorkingHour::findOrFail($id);
-
-        return view('workinghours.edit', compact('workinghour'));
+        
+        // Returns all relations, as otherwise the old registrations may not be valid anymore
+        $relations = $repository->getRelationsWithProjects(function($query) { return $query->where('type', '<>', Relation::TYPE_SUPPLIER); });
+        
+        return view('workinghours.edit', compact('workinghour', 'relations'));
     }
 
     /**
