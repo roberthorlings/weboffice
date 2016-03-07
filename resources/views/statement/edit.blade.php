@@ -34,18 +34,6 @@
                     {!! $errors->first('opmerkingen', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('actief') ? 'has-error' : ''}}">
-                {!! Form::label('actief', 'Actief: ', ['class' => 'col-sm-3 control-label']) !!}
-                <div class="col-sm-6">
-                                <div class="checkbox">
-                <label>{!! Form::radio('actief', '1') !!} Yes</label>
-            </div>
-            <div class="checkbox">
-                <label>{!! Form::radio('actief', '0', true) !!} No</label>
-            </div>
-                    {!! $errors->first('actief', '<p class="help-block">:message</p>') !!}
-                </div>
-            </div>
             <div class="form-group {{ $errors->has('transactie_id') ? 'has-error' : ''}}">
                 {!! Form::label('transactie_id', 'Transactie: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">

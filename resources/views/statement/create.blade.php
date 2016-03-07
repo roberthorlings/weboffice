@@ -30,29 +30,18 @@
                     {!! $errors->first('opmerkingen', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('actief') ? 'has-error' : ''}}">
-                {!! Form::label('actief', 'Actief: ', ['class' => 'col-sm-3 control-label']) !!}
-                <div class="col-sm-6">
-                                <div class="checkbox">
-                <label>{!! Form::radio('actief', '1') !!} Yes</label>
-            </div>
-            <div class="checkbox">
-                <label>{!! Form::radio('actief', '0', true) !!} No</label>
-            </div>
-                    {!! $errors->first('actief', '<p class="help-block">:message</p>') !!}
-                </div>
-            </div>
+            {!! Form::hidden('actief', '1') !!}
             <div class="form-group {{ $errors->has('transactie_id') ? 'has-error' : ''}}">
                 {!! Form::label('transactie_id', 'Transactie: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::select('transactie_id', $lists["transactie_id"], null, ['class' => 'form-control', ]) !!}
+                    {!! Form::select('transactie_id', $lists["transactie_id"], null, ['placeholder' => '', 'class' => 'form-control', ]) !!}
                     {!! $errors->first('transactie_id', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('activum_id') ? 'has-error' : ''}}">
                 {!! Form::label('activum_id', 'Activum: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::select('activum_id', $lists["activum_id"], null, ['class' => 'form-control', ]) !!}
+                    {!! Form::select('activum_id', $lists["activum_id"], null, ['placeholder' => '', 'class' => 'form-control', ]) !!}
                     {!! $errors->first('activum_id', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
