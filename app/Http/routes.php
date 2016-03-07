@@ -31,4 +31,15 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('posttype', 'PostTypeController');
 	Route::resource('post', 'PostController');
 	Route::resource('account', 'AccountController');
+	Route::resource('transaction', 'TransactionController');
+	Route::resource('relation', 'RelationController');
+	Route::resource('project', 'ProjectController');
+	Route::resource('saldo', 'SaldoController');
+	Route::resource('quote', 'QuoteController');
+	Route::resource('travelexpense', 'TravelExpenseController');
+	Route::resource('invoice', 'InvoiceController');
+	Route::resource('invoice', 'InvoiceController');
+	Route::resource('configuration', 'ConfigurationController');
+	Route::resource('statement', 'StatementController');
+	Route::resource('asset', 'AssetController');
 });

@@ -28,6 +28,16 @@ class Account extends Model
      */
     protected $dates = ['created_at', 'created_at', 'saldodatum'];
     
+
+    /**
+     * Returns a description for the current account
+     * @return string
+     */
+    public function getDescriptionAttribute()
+    {
+    	return $this->omschrijving . " (" . $this->rekeningnummer . ")";
+    }
+    
     /**
      * Get the saldodatum for forms, as it is by default returned as datetime
      *

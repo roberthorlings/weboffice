@@ -21,6 +21,16 @@ class WorkingHour extends Model
      */
     protected $fillable = ['datum', 'begintijd', 'eindtijd', 'opmerkingen', 'kilometers', 'pauze'];
 
+    /**
+     * Returns a description for the current working hour registration
+     * @return string
+     */
+    public function getDescriptionAttribute()
+    {
+    	return $this->relatie->bedrijfsnaam . " - " . $this->datum . " " . $this->begintijd;
+    }
+    
+    
     public function relatie() {
     	return $this->belongsTo('Weboffice\Relation', 'relatie_id');
     }
