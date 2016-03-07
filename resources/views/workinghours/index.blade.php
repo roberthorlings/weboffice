@@ -16,14 +16,21 @@
 			        <table class="table table-bordered table-striped table-hover">
 			            <thead>
 			                <tr>
-			                    <th>Datum</th><th>Begintijd</th><th>Eindtijd</th><th>Actions</th>
+			                    <th>Datum</th><th>Duur</th><th>Klant</th><th>Opmerkingen</th><th>Actions</th>
 			                </tr>
 			            </thead>
 			            <tbody>
 			            @foreach($workinghours as $item)
 			                <tr>
-			                    <td><a href="{{ url('workinghours', $item->id) }}">{{ $item->datum }}</a></td><td>{{ $item->begintijd }}</td><td>{{ $item->eindtijd }}</td>
 			                    <td>
+			                    	{{ $item->begintijd->format('d-m / H:i') }} - {{ $item->eindtijd->format('H:i') }} 
+			                    </td>
+			                    <td>
+			                    	{{ $item->duration->format("%H:%I") }}
+			                    </td>
+								<td><span class="relatie">{{ $item->relatie ? $item->relatie->bedrijfsnaam : '' }}</span> :: <span class="project">{{ $item->project ? $item->project->naam : ''}}</span></td>
+								<td>{{ str_limit($item->opmerkingen, 50, '...') }}</td>
+								<td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
 			                            'url' => ['workinghours/', $item->id],
@@ -44,7 +51,7 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $workinghours->render() !!} </div>
+			        <div class="pull-right"> {!! $workinghours->appends(Request::except('page'))->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->

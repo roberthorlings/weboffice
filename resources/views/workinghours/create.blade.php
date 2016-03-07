@@ -10,23 +10,23 @@
 	  <div class="box-body">
 
 		                <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
-                {!! Form::label('datum', 'Datum: ', ['class' => 'col-sm-3 control-label']) !!}
+                {!! Form::label('datum', 'Datum (ddmmyy): ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::date('datum', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                    {!! Form::text('datum', null, ['class' => 'form-control', 'required' => 'required']) !!}
                     {!! $errors->first('datum', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('begintijd') ? 'has-error' : ''}}">
                 {!! Form::label('begintijd', 'Begintijd: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::input('time', 'begintijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                    {!! Form::text('begintijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
                     {!! $errors->first('begintijd', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('eindtijd') ? 'has-error' : ''}}">
                 {!! Form::label('eindtijd', 'Eindtijd: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::input('time', 'eindtijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                    {!! Form::text('eindtijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
                     {!! $errors->first('eindtijd', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>

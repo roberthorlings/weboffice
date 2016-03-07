@@ -20,7 +20,11 @@ class WorkingHoursController extends Controller
      */
     public function index()
     {
-        $workinghours = WorkingHour::paginate(15);
+        $query = WorkingHour::orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
+        
+        // Apply filtering
+        
+        $workinghours = $query->paginate(15);
 
         return view('workinghours.index', compact('workinghours'));
     }
