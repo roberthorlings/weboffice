@@ -54,7 +54,16 @@ class WorkingHoursController extends Controller
     {
         $this->validate($request, ['datum' => 'required', 'begintijd' => 'required', 'eindtijd' => 'required', ]);
 
-        WorkingHour::create($request->all());
+        $workinghour = WorkingHour::create($request->all());
+
+        // Check whether the travel expense should be handled
+        // There should only be a travel expense input if distance > 0
+        $travelExpenseInput = $request->get('TravelExpense');
+        if(array_key_exists('afstand', $travelExpenseInput) && $travelExpenseInput['afstand'] > 0) {
+       		$travelExpense = new TravelExpense();
+       		$travelExpense->fill($travelExpenseInput);
+       		$workinghour->travelExpense()->save($travelExpense);
+        }        
 
         Session::flash('flash_message', 'WorkingHour added!');
 
@@ -107,6 +116,21 @@ class WorkingHoursController extends Controller
         $workinghour = WorkingHour::findOrFail($id);
         $workinghour->update($request->all());
 
+        // Check whether the travel expense should be handled
+        // There should only be a travel expense input if distance > 0
+        $travelExpenseInput = $request->get('TravelExpense');
+        if(array_key_exists('afstand', $travelExpenseInput) && $travelExpenseInput['afstand'] > 0) {
+        	if(!$workinghour->travelExpense) {
+        		$travelExpense = new TravelExpense();
+        		$travelExpense->fill($travelExpenseInput);
+        		$workinghour->travelExpense()->save($travelExpense);
+        	} else {
+        		$workinghour->travelExpense->update($travelExpenseInput);
+        	}
+        } else if( $workinghour->travelExpense ) {
+        	$workinghour->travelExpense->delete();
+        }
+        
         Session::flash('flash_message', 'WorkingHour updated!');
 
         return redirect('workinghours');
