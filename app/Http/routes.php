@@ -27,6 +27,12 @@ Route::group(['middleware' => ['web']], function () {
 	// Home page
 	Route::get('/', 'DashboardController@index');
 	
+	// Show the self relation (optionally as JSON)
+	Route::get('relation/self', 'RelationController@getSelf');
+
+	// Update the chosen date range
+	Route::post('/daterange', ['uses' => 'DashboardController@dateRange', 'as' => 'daterange']);
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');
@@ -43,7 +49,4 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('configuration', 'ConfigurationController');
 	Route::resource('statement', 'StatementController');
 	Route::resource('asset', 'AssetController');
-	
-	// Update the chosen date range
-	Route::post('/daterange', ['uses' => 'DashboardController@dateRange', 'as' => 'daterange']);	
 });

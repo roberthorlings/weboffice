@@ -9,6 +9,7 @@ use Weboffice\Relation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use AppConfig;
 
 class RelationController extends Controller
 {
@@ -61,11 +62,15 @@ class RelationController extends Controller
      *
      * @return Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         $relation = Relation::findOrFail($id);
 
-        return view('relation.show', compact('relation'));
+        if($request->wantsJson()) {
+        	return response()->json($relation);
+        } else {
+        	return view('relation.show', compact('relation'));
+        }
     }
 
     /**
@@ -119,4 +124,10 @@ class RelationController extends Controller
         return redirect('relation');
     }
 
+    /**
+     * Returns the relation marked as self
+     */
+    public function getSelf(Request $request) {
+    	return $this->show(AppConfig::get('relatieSelf'), $request);
+    }
 }
