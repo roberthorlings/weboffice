@@ -28,12 +28,12 @@
 			                    <td>
 			                    	{{ $item->duration->format("%H:%I") }}
 			                    </td>
-								<td><span class="relatie">{{ $item->relatie ? $item->relatie->bedrijfsnaam : '' }}</span> :: <span class="project">{{ $item->project ? $item->project->naam : ''}}</span></td>
+								<td><span class="relatie">{{ $item->relation ? $item->relation->bedrijfsnaam : '' }}</span> :: <span class="project">{{ $item->project ? $item->project->naam : ''}}</span></td>
 								<td>{{ str_limit($item->opmerkingen, 50, '...') }}</td>
 								<td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
-			                            'url' => ['workinghours/', $item->id],
+			                            'url' => ['workinghours', $item->id],
 			                            'style' => 'display:inline',
 			                            'data-confirm' => 'Are you sure you want to delete this item?'
 			                        ]) !!}
@@ -41,7 +41,7 @@
 					                        <a class="btn btn-default btn-xs" href="{{ url('workinghours/' . $item->id . '/edit') }}">
 					                            <i class="fa fa-fw fa-pencil"></i>
 					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
+				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs']) !!}
 					                    </div>
 			                        {!! Form::close() !!}
 			                    </td>
