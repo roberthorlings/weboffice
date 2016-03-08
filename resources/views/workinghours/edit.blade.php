@@ -103,10 +103,10 @@
 	                </div>
 	            </div>	            
 			    <div class="form-group {{ $errors->has('TravelExpense[afstand]') ? 'has-error' : ''}}">
-	                {!! Form::label('TravelExpense[afstand]', 'Afstand: ', ['class' => 'col-sm-4 control-label']) !!}
+	                {!! Form::label('kilometers', 'Afstand: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::text('TravelExpense[afstand]', $travelExpense->afstand, ['class' => 'form-control travel-distance', 'required' => 'required']) !!}
-	                    {!! $errors->first('TravelExpense[afstand]', '<p class="help-block">:message</p>') !!}
+	                    {!! Form::text('kilometers', $travelExpense->afstand, ['class' => 'form-control travel-distance', 'required' => 'required']) !!}
+	                    {!! $errors->first('kilometers', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
 			    <div class="form-group {{ $errors->has('TravelExpense[km_begin]') ? 'has-error' : ''}}">

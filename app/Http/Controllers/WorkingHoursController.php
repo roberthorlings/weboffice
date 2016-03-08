@@ -59,8 +59,9 @@ class WorkingHoursController extends Controller
         // Check whether the travel expense should be handled
         // There should only be a travel expense input if distance > 0
         $travelExpenseInput = $request->get('TravelExpense');
-        if(array_key_exists('afstand', $travelExpenseInput) && $travelExpenseInput['afstand'] > 0) {
+        if($workinghour->kilometers > 0) {
        		$travelExpense = new TravelExpense();
+       		$travelExpense->afstand = $workinghour->kilometers;
        		$travelExpense->fill($travelExpenseInput);
        		$workinghour->travelExpense()->save($travelExpense);
         }        
@@ -119,7 +120,8 @@ class WorkingHoursController extends Controller
         // Check whether the travel expense should be handled
         // There should only be a travel expense input if distance > 0
         $travelExpenseInput = $request->get('TravelExpense');
-        if(array_key_exists('afstand', $travelExpenseInput) && $travelExpenseInput['afstand'] > 0) {
+        if($workinghour->kilometers > 0) {
+        	$travelExpenseInput['afstand'] = $workinghour->kilometers;
         	if(!$workinghour->travelExpense) {
         		$travelExpense = new TravelExpense();
         		$travelExpense->fill($travelExpenseInput);
