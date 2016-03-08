@@ -24,7 +24,7 @@
 			    <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
 	                {!! Form::label('datum', 'Datum (ddmmyy): ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-6">
-	                    {!! Form::text('datum', null, ['class' => 'form-control', 'required' => 'required']) !!}
+	                    {!! Form::text('datum', date('dm'), ['class' => 'form-control', 'required' => 'required']) !!}
 	                    {!! $errors->first('datum', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
@@ -90,35 +90,35 @@
 			    <div class="form-group {{ $errors->has('TravelExpense[van_naar]') ? 'has-error' : ''}}">
 	                {!! Form::label('TravelExpense[van_naar]', 'Van/naar: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::text('TravelExpense[van_naar]', null, ['class' => 'form-control', 'required' => 'required']) !!}
+	                    {!! Form::text('TravelExpense[van_naar]', null, ['class' => 'form-control']) !!}
 	                    {!! $errors->first('TravelExpense[van_naar]', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
 			    <div class="form-group {{ $errors->has('TravelExpense[bezoekadres]') ? 'has-error' : ''}}">
 	                {!! Form::label('TravelExpense[bezoekadres]', 'Bezoekadres: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::textarea('TravelExpense[bezoekadres]', null, ['class' => 'form-control visiting-address', 'required' => 'required', 'data-self-url' => url('relation/self')]) !!}
+	                    {!! Form::textarea('TravelExpense[bezoekadres]', null, ['class' => 'form-control visiting-address', 'data-self-url' => url('relation/self')]) !!}
 	                    {!! $errors->first('TravelExpense[bezoekadres]', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>	            
 			    <div class="form-group {{ $errors->has('TravelExpense[afstand]') ? 'has-error' : ''}}">
 	                {!! Form::label('kilometers', 'Afstand: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::text('kilometers', null, ['class' => 'form-control travel-distance', 'required' => 'required']) !!}
+	                    {!! Form::text('kilometers', null, ['class' => 'form-control travel-distance']) !!}
 	                    {!! $errors->first('kilometers', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
 			    <div class="form-group {{ $errors->has('TravelExpense[km_begin]') ? 'has-error' : ''}}">
 	                {!! Form::label('TravelExpense[km_begin]', 'Beginstand km: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::text('TravelExpense[km_begin]', null, ['class' => 'form-control travel-start', 'required' => 'required']) !!}
+	                    {!! Form::text('TravelExpense[km_begin]', null, ['class' => 'form-control travel-start']) !!}
 	                    {!! $errors->first('TravelExpense[km_begin]', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
 			    <div class="form-group {{ $errors->has('TravelExpense[km_eind]') ? 'has-error' : ''}}">
 	                {!! Form::label('TravelExpense[km_eind]', 'Eindstand km: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::text('TravelExpense[km_eind]', null, ['class' => 'form-control travel-end', 'required' => 'required']) !!}
+	                    {!! Form::text('TravelExpense[km_eind]', null, ['class' => 'form-control travel-end']) !!}
 	                    {!! $errors->first('TravelExpense[km_eind]', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
