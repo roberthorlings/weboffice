@@ -11,6 +11,7 @@ use Weboffice\Repositories\RelationRepository;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
+use Weboffice\TravelExpense;
 
 class WorkingHoursController extends Controller
 {
@@ -83,12 +84,13 @@ class WorkingHoursController extends Controller
      */
     public function edit($id, RelationRepository $repository)
     {
-        $workinghour = WorkingHour::findOrFail($id);
+        $workinghour = WorkingHour::with('travelExpense')->findOrFail($id);
+        $travelExpense = $workinghour->travelExpense ? $workinghour->travelExpense : new TravelExpense();
         
         // Returns all relations, as otherwise the old registrations may not be valid anymore
         $relations = $repository->getRelationsWithProjects(function($query) { return $query->where('type', '<>', Relation::TYPE_SUPPLIER); });
         
-        return view('workinghours.edit', compact('workinghour', 'relations'));
+        return view('workinghours.edit', compact('workinghour', 'travelExpense', 'relations'));
     }
 
     /**

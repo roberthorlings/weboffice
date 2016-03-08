@@ -28,12 +28,17 @@ class WorkingHour extends Model
      */
     protected $dates = [ 'datum' ];
 
-    public function relatie() {
+    public function relation() {
     	return $this->belongsTo('Weboffice\Relation', 'relatie_id');
     }
     
     public function project() {
     	return $this->belongsTo('Weboffice\Project', 'project_id');
+    }
+    
+    public function travelExpense()
+    {
+    	return $this->hasOne('\Weboffice\TravelExpense', 'werktijd_id');
     }
     
     /**

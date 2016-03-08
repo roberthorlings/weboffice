@@ -25,6 +25,8 @@
   <!-- Custom css -->
   <link rel="stylesheet" href="{{ asset("/assets/css/weboffice.css") }}">
   
+  @yield('css')  
+  
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -83,6 +85,8 @@
 <script src="{{ asset ("/assets/js/modal-confirm.js") }}"></script>
 <script src="{{ asset ("/assets/js/date-range.js") }}"></script>
 <script src="{{ asset ("/assets/js/relation-project-select.js") }}"></script>
+
+@yield('js')  
 
 <script type="text/javascript">
     // date range picker configuration:
