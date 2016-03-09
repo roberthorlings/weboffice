@@ -21,17 +21,53 @@ class WorkingHoursController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(RelationRepository $repository, Request $request)
     {
-        $query = WorkingHour::orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
+        $filter = $this->getFilterFromRequest($request);
+        
+    	$query = WorkingHour::orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
         
         // Apply filtering on date
         $query->where( 'datum', '>=', Session::get('start'));
         $query->where( 'datum', '<=', Session::get('end'));
         
+        // Filter on project and relation as well
+        foreach(array_only($filter, ['relatie_id', 'project_id']) as $field => $value) {
+        	if($value) {
+        		$query->where($field, $value);
+        	}
+        }
+        
         $workinghours = $query->paginate(30);
-
-        return view('workinghours.index', compact('workinghours'));
+        $relations = $repository->getRelationsWithProjects();
+        
+        return view('workinghours.index', compact('workinghours', 'relations', 'filter'));
+    }
+    
+    /**
+     * 
+     * @param Request $request
+     */
+    protected function getFilterFromRequest(Request $request) {
+    	$relatieId = $request->input('relatie_id');
+    	$projectId = $request->input('project_id');
+    	
+    	$filter = [];
+    	
+    	if($relatieId) {
+    		$filter['relatie_id'] = $relatieId;
+    		
+    		// To handle project, a relatie_id is required as well
+    		if($projectId) {
+    			$filter['project_id'] = $projectId;
+    			$filter['relation_project'] = 'project.' . $relatieId . '.' . $projectId;
+    		} else {
+    			$filter['relation_project'] = 'klant.' . $relatieId;
+    		}
+    	}
+    	
+    	
+    	return $filter;
     }
 
     /**

@@ -56,6 +56,35 @@
             </div><!-- /.box -->
         </div><!-- /.col -->
         <div class='col-md-4 col-sm-12'>
+            <!-- Filter box -->
+            <div class="box">
+                {!! Form::model($filter, [
+                    'method'=>'GET',
+                    'url' => ['workinghours'],
+                ]) !!}
+                <div class="box-header with-border">
+                    <h3 class="box-title">Filter</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+				    <div class="form-group">
+		                {!! Form::label('relation_project', 'Klant: ', ['class' => 'col-sm-3 control-label']) !!}
+		                <div class="col-sm-6">
+		                    {!! Form::relationProjectSelect('', $relations, array_key_exists( 'relation_project', $filter ) ? $filter['relation_project'] : null, ['class' => 'form-control', 'placeholder' => '']) !!}
+		                </div>
+		            </div>
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+	                <div class="col-sm-6 col-sm-offset-3">
+	                    <button class="btn btn-primary" title="Filter"><i class="fa fa-filter"></i> Filter</button>
+	                </div>
+                </div>
+                {!! Form::close() !!}                	
+            </div><!-- /.box -->
+
             <!-- Box -->
             <div class="box">
                 <div class="box-header with-border">
