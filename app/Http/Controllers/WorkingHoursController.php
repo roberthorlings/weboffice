@@ -40,8 +40,9 @@ class WorkingHoursController extends Controller
         
         $workinghours = $query->paginate(30);
         $relations = $repository->getRelationsWithProjects();
+        $relationsForEntry = $repository->getRelationsForWorkingHourEntry();
         
-        return view('workinghours.index', compact('workinghours', 'relations', 'filter'));
+        return view('workinghours.index', compact('workinghours', 'relations', 'relationsForEntry', 'filter'));
     }
     
     /**
@@ -81,10 +82,19 @@ class WorkingHoursController extends Controller
      *
      * @return Response
      */
-    public function create(RelationRepository $repository)
+    public function create(RelationRepository $repository, Request $request)
     {
     	$relations = $repository->getRelationsForWorkingHourEntry();
-    	return view('workinghours.create', compact( 'relations'));
+    	
+    	// Default values can be supplied in the URL, when the user
+    	// is sent here from the index page
+    	$fields = ['relation_project', 'relatie_id', 'project_id', 'begintijd', 'eindtijd', 'pauze', 'opmerkingen'];
+    	$defaultValues = [];
+    	foreach($fields as $field) {
+    		$defaultValues[$field] = $request->get($field);
+    	}
+    	
+    	return view('workinghours.create', compact('relations', 'defaultValues'));
     }
 
     /**

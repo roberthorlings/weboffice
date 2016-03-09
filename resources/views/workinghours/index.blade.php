@@ -98,20 +98,57 @@
             </div><!-- /.box -->
 
             <!-- Box -->
+            {!! Form::open(['url' => 'workinghours', 'class' => 'form-horizontal', 'id' => 'add-registration']) !!}
+            {!! Form::hidden('datum', date('dm')) !!}
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add Workinghours</h3>
+                    <h3 class="box-title">Add registration today</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('workinghours/create') }}" class="btn btn-primary btn-sm">Add New Workinghour</a><br /><br />
-                	
-                	A form could be added here, although it is out of scope for scaffolding.
+				    <div class="form-group">
+		                {!! Form::label('relation_project', 'Klant: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
+		                    {!! Form::relationProjectSelect('relation_project', $relationsForEntry, null, ['class' => 'form-control']) !!}
+		                </div>
+		            </div>
+		            <div class="form-group {{ $errors->has('begintijd') ? 'has-error' : ''}}">
+		                {!! Form::label('begintijd', 'Tijd: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
+		                    {!! Form::text('begintijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
+		                </div>
+		            </div>
+		            <div class="form-group {{ $errors->has('eindtijd') ? 'has-error' : ''}}">
+		                {!! Form::label('eindtijd', 'Eindtijd: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
+		                    {!! Form::text('eindtijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
+		                </div>
+		            </div>
+		            <div class="form-group {{ $errors->has('pauze') ? 'has-error' : ''}}">
+		                {!! Form::label('pauze', 'Pauze: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
+		                    {!! Form::number('pauze', null, ['class' => 'form-control']) !!}
+		                </div>
+		            </div>
+		
+		            <div class="form-group {{ $errors->has('opmerkingen') ? 'has-error' : ''}}">
+		                {!! Form::label('opmerkingen', 'Opmerkingen: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
+		                    {!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
+		                </div>
+		            </div>
                 </div><!-- /.box-body -->
+                <div class="box-footer">
+                	<div class="col-sm-8 col-sm-offset-4">
+		            	{!! Form::submit('Create', ['class' => 'btn btn-primary']) !!}
+	                	<a href="{{ url('workinghours/create') }}" class="add-more-info btn btn-default">More info</a><br /><br />
+	                </div>
+                </div>
             </div><!-- /.box -->
+            {!! Form::close() !!}
         </div><!-- /.col -->
 
     </div><!-- /.row -->

@@ -17,7 +17,7 @@
 			    <div class="form-group">
 	                {!! Form::label('relation_project', 'Klant: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-6">
-	                    {!! Form::relationProjectSelect('relation_project', $relations, null, ['class' => 'form-control']) !!}
+	                    {!! Form::relationProjectSelect('relation_project', $relations, $defaultValues['relation_project'], ['class' => 'form-control']) !!}
 	                </div>
 	            </div>
 	
@@ -31,21 +31,21 @@
 	            <div class="form-group {{ $errors->has('begintijd') ? 'has-error' : ''}}">
 	                {!! Form::label('begintijd', 'Tijd: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-6">
-	                    {!! Form::text('begintijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
+	                    {!! Form::text('begintijd', $defaultValues['begintijd'], ['class' => 'form-control', 'required' => 'required']) !!}
 	                    {!! $errors->first('begintijd', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
 	            <div class="form-group {{ $errors->has('eindtijd') ? 'has-error' : ''}}">
 	                {!! Form::label('eindtijd', 'Eindtijd: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-6">
-	                    {!! Form::text('eindtijd', null, ['class' => 'form-control', 'required' => 'required']) !!}
+	                    {!! Form::text('eindtijd', $defaultValues['eindtijd'], ['class' => 'form-control', 'required' => 'required']) !!}
 	                    {!! $errors->first('eindtijd', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
 	            <div class="form-group {{ $errors->has('pauze') ? 'has-error' : ''}}">
 	                {!! Form::label('pauze', 'Pauze: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-6">
-	                    {!! Form::number('pauze', null, ['class' => 'form-control']) !!}
+	                    {!! Form::number('pauze', $defaultValues['pauze'], ['class' => 'form-control']) !!}
 	                    {!! $errors->first('pauze', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
@@ -53,7 +53,7 @@
 	            <div class="form-group {{ $errors->has('opmerkingen') ? 'has-error' : ''}}">
 	                {!! Form::label('opmerkingen', 'Opmerkingen: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-6">
-	                    {!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
+	                    {!! Form::textarea('opmerkingen', $defaultValues['opmerkingen'], ['class' => 'form-control']) !!}
 	                    {!! $errors->first('opmerkingen', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
