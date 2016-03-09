@@ -1,4 +1,7 @@
 @extends('layouts/adminlte')
+@section('js')
+	{{HTML::script(asset('/assets/js/workinghours.index.js'))}}
+@endsection
 
 @section('content')
     <div class='row'>
@@ -61,6 +64,7 @@
                 {!! Form::model($filter, [
                     'method'=>'GET',
                     'url' => ['workinghours'],
+                    'id' => 'filter-workinghours'
                 ]) !!}
                 <div class="box-header with-border">
                     <h3 class="box-title">Filter</h3>
@@ -71,8 +75,16 @@
                 </div>
                 <div class="box-body">
 				    <div class="form-group">
-		                {!! Form::label('relation_project', 'Klant: ', ['class' => 'col-sm-3 control-label']) !!}
-		                <div class="col-sm-6">
+		                {!! Form::label('period', 'Period: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
+		                    {!! Form::text('period', $filter['start']->format( 'd-m-Y') . ' - ' . $filter['end']->format( 'd-m-Y'), ['class' => 'form-control date-range-input', 'readonly' => 'readonly', 'data-selector-start' => '#filter-period-start', 'data-selector-end' => '#filter-period-end'] ) !!}
+		                    {!! Form::hidden('start', $filter['start']->format( 'Y-m-d'), ['id' => 'filter-period-start'] ) !!}
+		                    {!! Form::hidden('end', $filter['end']->format( 'Y-m-d'), ['id' => 'filter-period-end'] ) !!}
+		                </div>
+		            </div>
+				    <div class="form-group">
+		                {!! Form::label('relation_project', 'Klant: ', ['class' => 'col-sm-4 control-label']) !!}
+		                <div class="col-sm-8">
 		                    {!! Form::relationProjectSelect('', $relations, array_key_exists( 'relation_project', $filter ) ? $filter['relation_project'] : null, ['class' => 'form-control', 'placeholder' => '']) !!}
 		                </div>
 		            </div>

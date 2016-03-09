@@ -28,8 +28,8 @@ class WorkingHoursController extends Controller
     	$query = WorkingHour::orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
         
         // Apply filtering on date
-        $query->where( 'datum', '>=', Session::get('start'));
-        $query->where( 'datum', '<=', Session::get('end'));
+        $query->where( 'datum', '>=', $filter['start']);
+        $query->where( 'datum', '<=', $filter['end']);
         
         // Filter on project and relation as well
         foreach(array_only($filter, ['relatie_id', 'project_id']) as $field => $value) {
@@ -51,8 +51,14 @@ class WorkingHoursController extends Controller
     protected function getFilterFromRequest(Request $request) {
     	$relatieId = $request->input('relatie_id');
     	$projectId = $request->input('project_id');
-    	
-    	$filter = [];
+		$start = new Carbon($request->input('start', Session::get('start')));    	
+		$end  = new Carbon($request->input('end', Session::get('end')));
+		
+		// Build filter to use
+    	$filter = [
+    		'start' => $start,
+    		'end' => $end
+    	];
     	
     	if($relatieId) {
     		$filter['relatie_id'] = $relatieId;
