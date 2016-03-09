@@ -90,7 +90,7 @@
 		            </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
-	                <div class="col-sm-6 col-sm-offset-3">
+	                <div class="col-sm-8 col-sm-offset-4">
 	                    <button class="btn btn-primary" title="Filter"><i class="fa fa-filter"></i> Filter</button>
 	                </div>
                 </div>
