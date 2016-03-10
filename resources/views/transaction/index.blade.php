@@ -13,32 +13,15 @@
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered table-striped table-hover">
+			        <table class="table table-bordered transactions">
 			            <thead>
 			                <tr>
-			                    <th>Omschrijving</th><th>Bedrag</th><th>Datum</th><th>Actions</th>
+			                    <th>Datum</th><th>Rekening</th><th>Omschrijving</th><th class="amount">Bedrag</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
-			            @foreach($transaction as $item)
-			                <tr>
-			                    <td><a href="{{ url('transaction', $item->id) }}">{{ $item->omschrijving }}</a></td><td>{{ $item->bedrag }}</td><td>{{ $item->datum }}</td>
-			                    <td>
-			                        {!! Form::open([
-			                            'method'=>'DELETE',
-			                            'url' => ['transaction', $item->id],
-			                            'style' => 'display:inline',
-			                            'data-confirm' => 'Are you sure you want to delete this item?'
-			                        ]) !!}
-				                    	<div class="btn-group btn-group-xs">
-					                        <a class="btn btn-default btn-xs" href="{{ url('transaction/' . $item->id . '/edit') }}">
-					                            <i class="fa fa-fw fa-pencil"></i>
-					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
-					                    </div>
-			                        {!! Form::close() !!}
-			                    </td>
-			                </tr>
+			            @foreach($transaction as $idx => $item)
+			            	@include('transaction/partials/transactionRow')
 			            @endforeach
 			            </tbody>
 			        </table>

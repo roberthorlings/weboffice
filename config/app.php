@@ -166,7 +166,8 @@ return [
         Weboffice\Providers\AuthServiceProvider::class,
         Weboffice\Providers\EventServiceProvider::class,
         Weboffice\Providers\RouteServiceProvider::class,
-
+    	Weboffice\Providers\TemplateServiceProvider::class,
+    		
     ],
 
     /*

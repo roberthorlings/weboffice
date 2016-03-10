@@ -6,6 +6,18 @@
 /* Date range picker */
 .date-range-button { color: white; }
 
+/* Generic styles */
+.post-number { color: #aaa; display: inline-block; width: 30px; }
+.post-description { color: #367fa9; }
+
 /* Working hours overview */
 .relatie { color: #00a65a; }
 .project { color: #367fa9; }
+
+/* Transactions overview */
+.transactions .amount { text-align: right; }
+.transactions .amount.negative { color: red; }
+.transactions .amount.positive { color: green; }
+.transactions .not-booked-yet { color: grey; }
+.transactions .splitted .amount { color: grey; }
+.transactions tr.odd { background-color: #f9f9f9; }

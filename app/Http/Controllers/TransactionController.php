@@ -20,7 +20,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transaction = Transaction::paginate(15);
+        $transaction = Transaction::with(['Statement', 'Statement.StatementLines', 'Statement.StatementLines.Post'])->paginate(15);
 
         return view('transaction.index', compact('transaction'));
     }
