@@ -18,6 +18,22 @@
 .transactions .amount { text-align: right; }
 .transactions .amount.negative { color: red; }
 .transactions .amount.positive { color: green; }
-.transactions .not-booked-yet { color: grey; }
-.transactions .splitted .amount { color: grey; }
+
+/* Transactions not booked yet are grey */ 
+.transactions .not-booked-yet td { color: grey; }
+.transactions .not-booked-yet .amount { color: grey; }
+
+/* Alternate colors per transaction */
 .transactions tr.odd { background-color: #f9f9f9; }
+
+/* Mark not balanced transactions */
+.transactions tr.not-balanced,
+input.not-balanced { background: repeating-linear-gradient(135deg, rgba(188,96,96,0.6), rgba(188,96,96,0.6) 10px, rgba(152,70,70,0.6) 10px, rgba(152,70,70,0.6) 20px); }
+
+/* Proper line breaks in every line */
+.transactions td { white-space: nowrap; }
+.transactions td.description { white-space: normal; }
+.transactions td.buttons { min-width: 80px; }
+
+/* Transaction edit form */
+.statement-total-amount { font-weight: bold; }

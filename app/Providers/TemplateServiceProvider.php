@@ -20,7 +20,7 @@ class TemplateServiceProvider extends ServiceProvider
     	
     	// Register directive to show the amount
     	Blade::directive('amount', function($expression) {
-    		return "&euro; <?php echo number_format((" . $expression . ") / 100, 2, ',', '.'); ?>";
+    		return "&euro; <?php echo number_format((" . $expression . "), 2, ',', '.'); ?>";
     	});
 
    		// Register directive to show a post description

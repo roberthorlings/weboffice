@@ -58,5 +58,20 @@ class Transaction extends Model
 		// The second line represents the post for the transaction
 		return $this->Statement->StatementLines[1]->Post;
 	}
+	
+	/**
+	 * Accessor for amount
+	 */
+	public function getBedragAttribute($value) {
+		return round($value / 100, 2);
+	}
+	
+	/**
+	 * Mutator for amount
+	 */
+	public function setBedragAttribute($amount) {
+		$this->attributes['bedrag' ] = $amount * 100;
+	}
+	
     
 }

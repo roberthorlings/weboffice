@@ -46,4 +46,17 @@ class StatementLine extends Model
     	return ( $this->credit ? 1 : -1 ) * $this->bedrag;
     }
     
+    /**
+     * Accessor for amount
+     */
+    public function getBedragAttribute($value) {
+    	return round($value) / 100;
+    }
+    
+    /**
+     * Mutator for amount
+     */
+    public function setBedragAttribute($amount) {
+    	$this->attributes['bedrag' ] = $amount * 100;
+    }    
 }
