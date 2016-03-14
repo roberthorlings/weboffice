@@ -159,10 +159,15 @@ return [
     	 */
     	Baum\Providers\BaumServiceProvider::class,
     		
-   		/**
+   		/*
    		 * Easy flash messages
    		 */
     	Laracasts\Flash\FlashServiceProvider::class,
+
+    	/*
+    	 * Debugbar to debug laravel
+    	 */
+    	Barryvdh\Debugbar\ServiceProvider::class,    		
     		
         /*
          * Application Service Providers...
