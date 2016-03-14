@@ -2,6 +2,7 @@
 
 namespace Weboffice;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Statement extends Model
@@ -62,6 +63,20 @@ class Statement extends Model
     	
     	return abs($sum['credit'] - $sum['debet']) < 0.005;
     }
+    
+    /**
+     * Scope to filter transactions to be booked on a specific post
+     * @param unknown $postId
+     */
+    public function scopeBookedOnPost($query, $postId) {
+    	return $query->whereExists(function ($subQuery) use ($postId) {
+    		$subQuery->select(DB::raw(1))
+    		->from('boeking_delen')
+    		->whereRaw('boeking_delen.boeking_id = boekingen.id')
+    		->where('boeking_delen.post_id', $postId);
+    	});
+    }
+        
     
     /**
      * Handle updating a statement line, as edited by the user. 

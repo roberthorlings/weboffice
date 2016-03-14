@@ -10,6 +10,9 @@
 .post-number { color: #aaa; display: inline-block; width: 30px; }
 .post-description { color: #367fa9; }
 
+/* Alternate colors */
+table tbody tr.odd { background-color: #f9f9f9; }
+
 /* Working hours overview */
 .relatie { color: #00a65a; }
 .project { color: #367fa9; }
@@ -23,9 +26,6 @@
 .transactions .not-booked-yet td { color: grey; }
 .transactions .not-booked-yet .amount { color: grey; }
 
-/* Alternate colors per transaction */
-.transactions tr.odd { background-color: #f9f9f9; }
-
 /* Mark not balanced transactions */
 .transactions tr.not-balanced,
 input.not-balanced { background: repeating-linear-gradient(135deg, rgba(188,96,96,0.6), rgba(188,96,96,0.6) 10px, rgba(152,70,70,0.6) 10px, rgba(152,70,70,0.6) 20px); }
@@ -37,3 +37,9 @@ input.not-balanced { background: repeating-linear-gradient(135deg, rgba(188,96,9
 
 /* Transaction edit form */
 .statement-total-amount { font-weight: bold; }
+
+/* Statement overview */
+table.statements tbody tr td { border-width: 0; }
+.header-line td { font-weight: bold;  }
+.statements .remarks { max-width: 200px; color: grey; font-weight: normal; }
+.statements .detail-line td { font-size: 0.9em; padding-top: 2px; padding-bottom: 2px; }

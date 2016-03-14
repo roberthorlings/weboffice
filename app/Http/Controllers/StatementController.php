@@ -4,8 +4,10 @@ namespace Weboffice\Http\Controllers;
 
 use Weboffice\Http\Controllers\Controller;
 
+use Carbon\Carbon;
 use Flash;
 use Illuminate\Http\Request;
+use Session;
 use Weboffice\Statement;
 
 
@@ -17,11 +19,24 @@ class StatementController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $statement = Statement::paginate(15);
-
-        return view('statement.index', compact('statement'));
+    	$filter = $this->getFilterFromRequest($request);
+    	
+    	$query = Statement::with('StatementLines')->orderBy('datum', 'desc');
+    	
+    	// Apply filtering on date
+    	$query->where( 'datum', '>=', $filter['start']);
+    	$query->where( 'datum', '<=', $filter['end']);
+    	
+    	// Filter on project and relation as well
+    	if(array_key_exists('post_id', $filter)) {
+    		$query->bookedOnPost($filter['post_id']);
+    	}
+    	
+    	$statement = $query->paginate(15);
+    	
+        return view('statement.index', compact('statement', 'filter'));
     }
 
     /**
@@ -117,5 +132,27 @@ class StatementController extends Controller
 
         return redirect('statement');
     }
+    
+
+    /**
+     *
+     * @param Request $request
+     */
+    protected function getFilterFromRequest(Request $request) {
+    	$postId = $request->input('post_id');
+    	$start = new Carbon($request->input('start', Session::get('start')));
+    	$end  = new Carbon($request->input('end', Session::get('end')));
+    
+    	// Build filter to use
+    	$filter = [
+    			'start' => $start,
+    			'end' => $end
+    	];
+    		
+    	if($postId)
+    		$filter['post_id'] = $postId;
+    
+    		return $filter;
+    }    
 
 }
