@@ -21,7 +21,7 @@
 			            </thead>
 			            <tbody>
 			            @foreach($transaction as $idx => $item)
-			            	@include('transaction/partials/transactionRow')
+			            	@include('transaction/partials/transaction-row')
 			            @endforeach
 			            </tbody>
 			        </table>

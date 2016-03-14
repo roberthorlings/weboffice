@@ -33,6 +33,20 @@ Route::group(['middleware' => ['web']], function () {
 	// Update the chosen date range
 	Route::post('/daterange', ['uses' => 'DashboardController@dateRange', 'as' => 'daterange']);
 	
+	// Assign transactions to statements
+	Route::get('transaction/{id}/assign/invoice', 'TransactionController@invoice');
+	Route::post('transaction/{id}/store_invoice', 'TransactionController@store_invoice');
+	Route::get('transaction/{id}/assign/transfer', 'TransactionController@edit');
+	Route::get('transaction/{id}/assign/private', 'TransactionController@edit');
+	Route::get('transaction/{id}/assign/costs_with_vat', 'TransactionController@costs_with_vat');
+	
+	// Transaction without VAT or other is just the edit form.
+	Route::get('transaction/{id}/assign/costs_without_vat', 'TransactionController@edit');
+	Route::get('transaction/{id}/assign', 'TransactionController@edit');
+	
+	/* Delete the statement belonging to a transaction */
+	Route::delete('transaction/{id}/statement', 'TransactionController@deleteStatement');
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');

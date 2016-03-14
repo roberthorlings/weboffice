@@ -62,5 +62,66 @@ class Statement extends Model
     	
     	return abs($sum['credit'] - $sum['debet']) < 0.005;
     }
+    
+    /**
+     * Handle updating a statement line, as edited by the user. 
+     * Only lines with a non-zero amount and proper postId are stored.
+     * 
+     * @param unknown $id		Existing ID for the statement line. If none is given, a new one will be created
+     * @param boolean $credit	Should the line be credited or not. Only used for new lines, otherwise the sign of the original line is used
+     * @param unknown $amount	Amount in euros to store.
+     * @param unknown $postId	ID of the post to associate the statementline with.
+     * @param unknown $saldoId	ID of the saldo to associate the statementline with.
+     * @return StatementLine	The StatementLine object or null if no proper data was specified.
+     */
+    public function updateLine($id, $credit, $amount, $postId, $saldoId = null) {
+    	$line = null;
+    	
+    	// If ID is specified, reuse existing line
+    	if($id) {
+    		$line = StatementLine::find($id);
+    	}
+
+    	// If no amount is specified, don't store anything (or delete existing)
+    	if( !$amount || !$postId ) {
+    		if($line && $line->id)
+    			$line->delete();
+    			 
+    		return null;
+    	}
+    	 
+    	// If no or invalid id was specified, create a new line
+    	if(!$line) {
+    		$line = new StatementLine();
+    		$line->credit = $credit; 
+    	}
+    	
+    	// Update line properites
+    	$line->bedrag = $amount;
+    	$line->post_id = $postId;
+    	
+    	if($saldoId) {
+    		$line->saldo_id = $saldoId;
+    	}
+    	 
+    	// Save the line itself
+    	$this->StatementLines()->save($line);
+    	 
+    	return $line;
+    }
+    
+    /**
+     * Adds a new statement line
+     * Only lines with a non-zero amount and proper postId are stored.
+     *
+     * @param boolean $credit	Should the line be credited or not.
+     * @param unknown $amount	Amount in euros to store.
+     * @param unknown $postId	ID of the post to associate the statementline with.
+     * @param unknown $saldoId	ID of the saldo to associate the statementline with.
+     * @return StatementLine	The StatementLine object or null if no proper data was specified.
+     */
+    public function addLine($credit, $amount, $postId, $saldoId = null) {
+    	return $this->updateLine(null, $credit, $amount, $postId, $saldoId);
+    }    
 
 }

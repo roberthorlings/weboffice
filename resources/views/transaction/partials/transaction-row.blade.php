@@ -28,18 +28,28 @@
 		@endif
 	</td>
 	<td class="buttons">
-		{!! Form::open([
-				'method'=>'DELETE',
-				'url' => ['transaction', $item->id],
-				'style' => 'display:inline',
-				'data-confirm' => 'Are you sure you want to delete this item?'
-		]) !!}
-		<div class="btn-group btn-group-xs">
-			@if($item->ingedeeld)
+		@if($item->ingedeeld)
+			{!! Form::open([
+					'method'=>'DELETE',
+					'url' => ['transaction', $item->id, 'statement'],
+					'style' => 'display:inline',
+					'data-confirm' => 'Are you sure you want to delete the statement for this transaction?'
+			]) !!}
+			<div class="btn-group btn-group-xs">
 				<a class="btn btn-default btn-xs" href="{{ url('transaction/' . $item->id . '/edit') }}">
 					<i class="fa fa-fw fa-pencil"></i>
 				</a>
-	        @else
+				{!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs', 'title' => 'Delete statement', 'type' => 'submit']) !!}
+			</div>
+			{!! Form::close() !!}
+        @else
+			{!! Form::open([
+					'method'=>'DELETE',
+					'url' => ['transaction', $item->id],
+					'style' => 'display:inline',
+					'data-confirm' => 'Are you sure you want to delete this item?'
+			]) !!}
+			<div class="btn-group btn-group-xs">
 				<div class="btn-group">
 	            	<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 	                	<i class="fa fa-fw fa-anchor"></i>
@@ -61,14 +71,15 @@
 					        <a href="{{ url( 'transaction/' . $item->id . '/assign/costs_without_vat' ) }}">Kosten excl. BTW</a>
 					    </li>    
 					    <li>
-					        <a href="{{ url( 'transaction/' . $item->id . '/edit' ) }}">Anders</a>
+					        <a href="{{ url( 'transaction/' . $item->id . '/assign' ) }}">Anders</a>
 					    </li>
 	                </ul>
 	            </div>
-	        @endif
-			{!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs', 'title' => 'Delete transaction']) !!}
-		</div>
-		{!! Form::close() !!}
+				{!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs', 'title' => 'Delete transaction', 'type' => 'submit']) !!}
+			</div>
+			{!! Form::close() !!}
+        @endif
+        
 	</td>
 </tr>
 
@@ -84,7 +95,7 @@
 				<td></td>
 				<td> &#8627;</td>
 				<td>@post($statementLine->Post)</td>
-				<td class="amount {{ $signedAmount < 0 ? 'negative' : 'positive' }}">@amount($statementLine->bedrag)</td>
+				<td class="amount {{ $signedAmount > 0 ? 'negative' : 'positive' }}">@amount($statementLine->bedrag)</td>
 				<td></td> 
 			</tr>
 		@endif

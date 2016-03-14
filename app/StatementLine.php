@@ -39,11 +39,11 @@ class StatementLine extends Model
     /**
      * Returns the signed amount for this line.
      * 
-     * If the line is debet, the amount will be negative.
+     * If the line is debet, the amount will be positive.
      * @return number
      */
     public function getSignedAmount() {    	
-    	return ( $this->credit ? 1 : -1 ) * $this->bedrag;
+    	return ( $this->credit ? -1 : 1 ) * $this->bedrag;
     }
     
     /**

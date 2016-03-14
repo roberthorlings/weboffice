@@ -42,6 +42,16 @@ class Transaction extends Model
 	}
 	
 	/**
+	 * Returns whether this transaction should be a credit booking. This is true iff the amount < 0
+	 * 
+	 * Deposits to a bank account (amount > 0) should appear at the debit side.
+	 * Withdrawals to a bank account (amount < 0) should appear at the credit side.
+	 */
+	public function isCredited() {
+		return $this->bedrag < 0;
+	}
+	
+	/**
 	 * Returns the post where this transaction is booked.
 	 * 
 	 * @returns Post if the transactions is booked onto a single post (i.e. is not splitted)
