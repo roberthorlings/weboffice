@@ -4,6 +4,7 @@ namespace Weboffice\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Weboffice\Transaction;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,31 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot($events);
 
-        //
+		// Handle transaction creation, by creating the
+		// hash and checking for duplicate
+		Transaction::creating(function($transaction)
+		{
+		    if( $transaction->datum && $transaction->bedrag && $transaction->rekening_id && $transaction->omschrijving ) {
+		    	// Generate a hash and see if it already exists
+		    	$hash = $transaction->createHash();
+		    	
+		    	// Check for duplicates (discard the current transaction)
+		    	$query = Transaction::where('hash', $hash);
+		    	if( $transaction->id ) {
+		    		$query = $query->where('id', '<>', $transaction->id);
+		    	}
+		    	
+		    	// If a duplicate is found, cancel save
+		    	if($query->count() > 0) {
+		    		return false;
+		    	}
+		    	
+		    	// Save the hash
+		    	$transaction->hash = $hash;
+		    	return true;
+		    }
+		});
+        
+        
     }
 }

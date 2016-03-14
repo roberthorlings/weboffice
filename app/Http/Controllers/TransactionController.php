@@ -67,9 +67,13 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         
-        Transaction::create($request->all());
-
-        Flash::message( 'Transaction added!');
+		$model = new Transaction($request->all());
+        
+		if($model->save()) {
+			Flash::message( 'Transaction added!');
+		} else {
+			Flash::error("Transaction not added, probably because it's a duplicate!");
+		}				
 
         return redirect('transaction');
     }
@@ -121,7 +125,7 @@ class TransactionController extends Controller
     	
     	return $this->editForm($transaction, $repository, $initialLines);
     }
-    
+   
     /**
      * Assign the transaction to an invoice
      * @param unknown $id
