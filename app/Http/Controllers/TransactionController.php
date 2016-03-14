@@ -4,7 +4,10 @@ namespace Weboffice\Http\Controllers;
 
 use AppConfig;
 use Flash;
+use Session;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 use Weboffice\Account;
 use Weboffice\Http\Controllers\Controller;
 use Weboffice\Post;
@@ -23,11 +26,24 @@ class TransactionController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transaction = Transaction::with(['Statement', 'Statement.StatementLines', 'Statement.StatementLines.Post'])->paginate(15);
+    	$filter = $this->getFilterFromRequest($request);
+    	 
+        $query = Transaction::with(['Statement', 'Statement.StatementLines', 'Statement.StatementLines.Post'])->orderBy('datum', 'desc');
 
-        return view('transaction.index', compact('transaction'));
+        // Apply filtering on date
+        $query->where( 'datum', '>=', $filter['start']);
+        $query->where( 'datum', '<=', $filter['end']);
+        
+        // Filter on project and relation as well
+       	if(array_key_exists('post_id', $filter)) {
+       		$query->bookedOnPost($filter['post_id']);
+        }        
+        
+        $transaction = $query->paginate(15);
+        
+        return view('transaction.index', compact('transaction', 'filter'));
     }
 
     /**
@@ -408,4 +424,25 @@ class TransactionController extends Controller
 		}
 		return null;
 	}
+	
+	/**
+	 *
+	 * @param Request $request
+	 */
+	protected function getFilterFromRequest(Request $request) {
+		$postId = $request->input('post_id');
+		$start = new Carbon($request->input('start', Session::get('start')));
+		$end  = new Carbon($request->input('end', Session::get('end')));
+	
+		// Build filter to use
+		$filter = [
+				'start' => $start,
+				'end' => $end
+		];
+		 
+		if($postId)
+			$filter['post_id'] = $postId;
+
+		return $filter;
+	}	
 }

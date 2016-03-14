@@ -3,6 +3,7 @@
 namespace Weboffice;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Transaction extends Model
 {
@@ -81,6 +82,20 @@ class Transaction extends Model
 	 */
 	public function setBedragAttribute($amount) {
 		$this->attributes['bedrag' ] = $amount * 100;
+	}
+	
+	/**
+	 * Scope to filter transactions to be booked on a specific post
+	 * @param unknown $postId
+	 */
+	public function scopeBookedOnPost($query, $postId) {
+		return $query->whereExists(function ($subQuery) use ($postId) {
+             $subQuery->select(DB::raw(1))
+             		->from('boeking_delen')
+             		->join('boekingen', 'boekingen.id', '=', 'boeking_delen.boeking_id')
+             		->whereRaw('boekingen.transactie_id = transacties.id')
+             		->where('boeking_delen.post_id', $postId);
+        });
 	}
 	
     
