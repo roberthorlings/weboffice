@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Asset;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Asset;
 
 class AssetController extends Controller
 {
@@ -48,7 +46,7 @@ class AssetController extends Controller
         
         Asset::create($request->all());
 
-        Session::flash('flash_message', 'Asset added!');
+        Flash::message( 'Asset added!');
 
         return redirect('asset');
     }
@@ -96,7 +94,7 @@ class AssetController extends Controller
         $asset = Asset::findOrFail($id);
         $asset->update($request->all());
 
-        Session::flash('flash_message', 'Asset updated!');
+        Flash::message( 'Asset updated!');
 
         return redirect('asset');
     }
@@ -112,7 +110,7 @@ class AssetController extends Controller
     {
         Asset::destroy($id);
 
-        Session::flash('flash_message', 'Asset deleted!');
+        Flash::message( 'Asset deleted!');
 
         return redirect('asset');
     }

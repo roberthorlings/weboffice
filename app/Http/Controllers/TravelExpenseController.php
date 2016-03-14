@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
 use Weboffice\TravelExpense;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Flash;
 
 class TravelExpenseController extends Controller
 {
@@ -48,7 +46,7 @@ class TravelExpenseController extends Controller
         
         TravelExpense::create($request->all());
 
-        Session::flash('flash_message', 'TravelExpense added!');
+        Flash::message( 'TravelExpense added!');
 
         return redirect('travelexpense');
     }
@@ -96,7 +94,7 @@ class TravelExpenseController extends Controller
         $travelexpense = TravelExpense::findOrFail($id);
         $travelexpense->update($request->all());
 
-        Session::flash('flash_message', 'TravelExpense updated!');
+        Flash::message( 'TravelExpense updated!');
 
         return redirect('travelexpense');
     }
@@ -112,7 +110,7 @@ class TravelExpenseController extends Controller
     {
         TravelExpense::destroy($id);
 
-        Session::flash('flash_message', 'TravelExpense deleted!');
+        Flash::message( 'TravelExpense deleted!');
 
         return redirect('travelexpense');
     }

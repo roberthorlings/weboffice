@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\PostType;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\PostType;
 
 class PostTypeController extends Controller
 {
@@ -45,7 +43,7 @@ class PostTypeController extends Controller
         
         PostType::create($request->all());
 
-        Session::flash('flash_message', 'PostType added!');
+        Flash::message( 'PostType added!');
 
         return redirect('posttype');
     }
@@ -91,7 +89,7 @@ class PostTypeController extends Controller
         $posttype = PostType::findOrFail($id);
         $posttype->update($request->all());
 
-        Session::flash('flash_message', 'PostType updated!');
+        Flash::message( 'PostType updated!');
 
         return redirect('posttype');
     }
@@ -107,7 +105,7 @@ class PostTypeController extends Controller
     {
         PostType::destroy($id);
 
-        Session::flash('flash_message', 'PostType deleted!');
+        Flash::message( 'PostType deleted!');
 
         return redirect('posttype');
     }

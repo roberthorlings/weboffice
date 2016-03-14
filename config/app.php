@@ -159,6 +159,11 @@ return [
     	 */
     	Baum\Providers\BaumServiceProvider::class,
     		
+   		/**
+   		 * Easy flash messages
+   		 */
+    	Laracasts\Flash\FlashServiceProvider::class,
+    		
         /*
          * Application Service Providers...
          */
@@ -217,6 +222,8 @@ return [
     	'Form'      => Collective\Html\FormFacade::class,
     	'HTML'      => Collective\Html\HtmlFacade::class,
     	
+    	'Flash' 	=> Laracasts\Flash\Flash::class,
+    		
     	'AppConfig' => Weboffice\Support\Facades\AppConfig::class
     ],
 

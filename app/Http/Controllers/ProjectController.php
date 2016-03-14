@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Project;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Project;
 
 class ProjectController extends Controller
 {
@@ -49,7 +47,7 @@ class ProjectController extends Controller
         
         Project::create($request->all());
 
-        Session::flash('flash_message', 'Project added!');
+        Flash::message( 'Project added!');
 
         return redirect('project');
     }
@@ -98,7 +96,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $project->update($request->all());
 
-        Session::flash('flash_message', 'Project updated!');
+        Flash::message( 'Project updated!');
 
         return redirect('project');
     }
@@ -114,7 +112,7 @@ class ProjectController extends Controller
     {
         Project::destroy($id);
 
-        Session::flash('flash_message', 'Project deleted!');
+        Flash::message( 'Project deleted!');
 
         return redirect('project');
     }

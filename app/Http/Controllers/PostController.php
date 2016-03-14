@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Post;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Post;
 
 class PostController extends Controller
 {
@@ -49,7 +47,7 @@ class PostController extends Controller
 
         Post::create($request->all());
 
-        Session::flash('flash_message', 'Post added!');
+        Flash::message( 'Post added!');
 
         return redirect('post');
     }
@@ -98,7 +96,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $post->update($request->all());
 
-        Session::flash('flash_message', 'Post updated!');
+        Flash::message( 'Post updated!');
 
         return redirect('post');
     }
@@ -114,7 +112,7 @@ class PostController extends Controller
     {
         Post::destroy($id);
 
-        Session::flash('flash_message', 'Post deleted!');
+        Flash::message( 'Post deleted!');
 
         return redirect('post');
     }

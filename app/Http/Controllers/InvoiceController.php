@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Invoice;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Invoice;
 
 class InvoiceController extends Controller
 {
@@ -49,7 +47,7 @@ class InvoiceController extends Controller
         
         Invoice::create($request->all());
 
-        Session::flash('flash_message', 'Invoice added!');
+        Flash::message( 'Invoice added!');
 
         return redirect('invoice');
     }
@@ -98,7 +96,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::findOrFail($id);
         $invoice->update($request->all());
 
-        Session::flash('flash_message', 'Invoice updated!');
+        Flash::message( 'Invoice updated!');
 
         return redirect('invoice');
     }
@@ -114,7 +112,7 @@ class InvoiceController extends Controller
     {
         Invoice::destroy($id);
 
-        Session::flash('flash_message', 'Invoice deleted!');
+        Flash::message( 'Invoice deleted!');
 
         return redirect('invoice');
     }

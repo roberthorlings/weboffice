@@ -2,13 +2,12 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Saldo;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Saldo;
+use Flash;
+
 
 class SaldoController extends Controller
 {
@@ -48,7 +47,7 @@ class SaldoController extends Controller
         
         Saldo::create($request->all());
 
-        Session::flash('flash_message', 'Saldo added!');
+        Flash::message( 'Saldo added!');
 
         return redirect('saldo');
     }
@@ -96,7 +95,7 @@ class SaldoController extends Controller
         $saldo = Saldo::findOrFail($id);
         $saldo->update($request->all());
 
-        Session::flash('flash_message', 'Saldo updated!');
+        Flash::message( 'Saldo updated!');
 
         return redirect('saldo');
     }
@@ -112,7 +111,7 @@ class SaldoController extends Controller
     {
         Saldo::destroy($id);
 
-        Session::flash('flash_message', 'Saldo deleted!');
+        Flash::message( 'Saldo deleted!');
 
         return redirect('saldo');
     }

@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Configuration;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Configuration;
 
 class ConfigurationController extends Controller
 {
@@ -48,7 +46,7 @@ class ConfigurationController extends Controller
         
         Configuration::create($request->all());
 
-        Session::flash('flash_message', 'Configuration added!');
+        Flash::message( 'Configuration added!');
 
         return redirect('configuration');
     }
@@ -96,7 +94,7 @@ class ConfigurationController extends Controller
         $configuration = Configuration::findOrFail($id);
         $configuration->update($request->all());
 
-        Session::flash('flash_message', 'Configuration updated!');
+        Flash::message( 'Configuration updated!');
 
         return redirect('configuration');
     }
@@ -112,7 +110,7 @@ class ConfigurationController extends Controller
     {
         Configuration::destroy($id);
 
-        Session::flash('flash_message', 'Configuration deleted!');
+        Flash::message( 'Configuration deleted!');
 
         return redirect('configuration');
     }

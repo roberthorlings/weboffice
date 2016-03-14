@@ -2,15 +2,16 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
-use Weboffice\Http\Controllers\Controller;
+use Flash;
+use Session;
 
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
+use Weboffice\Http\Controllers\Controller;
 use Weboffice\WorkingHour;
 use Weboffice\Relation;
 use Weboffice\Repositories\RelationRepository;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
 use Weboffice\TravelExpense;
 
 class WorkingHoursController extends Controller
@@ -118,7 +119,7 @@ class WorkingHoursController extends Controller
        		$workinghour->travelExpense()->save($travelExpense);
         }        
 
-        Session::flash('flash_message', 'WorkingHour added!');
+        Flash::message( 'WorkingHour added!');
 
         return redirect('workinghours');
     }
@@ -185,7 +186,7 @@ class WorkingHoursController extends Controller
         	$workinghour->travelExpense->delete();
         }
         
-        Session::flash('flash_message', 'WorkingHour updated!');
+        Flash::message( 'WorkingHour updated!');
 
         return redirect('workinghours');
     }
@@ -201,7 +202,7 @@ class WorkingHoursController extends Controller
     {
         WorkingHour::destroy($id);
 
-        Session::flash('flash_message', 'WorkingHour deleted!');
+        Flash::message( 'WorkingHour deleted!');
 
         return redirect('workinghours');
     }

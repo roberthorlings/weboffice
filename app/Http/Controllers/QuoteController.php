@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Quote;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Quote;
+use Flash;
 
 class QuoteController extends Controller
 {
@@ -49,7 +47,7 @@ class QuoteController extends Controller
         
         Quote::create($request->all());
 
-        Session::flash('flash_message', 'Quote added!');
+        Flash::message( 'Quote added!');
 
         return redirect('quote');
     }
@@ -98,7 +96,7 @@ class QuoteController extends Controller
         $quote = Quote::findOrFail($id);
         $quote->update($request->all());
 
-        Session::flash('flash_message', 'Quote updated!');
+        Flash::message( 'Quote updated!');
 
         return redirect('quote');
     }
@@ -114,7 +112,7 @@ class QuoteController extends Controller
     {
         Quote::destroy($id);
 
-        Session::flash('flash_message', 'Quote deleted!');
+        Flash::message( 'Quote deleted!');
 
         return redirect('quote');
     }

@@ -2,13 +2,12 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Statement;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Statement;
+
 
 class StatementController extends Controller
 {
@@ -49,7 +48,7 @@ class StatementController extends Controller
         
         Statement::create($request->all());
 
-        Session::flash('flash_message', 'Statement added!');
+        Flash::message( 'Statement added!');
 
         return redirect('statement');
     }
@@ -98,7 +97,7 @@ class StatementController extends Controller
         $statement = Statement::findOrFail($id);
         $statement->update($request->all());
 
-        Session::flash('flash_message', 'Statement updated!');
+        Flash::message( 'Statement updated!');
 
         return redirect('statement');
     }
@@ -114,7 +113,7 @@ class StatementController extends Controller
     {
         Statement::destroy($id);
 
-        Session::flash('flash_message', 'Statement deleted!');
+        Flash::message( 'Statement deleted!');
 
         return redirect('statement');
     }

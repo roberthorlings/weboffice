@@ -2,7 +2,6 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
 use Weboffice\Transaction;
@@ -10,8 +9,7 @@ use Weboffice\Post;
 use Weboffice\Statement;
 use Weboffice\StatementLine;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Flash;
 
 class TransactionController extends Controller
 {
@@ -51,7 +49,7 @@ class TransactionController extends Controller
         
         Transaction::create($request->all());
 
-        Session::flash('flash_message', 'Transaction added!');
+        Flash::message( 'Transaction added!');
 
         return redirect('transaction');
     }
@@ -175,7 +173,7 @@ class TransactionController extends Controller
         // Save all new lines at once
         $statement->StatementLines()->saveMany($linesToSave);
         
-        Session::flash('flash_message', 'Transaction updated!');
+        Flash::message( 'Transaction updated!');
 
         return redirect('transaction');
     }
@@ -191,7 +189,7 @@ class TransactionController extends Controller
     {
         Transaction::destroy($id);
 
-        Session::flash('flash_message', 'Transaction deleted!');
+        Flash::message( 'Transaction deleted!');
 
         return redirect('transaction');
     }

@@ -2,13 +2,12 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Relation;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Relation;
+
 use AppConfig;
 
 class RelationController extends Controller
@@ -50,7 +49,7 @@ class RelationController extends Controller
 
         Relation::create($request->all());
 
-        Session::flash('flash_message', 'Relation added!');
+        Flash::message( 'Relation added!');
 
         return redirect('relation');
     }
@@ -103,7 +102,7 @@ class RelationController extends Controller
         $relation = Relation::findOrFail($id);
         $relation->update($request->all());
 
-        Session::flash('flash_message', 'Relation updated!');
+        Flash::message( 'Relation updated!');
 
         return redirect('relation');
     }
@@ -119,7 +118,7 @@ class RelationController extends Controller
     {
         Relation::destroy($id);
 
-        Session::flash('flash_message', 'Relation deleted!');
+        Flash::message( 'Relation deleted!');
 
         return redirect('relation');
     }

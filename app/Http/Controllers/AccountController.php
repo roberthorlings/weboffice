@@ -2,13 +2,11 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Requests;
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\Account;
+use Flash;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Session;
+use Weboffice\Account;
 
 class AccountController extends Controller
 {
@@ -49,7 +47,7 @@ class AccountController extends Controller
 
         Account::create($request->all());
 
-        Session::flash('flash_message', 'Account added!');
+        Flash::message( 'Account added!');
 
         return redirect('account');
     }
@@ -98,7 +96,7 @@ class AccountController extends Controller
         $account = Account::findOrFail($id);
         $account->update($request->all());
 
-        Session::flash('flash_message', 'Account updated!');
+        Flash::message( 'Account updated!');
 
         return redirect('account');
     }
@@ -114,7 +112,7 @@ class AccountController extends Controller
     {
         Account::destroy($id);
 
-        Session::flash('flash_message', 'Account deleted!');
+        Flash::message( 'Account deleted!');
 
         return redirect('account');
     }
