@@ -8,8 +8,14 @@
 	    <h3 class="box-title">Create new Transaction</h3>
 	  </div><!-- /.box-header -->
 	  <div class="box-body">
-
-		                <div class="form-group {{ $errors->has('omschrijving') ? 'has-error' : ''}}">
+            <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
+                {!! Form::label('datum', 'Datum: ', ['class' => 'col-sm-3 control-label']) !!}
+                <div class="col-sm-6">
+                    {!! Form::date('datum', null, ['class' => 'form-control']) !!}
+                    {!! $errors->first('datum', '<p class="help-block">:message</p>') !!}
+                </div>
+            </div>
+	       <div class="form-group {{ $errors->has('omschrijving') ? 'has-error' : ''}}">
                 {!! Form::label('omschrijving', 'Omschrijving: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {!! Form::text('omschrijving', null, ['class' => 'form-control']) !!}
@@ -23,11 +29,11 @@
                     {!! $errors->first('bedrag', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
-                {!! Form::label('datum', 'Datum: ', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="form-group {{ $errors->has('rekening_id') ? 'has-error' : ''}}">
+                {!! Form::label('rekening_id', 'Rekening: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::date('datum', null, ['class' => 'form-control']) !!}
-                    {!! $errors->first('datum', '<p class="help-block">:message</p>') !!}
+                    {!! Form::select('rekening_id', $lists["rekening_id"], null, ['class' => 'form-control', ]) !!}
+                    {!! $errors->first('rekening_id', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('tegenrekening') ? 'has-error' : ''}}">
@@ -37,25 +43,8 @@
                     {!! $errors->first('tegenrekening', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('ingedeeld') ? 'has-error' : ''}}">
-                {!! Form::label('ingedeeld', 'Ingedeeld: ', ['class' => 'col-sm-3 control-label']) !!}
-                <div class="col-sm-6">
-                                <div class="checkbox">
-                <label>{!! Form::radio('ingedeeld', '1') !!} Yes</label>
-            </div>
-            <div class="checkbox">
-                <label>{!! Form::radio('ingedeeld', '0', true) !!} No</label>
-            </div>
-                    {!! $errors->first('ingedeeld', '<p class="help-block">:message</p>') !!}
-                </div>
-            </div>
-            <div class="form-group {{ $errors->has('rekening_id') ? 'has-error' : ''}}">
-                {!! Form::label('rekening_id', 'Rekening: ', ['class' => 'col-sm-3 control-label']) !!}
-                <div class="col-sm-6">
-                    {!! Form::select('rekening_id', $lists["rekening_id"], null, ['class' => 'form-control', ]) !!}
-                    {!! $errors->first('rekening_id', '<p class="help-block">:message</p>') !!}
-                </div>
-            </div>
+            {!! Form::hidden('ingedeeld', '0') !!}
+
 
 		
 		    @if ($errors->any())

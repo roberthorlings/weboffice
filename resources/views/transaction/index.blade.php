@@ -75,16 +75,15 @@
             <!-- Box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add Transaction</h3>
+                    <h3 class="box-title">Import Transactions</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('transaction/create') }}" class="btn btn-primary btn-sm">Add New Transaction</a><br /><br />
-                	
-                	A form could be added here, although it is out of scope for scaffolding.
+                	<a href="{{ url('import') }}" class="btn btn-primary">Import transactions</a>
+                	<a href="{{ url('transaction/create') }}" class="btn btn-default">Add new Transaction</a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col -->
