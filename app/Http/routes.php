@@ -36,11 +36,14 @@ Route::group(['middleware' => ['web']], function () {
 	// Assign transactions to statements
 	Route::get('transaction/{id}/assign/invoice', 'TransactionController@invoice');
 	Route::post('transaction/{id}/store_invoice', 'TransactionController@store_invoice');
-	Route::get('transaction/{id}/assign/transfer', 'TransactionController@edit');
-	Route::get('transaction/{id}/assign/private', 'TransactionController@edit');
-	Route::get('transaction/{id}/assign/costs_with_vat', 'TransactionController@costs_with_vat');
+	Route::get('transaction/{id}/assign/transfer', 'TransactionController@transfer');
+	Route::post('transaction/{id}/store_transfer', 'TransactionController@store_transfer');
+	Route::get('transaction/{id}/assign/private', 'TransactionController@private_transfer');
+	Route::post('transaction/{id}/store_private', 'TransactionController@store_private');
 	
+	// Transaction with VAT is a prefilled edit form
 	// Transaction without VAT or other is just the edit form.
+	Route::get('transaction/{id}/assign/costs_with_vat', 'TransactionController@costs_with_vat');
 	Route::get('transaction/{id}/assign/costs_without_vat', 'TransactionController@edit');
 	Route::get('transaction/{id}/assign', 'TransactionController@edit');
 	

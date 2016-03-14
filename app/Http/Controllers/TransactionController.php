@@ -5,6 +5,7 @@ namespace Weboffice\Http\Controllers;
 use AppConfig;
 use Flash;
 use Illuminate\Http\Request;
+use Weboffice\Account;
 use Weboffice\Http\Controllers\Controller;
 use Weboffice\Post;
 use Weboffice\Repositories\PostRepository;
@@ -112,26 +113,75 @@ class TransactionController extends Controller
      */
     public function invoice($id) {
     	$transaction = Transaction::with(['Statement'])->findOrFail($id);
-    	$statement = $transaction->ingedeeld && $transaction->Statement ? $transaction->Statement : null;
     	 
     	// Find any saldos still open
     	$saldos = Saldo::open()->with('StatementLines')->get();;
     	
     	// Try to match the invoice based on the amount
-    	$selected_invoice_id = null;
-    	$amountToFind = abs($transaction->bedrag);
-    	foreach( $saldos as $saldo ) {
-    		if( $amountToFind == $saldo->getOpenAmount() ){
-    			$selected_invoice_id = $saldo->id;
-    			break;
-    		}
-    	}
+    	$match = $this->matchTransaction($saldos, $transaction);
     	
     	// Create a proper list of open saldos for the view
     	$invoices = $saldos->lists( 'omschrijving', 'id' );
     	
-    	return view('transaction.assign-invoice', compact('transaction', 'invoices', 'selected_invoice_id', 'statement'));    	
+    	return view('transaction.assign-invoice', [ 
+    			'transaction' => $transaction, 
+    			'invoices' => $invoices, 
+    			'selected_invoice_id' => $match ? $match['id'] : null, 
+    			'description' => $match ? 'Betaling ' . $match['description'] : null, 
+    	]);    	
     }
+    
+    /**
+     * Book the transaction as transfer
+     * @param unknown $id
+     * @param PostReposity $repository
+     */
+    public function transfer($id) {
+    	$transaction = Transaction::with(['Statement'])->findOrFail($id);
+    
+    	// Find any saldos still open
+    	$saldos = Saldo::open()->with('StatementLines')->get();
+    	 
+    	// Try to match the invoice based on the amount
+    	$match = $this->matchTransaction($saldos, $transaction);
+    	
+    	// Create a proper list of open saldos for the view
+    	$saldos = $saldos->lists( 'omschrijving', 'id' );
+
+    	// Create a list of accounts
+    	$accounts = Account::where('id', '<>', $transaction->rekening_id)->get();
+    	 
+    	// Find the selected account, based on the opposing account for the transaction
+    	$selected_account_id = null;
+    	foreach( $accounts as $account ) {
+    		if($account->rekeningnummer == $transaction->tegenrekening) {
+    			$selected_account_id = $account->id;
+    			break;
+    		}
+    	}
+    	
+    	return view('transaction.assign-transfer', [ 
+    			'transaction' => $transaction,
+    			'accounts' => $accounts->lists( 'description', 'id' ),
+    			'selected_account_id' => $selected_account_id,
+    			'saldos' => $saldos, 
+    			'selected_saldo_id' => $match ? $match['id'] : null, 
+    	]);    	
+    }
+
+    /**
+     * Book the transaction as private booking
+     * @param unknown $id
+     * @param PostReposity $repository
+     */
+    public function private_transfer($id) {
+    	$transaction = Transaction::with(['Statement'])->findOrFail($id);
+    
+    	return view('transaction.assign-private', [
+    			'transaction' => $transaction,
+    			'description' => 'Privé boeking'
+    	]);
+    }    
     
     /**
      * Stores a transaction as invoice
@@ -158,6 +208,75 @@ class TransactionController extends Controller
     	Flash::message( 'Transaction booked as invoice!');
     	return redirect('transaction');
     }
+    
+
+    /**
+     * Stores a transaction as transfer
+     * @param unknown $id
+     * @param unknown $request
+     * @param unknown $transactionRepository
+     */
+    public function store_transfer($id, Request $request, TransactionRepository $transactionRepository ) {
+    	// Lookup the current transaction
+    	$transaction = Transaction::with('Account')->findOrFail($id);
+    	$opposingAccount = Account::find($request->get('account_id'));
+    	$currentAccount = $transaction->Account;
+    	
+    	// Determine descriptions
+    	if( $transaction->isCredited() ) {
+    		$description = "Overboeking naar " . $opposingAccount->omschrijving;
+    		$saldo_description = "Overboeking " . number_format( abs($transaction->bedrag), 2) . " van " . $currentAccount->omschrijving . " naar " . $opposingAccount->omschrijving;
+    	} else {
+    		$description = "Overboeking van " . $opposingAccount->omschrijving;
+    		$saldo_description = "Overboeking " . number_format( abs($transaction->bedrag), 2) . " van " . $opposingAccount->omschrijving . " naar " . $currentAccount->omschrijving;
+    	}
+    	
+    	// Update or create the statement belonging to this transaction
+    	$statement = $transactionRepository->updateStatement($transaction, $description);
+    	
+    	// Check whether there is a saldo
+    	$saldoId = $request->get('saldo_id');
+    	if($saldoId) {
+    		$saldo = Saldo::find($saldoId);
+    	} else {
+    		$saldo = new Saldo();
+    		$saldo->omschrijving = $saldo_description;
+    		$saldo->relatie_id = AppConfig::get('relatieSelf');
+    		$saldo->save();
+    	}
+    	
+    	// The line should be opposing the actual withdrawal or deposit
+    	$credit = !$transaction->isCredited();
+    	$postId = AppConfig::get('postTussenrekening');
+    	$statement->addLine($credit, abs($transaction->bedrag), $postId, $saldo->id);
+    	 
+    	// Redirect the user with a message
+    	Flash::message( 'Transaction booked as transfer!');
+    	return redirect('transaction');
+    }
+    
+    /**
+     * Stores a transaction as private transfer
+     * @param unknown $id
+     * @param unknown $request
+     * @param unknown $transactionRepository
+     */
+    public function store_private($id, Request $request, TransactionRepository $transactionRepository ) {
+    	// Lookup the current transaction
+    	$transaction = Transaction::with('Account')->findOrFail($id);
+    	 
+    	// Update or create the statement belonging to this transaction
+    	$statement = $transactionRepository->updateStatement($transaction, $request->get('Statement')['omschrijving']);
+    	 
+    	// The line should be opposing the actual withdrawal or deposit
+    	$credit = !$transaction->isCredited();
+    	$postId = $credit ? AppConfig::get('postPriveInvesteringen') : AppConfig::get('postPriveOpnames');
+    	$statement->addLine($credit, abs($transaction->bedrag), $postId);
+    	 
+    	// Redirect the user with a message
+    	Flash::message( 'Transaction booked as private transfer!');
+    	return redirect('transaction');
+    }    
 
     /**
      * Update the specified resource in storage.
@@ -272,5 +391,21 @@ class TransactionController extends Controller
     	return view('transaction.edit', compact('transaction', 'statement', 'numLines', 'preEnteredLines', 'sum',  'posts'));
     }
     
-
+	/**
+	 * Searches the saldos to find one matching the given transaction. Match is done based on the amount
+	 * @param unknown $saldos
+	 * @param unknown $transaction
+	 */
+	protected function matchTransaction($saldos, $transaction) {
+		$selected_invoice_id = null;
+		$description = '';
+		 
+		$amountToFind = abs($transaction->bedrag);
+		foreach( $saldos as $saldo ) {
+			if( $amountToFind == abs($saldo->getOpenAmount()) ){
+				return [ 'id' => $saldo->id, 'description' => $saldo->omschrijving ]; 
+			}
+		}
+		return null;
+	}
 }
