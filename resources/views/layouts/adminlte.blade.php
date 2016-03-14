@@ -17,10 +17,11 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/dist/css/skins/_all-skins.min.css") }}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/iCheck/flat/blue.css") }}">
   
+  <!-- AdminLTE plugins-->
+  <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/iCheck/flat/blue.css") }}">
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css") }}">
+  <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/select2/select2.min.css") }}">
   
   <!-- Custom css -->
   <link rel="stylesheet" href="{{ asset("/assets/css/weboffice.css") }}">
@@ -82,10 +83,14 @@
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/daterangepicker/moment.min.js") }}"></script>
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/daterangepicker/daterangepicker.js") }}"></script>
 
+<!-- Select2 nice searchable dropdowns -->
+<script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/select2/select2.min.js") }}"></script>
+
 <!-- Application specific scripts -->
 <script src="{{ asset ("/assets/js/modal-confirm.js") }}"></script>
 <script src="{{ asset ("/assets/js/date-range.js") }}"></script>
 <script src="{{ asset ("/assets/js/relation-project-select.js") }}"></script>
+<script src="{{ asset ("/assets/js/post-select.js") }}"></script>
 
 @yield('js')  
 

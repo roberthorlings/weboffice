@@ -10,6 +10,7 @@ use Weboffice\Statement;
 use Weboffice\StatementLine;
 use Illuminate\Http\Request;
 use Flash;
+use Weboffice\Repositories\PostRepository;
 
 class TransactionController extends Controller
 {
@@ -75,7 +76,7 @@ class TransactionController extends Controller
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, PostRepository $repository)
     {
         $transaction = Transaction::with(['Statement', 'Statement.StatementLines'])->findOrFail($id);
         $statement = $transaction->ingedeeld && $transaction->Statement ? $transaction->Statement : null;
@@ -104,7 +105,7 @@ class TransactionController extends Controller
         }
         
         // Add a list of posts to choose from
-        $posts = \Weboffice\Post::all()->lists("description", "id");
+        $posts = $repository->getListForPostSelect();
         	
         return view('transaction.edit', compact('transaction', 'statement', 'numLines', 'preEnteredLines', 'sum',  'posts'));
     }

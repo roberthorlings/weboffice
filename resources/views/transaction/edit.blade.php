@@ -35,7 +35,7 @@
 									{!! Form::input('number', 'Statement[lines][' . $i . '][amount]', $preEnteredLines[$i]['amount'], ['class' => 'form-control statement-amount', 'step' => 'any']) !!} 
 								</div>
 								<div class="col-sm-8">
-									{!! Form::select('Statement[lines][' . $i . '][post_id]', $posts, $preEnteredLines[$i]['post_id'], ['class' => 'form-control']) !!} 
+									{!! Form::postSelect('Statement[lines][' . $i . '][post_id]', null, $preEnteredLines[$i]['post_id'], ['class' => 'form-control']) !!} 
 								</div>
 							</div>
 						@endfor

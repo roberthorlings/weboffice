@@ -17,7 +17,11 @@ class TemplateServiceProvider extends ServiceProvider
     {
 		// Register a selection component for a project and relation
     	Form::component('relationProjectSelect', 'components.selectRelationProject', ['name', 'relations', 'value', 'attributes']);
-    	
+
+    	// Register a nice selection component for a post
+    	// Second argument is an optional list with numbers for the roots to include
+    	Form::component('postSelect', 'components.selectPost', ['name', 'posts', 'value', 'attributes']);
+    	 
     	// Register directive to show the amount
     	Blade::directive('amount', function($expression) {
     		return "&euro; <?php echo number_format((" . $expression . "), 2, ',', '.'); ?>";
