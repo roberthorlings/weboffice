@@ -23,7 +23,12 @@ class StatementController extends Controller
     {
     	$filter = $this->getFilterFromRequest($request);
     	
-    	$query = Statement::with('StatementLines')->orderBy('datum', 'desc');
+    	$query = Statement::with([
+    			'StatementLines' => function($q) {
+    				$q->orderBy('credit');
+    			},
+    			'StatementLines.Post'
+    	])->orderBy('datum', 'desc');
     	
     	// Apply filtering on date
     	$query->where( 'datum', '>=', $filter['start']);
@@ -34,9 +39,8 @@ class StatementController extends Controller
     		$query->bookedOnPost($filter['post_id']);
     	}
     	
-    	$statement = $query->paginate(15);
-    	
-        return view('statement.index', compact('statement', 'filter'));
+    	$statements = $query->paginate(15);    	
+        return view('statement.index', compact('statements', 'filter'));
     }
 
     /**

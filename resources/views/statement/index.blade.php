@@ -17,14 +17,14 @@
                 <div class="box-body">
 			        <table class="table table-bordered statements">
 			            <tbody>
-			            @foreach($statement as $idx => $item)
+			            @foreach($statements as $idx => $item)
 			            	@include('statement/partials/statement-row')
 			            @endforeach
 			            </tbody>
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $statement->render() !!} </div>
+			        <div class="pull-right"> {!! $statements->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->

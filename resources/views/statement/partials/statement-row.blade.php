@@ -1,4 +1,4 @@
-<?php $numStatementLines = $item->StatementLines()->count(); ?>
+<?php $numStatementLines = count($item->StatementLines); ?>
 <tr
 	class="
 		header-line
@@ -30,7 +30,7 @@
 	</td>
 </tr>
 
-@foreach($item->StatementLines()->orderBy('credit')->get() as  $statementLine)
+@foreach($item->StatementLines as  $statementLine)
 	<tr	class="detail-line 
 		{{ $idx % 2 == 0 ? 'even' : 'odd' }}
 		{{ !$item->isBalanced() ? "not-balanced" : "" }}
