@@ -50,6 +50,10 @@ Route::group(['middleware' => ['web']], function () {
 	/* Delete the statement belonging to a transaction */
 	Route::delete('transaction/{id}/statement', 'TransactionController@deleteStatement');
 	
+	// Financial overviews
+	Route::get('balance', 'BalanceController@index');
+	Route::get('profit_and_loss', 'ProfitAndLossController@index');
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');
