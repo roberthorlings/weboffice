@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
@@ -36,17 +36,17 @@ class Statement extends Model
     
     public function Transaction()
     {
-        return $this->belongsTo('\Weboffice\Transaction', 'transactie_id');
+        return $this->belongsTo('\Weboffice\Models\Transaction', 'transactie_id');
     }    	
     
     public function Asset()
     {
-        return $this->belongsTo('\Weboffice\Asset', 'activum_id');
+        return $this->belongsTo('\Weboffice\Models\Asset', 'activum_id');
     }
     
     public function StatementLines() 
     {
-    	return $this->hasMany('\Weboffice\StatementLine', 'boeking_id');
+    	return $this->hasMany('\Weboffice\Models\StatementLine', 'boeking_id');
     }
     
     /**

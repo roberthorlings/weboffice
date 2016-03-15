@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,11 +29,11 @@ class Project extends Model
 
     public function Relation()
     {
-        return $this->belongsTo('\Weboffice\Relation', 'relatie_id');
+        return $this->belongsTo('\Weboffice\Models\Relation', 'relatie_id');
     }    	
     public function Post()
     {
-        return $this->belongsTo('\Weboffice\Post', 'post_id');
+        return $this->belongsTo('\Weboffice\Models\Post', 'post_id');
     }    	
 
 }

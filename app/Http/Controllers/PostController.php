@@ -6,7 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 
 use Flash;
 use Illuminate\Http\Request;
-use Weboffice\Post;
+use Weboffice\Models\Post;
 
 class PostController extends Controller
 {

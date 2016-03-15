@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,7 +55,7 @@ class Account extends Model
     
     public function Post()
     {
-        return $this->belongsTo('\Weboffice\Post', 'post_id');
+        return $this->belongsTo('\Weboffice\Models\Post', 'post_id');
     }    	
 
 }

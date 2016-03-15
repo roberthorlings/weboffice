@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Baum\Node;
 use Illuminate\Database\Eloquent\Model;
@@ -52,7 +52,7 @@ class Post extends Node
      */
     public function postType()
     {
-        return $this->belongsTo('\Weboffice\PostType', 'post_type_id');
+        return $this->belongsTo('\Weboffice\Models\PostType', 'post_type_id');
     }    	
 
 }

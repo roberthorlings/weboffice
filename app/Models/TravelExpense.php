@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,7 +23,7 @@ class TravelExpense extends Model
 
     public function WorkingHour()
     {
-        return $this->belongsTo('\Weboffice\WorkingHour', 'werktijd_id');
+        return $this->belongsTo('\Weboffice\Models\WorkingHour', 'werktijd_id');
     }    	
 
 }

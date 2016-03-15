@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use Weboffice\Http\Controllers\Controller;
-use Weboffice\WorkingHour;
-use Weboffice\Relation;
+use Weboffice\Models\WorkingHour;
+use Weboffice\Models\Relation;
 use Weboffice\Repositories\RelationRepository;
-use Weboffice\TravelExpense;
+use Weboffice\Models\TravelExpense;
 
 class WorkingHoursController extends Controller
 {

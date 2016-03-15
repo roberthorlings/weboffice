@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -24,14 +24,14 @@ class Saldo extends Model
 
     public function Relation()
     {
-        return $this->belongsTo('\Weboffice\Relation', 'relatie_id');
+        return $this->belongsTo('\Weboffice\Models\Relation', 'relatie_id');
     }
     
     /**
      * Associated statement lines
      */
     public function StatementLines() {
-    	return $this->hasMany('\Weboffice\StatementLine', 'saldo_id');
+    	return $this->hasMany('\Weboffice\Models\StatementLine', 'saldo_id');
     }
     
     /**

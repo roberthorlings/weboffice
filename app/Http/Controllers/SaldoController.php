@@ -5,7 +5,7 @@ namespace Weboffice\Http\Controllers;
 use Weboffice\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Weboffice\Saldo;
+use Weboffice\Models\Saldo;
 use Flash;
 
 

@@ -1,7 +1,7 @@
 <?php
 namespace Weboffice\Repositories;
 
-use Weboffice\Configuration;
+use Weboffice\Models\Configuration;
 
 class ConfigurationRepository {
 	protected $configuration = [];

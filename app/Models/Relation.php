@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,7 +27,7 @@ class Relation extends Model
     const TYPE_OTHER = 3;
 	
 	public function projects() {
-		return $this->hasMany('Weboffice\Project', 'relatie_id');
+		return $this->hasMany('Weboffice\Models\Project', 'relatie_id');
 	}
 
 }

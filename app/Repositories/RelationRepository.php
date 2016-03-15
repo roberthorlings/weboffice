@@ -1,8 +1,8 @@
 <?php
 namespace Weboffice\Repositories;
 
-use Weboffice\Relation;
-use Weboffice\Project;
+use Weboffice\Models\Relation;
+use Weboffice\Models\Project;
 
 class RelationRepository {
 	/**

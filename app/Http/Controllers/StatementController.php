@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Flash;
 use Illuminate\Http\Request;
 use Session;
-use Weboffice\Statement;
+use Weboffice\Models\Statement;
 use Weboffice\Repositories\PostRepository;
 
 

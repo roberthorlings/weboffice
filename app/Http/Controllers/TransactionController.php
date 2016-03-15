@@ -3,19 +3,19 @@
 namespace Weboffice\Http\Controllers;
 
 use AppConfig;
-use Flash;
-use Session;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Flash;
+use Illuminate\Http\Request;
+use Session;
 
-use Weboffice\Account;
 use Weboffice\Http\Controllers\Controller;
-use Weboffice\Post;
+use Weboffice\Models\Account;
+use Weboffice\Models\Post;
+use Weboffice\Models\Saldo;
+use Weboffice\Models\Statement;
+use Weboffice\Models\Transaction;
 use Weboffice\Repositories\PostRepository;
 use Weboffice\Repositories\TransactionRepository;
-use Weboffice\Saldo;
-use Weboffice\Statement;
-use Weboffice\Transaction;
 
 class TransactionController extends Controller
 {

@@ -1,8 +1,7 @@
 <?php
 namespace Weboffice\Repositories;
 
-use Weboffice\Post;
-use Weboffice\Statement;
+use Weboffice\Models\Statement;
 
 class TransactionRepository {
 

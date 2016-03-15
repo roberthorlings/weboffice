@@ -6,7 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 
 use Flash;
 use Illuminate\Http\Request;
-use Weboffice\Account;
+use Weboffice\Models\Account;
 
 class AccountController extends Controller
 {

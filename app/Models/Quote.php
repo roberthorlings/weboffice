@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,11 +23,11 @@ class Quote extends Model
 
     public function Relation()
     {
-        return $this->belongsTo('\Weboffice\Relation', 'relatie_id');
+        return $this->belongsTo('\Weboffice\Models\Relation', 'relatie_id');
     }    	
     public function Project()
     {
-        return $this->belongsTo('\Weboffice\Project', 'project_id');
+        return $this->belongsTo('\Weboffice\Models\Project', 'project_id');
     }    	
 
 }

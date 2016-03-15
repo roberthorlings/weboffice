@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -26,12 +26,12 @@ class Transaction extends Model
     
     public function Account()
     {
-        return $this->belongsTo('\Weboffice\Account', 'rekening_id');
+        return $this->belongsTo('\Weboffice\Models\Account', 'rekening_id');
     }
     
     public function Statement()
     {
-    	return $this->hasOne('\Weboffice\Statement', 'transactie_id');
+    	return $this->hasOne('\Weboffice\Models\Statement', 'transactie_id');
     }
 
     /**

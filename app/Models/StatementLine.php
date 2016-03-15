@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,17 +23,17 @@ class StatementLine extends Model
 
     public function Post()
     {
-        return $this->belongsTo('\Weboffice\Post', 'post_id');
+        return $this->belongsTo('\Weboffice\Models\Post', 'post_id');
     }    	
     
     public function Statement()
     {
-        return $this->belongsTo('\Weboffice\Statement', 'boeking_id');
+        return $this->belongsTo('\Weboffice\Models\Statement', 'boeking_id');
     }
     
     public function Saldo() 
     {
-    	return $this->belongsTo('\Weboffice\Saldo', 'saldo_id');
+    	return $this->belongsTo('\Weboffice\Models\Saldo', 'saldo_id');
     }
 
     /**

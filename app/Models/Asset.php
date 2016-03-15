@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,15 +23,15 @@ class Asset extends Model
 
     public function PostInvestering()
     {
-        return $this->belongsTo('\Weboffice\Post', 'post_investering');
+        return $this->belongsTo('\Weboffice\Models\Post', 'post_investering');
     }    	
     public function PostAfschrijving()
     {
-        return $this->belongsTo('\Weboffice\Post', 'post_afschrijving');
+        return $this->belongsTo('\Weboffice\Models\Post', 'post_afschrijving');
     }    	
     public function PostKosten()
     {
-        return $this->belongsTo('\Weboffice\Post', 'post_kosten');
+        return $this->belongsTo('\Weboffice\Models\Post', 'post_kosten');
     }    	
 
 }

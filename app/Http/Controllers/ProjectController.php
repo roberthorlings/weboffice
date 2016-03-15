@@ -6,7 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 
 use Flash;
 use Illuminate\Http\Request;
-use Weboffice\Project;
+use Weboffice\Models\Project;
 
 class ProjectController extends Controller
 {

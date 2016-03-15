@@ -6,7 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 
 use Flash;
 use Illuminate\Http\Request;
-use Weboffice\Invoice;
+use Weboffice\Models\Invoice;
 
 class InvoiceController extends Controller
 {

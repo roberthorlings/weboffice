@@ -6,7 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 
 use Flash;
 use Illuminate\Http\Request;
-use Weboffice\Asset;
+use Weboffice\Models\Asset;
 
 class AssetController extends Controller
 {

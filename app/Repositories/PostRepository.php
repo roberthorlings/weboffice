@@ -1,7 +1,7 @@
 <?php
 namespace Weboffice\Repositories;
 
-use Weboffice\Post;
+use Weboffice\Models\Post;
 
 class PostRepository {
 

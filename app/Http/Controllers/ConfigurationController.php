@@ -6,7 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 
 use Flash;
 use Illuminate\Http\Request;
-use Weboffice\Configuration;
+use Weboffice\Models\Configuration;
 
 class ConfigurationController extends Controller
 {

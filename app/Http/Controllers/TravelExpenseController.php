@@ -4,7 +4,7 @@ namespace Weboffice\Http\Controllers;
 
 use Weboffice\Http\Controllers\Controller;
 
-use Weboffice\TravelExpense;
+use Weboffice\Models\TravelExpense;
 use Illuminate\Http\Request;
 use Flash;
 

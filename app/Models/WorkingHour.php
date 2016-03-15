@@ -1,6 +1,6 @@
 <?php
 
-namespace Weboffice;
+namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -29,16 +29,16 @@ class WorkingHour extends Model
     protected $dates = [ 'datum' ];
 
     public function relation() {
-    	return $this->belongsTo('Weboffice\Relation', 'relatie_id');
+    	return $this->belongsTo('Weboffice\Models\Relation', 'relatie_id');
     }
     
     public function project() {
-    	return $this->belongsTo('Weboffice\Project', 'project_id');
+    	return $this->belongsTo('Weboffice\Models\Project', 'project_id');
     }
     
     public function travelExpense()
     {
-    	return $this->hasOne('\Weboffice\TravelExpense', 'werktijd_id');
+    	return $this->hasOne('\Weboffice\Models\TravelExpense', 'werktijd_id');
     }
     
     /**
