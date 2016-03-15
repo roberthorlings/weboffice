@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/iCheck/flat/blue.css") }}">
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/daterangepicker/daterangepicker-bs3.css") }}">
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/select2/select2.min.css") }}">
+  <link rel="stylesheet" href="{{ asset("/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.min.css") }}">
   
   <!-- Custom css -->
   <link rel="stylesheet" href="{{ asset("/assets/css/weboffice.css") }}">

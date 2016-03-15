@@ -76,7 +76,21 @@ class Statement extends Model
     		->where('boeking_delen.post_id', $postId);
     	});
     }
-        
+    
+    /**
+     * Get a specific attribute for use in forms. Dates and times have to be formatted properly
+     *
+     * @return string
+     */
+    public function getFormValue($field)
+    {
+    	switch($field) {
+    		case 'datum':
+    			return $this->datum->format('Y-m-d');
+    		default:
+    			return $this->{$field};
+    	}
+    }
     
     /**
      * Handle updating a statement line, as edited by the user. 

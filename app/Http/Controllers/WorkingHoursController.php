@@ -26,7 +26,7 @@ class WorkingHoursController extends Controller
     {
         $filter = $this->getFilterFromRequest($request);
         
-    	$query = WorkingHour::orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
+    	$query = WorkingHour::with('Project', 'Relation')->orderBy('datum', 'desc')->orderBy('begintijd', 'desc');
         
         // Apply filtering on date
         $query->where( 'datum', '>=', $filter['start']);

@@ -33,6 +33,21 @@ class Transaction extends Model
     {
     	return $this->hasOne('\Weboffice\Statement', 'transactie_id');
     }
+
+    /**
+     * Get a specific attribute for use in forms. Dates and times have to be formatted properly
+     *
+     * @return string
+     */
+    public function getFormValue($field)
+    {
+    	switch($field) {
+    		case 'datum':
+    			return $this->datum->format('Y-m-d');
+    		default:
+    			return $this->{$field};
+    	}
+    }    
     
 	/**
 	 * Checks whether the current transaction is being split

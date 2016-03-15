@@ -12,10 +12,10 @@ $(function() {
 	}
 	
 	$('.relation-project-select').each(function(idx, el) {
-		$el = $(el);
-		var name = $el.attr('name');
-		
-		$el.on('change', function() {
+		$(el).on('change', function() {
+			$el = $(this);
+			var name = $el.attr('name');
+			
 			var ids = parseRelationProjectValue($el.val());
 			$( '.hidden-relation-' + name + '-relatie-id').val(ids.relatie_id);
 			$( '.hidden-relation-' + name + '-project-id').val(ids.project_id);

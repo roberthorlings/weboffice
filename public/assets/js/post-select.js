@@ -1,3 +1,3 @@
 $(function() {
-	$('.post-select').select2();
+	$('.post-select').select2({theme: 'bootstrap'});
 })

@@ -31,17 +31,17 @@
 						@for($i = 0; $i < $numLines; $i++)
 							{!! Form::hidden('Statement[lines][' . $i . '][id]', $preEnteredLines[$i]['id']) !!} 
 							<div class="row">
+								<div class="col-sm-8">
+									{!! Form::postSelect('Statement[lines][' . $i . '][post_id]', $posts, $preEnteredLines[$i]['post_id'], ['class' => 'form-control', 'placeholder' => ' - No post selected - ']) !!} 
+								</div>
 								<div class="col-sm-4">
 									{!! Form::input('number', 'Statement[lines][' . $i . '][amount]', $preEnteredLines[$i]['amount'], ['class' => 'form-control statement-amount', 'step' => 'any']) !!} 
-								</div>
-								<div class="col-sm-8">
-									{!! Form::postSelect('Statement[lines][' . $i . '][post_id]', null, $preEnteredLines[$i]['post_id'], ['class' => 'form-control', 'placeholder' => ' - No post selected - ']) !!} 
 								</div>
 							</div>
 						@endfor
 						
 						<div class="row total">
-							<div class="col-sm-4">
+							<div class="col-sm-4 col-sm-offset-8">
 								{!! Form::input('number', 'total', number_format($sum, 2, '.', ''), ['class' => 'form-control statement-total-amount', 'readonly' => 'readonly']) !!} 
 							</div>
 						</div>

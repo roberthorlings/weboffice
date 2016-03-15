@@ -19,7 +19,7 @@
 			        <table class="table table-bordered table-striped table-hover">
 			            <thead>
 			                <tr>
-			                    <th>Datum</th><th>Duur</th><th>Klant</th><th>Opmerkingen</th><th></th>
+			                    <th>Datum</th><th>Duur</th><th>Klant</th><th>Opmerkingen</th><th>Km</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
@@ -31,8 +31,11 @@
 			                    <td>
 			                    	{{ $item->duration->format("%H:%I") }}
 			                    </td>
-								<td><span class="relatie">{{ $item->relation ? $item->relation->bedrijfsnaam : '' }}</span> :: <span class="project">{{ $item->project ? $item->project->naam : ''}}</span></td>
+								<td><span class="relatie">{{ $item->Relation ? $item->Relation->bedrijfsnaam : '' }}</span> :: <span class="project">{{ $item->Project ? $item->Project->naam : ''}}</span></td>
 								<td>{{ str_limit($item->opmerkingen, 50, '...') }}</td>
+			                    <td>
+			                    	{{ $item->kilometers > 0 ? $item->kilometers : '' }}
+			                    </td>
 								<td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',

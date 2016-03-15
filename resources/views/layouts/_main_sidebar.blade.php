@@ -38,7 +38,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{ url( 'transaction' )}}"><i class="fa fa-circle-o"></i> Transactions</a></li>
-            <li><a href="{{ url( 'statement' )}}"><i class="fa fa-circle-o"></i> Statement</a></li>
+            <li><a href="{{ url( 'statement' )}}"><i class="fa fa-circle-o"></i> Statements</a></li>
             <li><a href="{{ url( 'results' )}}"><i class="fa fa-circle-o"></i> Results</a></li>
             <li><a href="{{ url( 'balance' )}}"><i class="fa fa-circle-o"></i> Balance</a></li>
             <li><a href="{{ url( 'amounts_due' )}}"><i class="fa fa-circle-o"></i> Amounts due</a></li>

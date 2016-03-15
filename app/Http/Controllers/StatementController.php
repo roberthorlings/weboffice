@@ -9,11 +9,13 @@ use Flash;
 use Illuminate\Http\Request;
 use Session;
 use Weboffice\Statement;
+use Weboffice\Repositories\PostRepository;
 
 
 class StatementController extends Controller
 {
-
+	const NUM_STATEMENT_LINES = 6;
+	
     /**
      * Display a listing of the resource.
      *
@@ -48,13 +50,10 @@ class StatementController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(PostRepository $repository)
     {
-    	$lists = [];
-    	$lists["transactie_id"] = \Weboffice\Transaction::lists("omschrijving", "id");
-		$lists["activum_id"] = \Weboffice\Asset::lists("omschrijving", "id");
-    
-        return view('statement.create', compact('lists'));
+    	$data = $this->getDataForForm(null, $repository);
+        return view('statement.create', $data);
     }
 
     /**
@@ -93,14 +92,11 @@ class StatementController extends Controller
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, PostRepository $repository)
     {
         $statement = Statement::findOrFail($id);
-    	$lists = [];
-    	$lists["transactie_id"] = \Weboffice\Transaction::lists("omschrijving", "id");
-		$lists["activum_id"] = \Weboffice\Asset::lists("omschrijving", "id");
-
-        return view('statement.edit', compact('lists', 'statement'));
+    	$data = $this->getDataForForm($statement, $repository);
+        return view('statement.edit', $data);
     }
 
     /**
@@ -116,8 +112,12 @@ class StatementController extends Controller
         $statement = Statement::findOrFail($id);
         $statement->update($request->all());
 
-        Flash::message( 'Statement updated!');
-
+        // Store the lines as well.
+        $linesToSave = [];
+        foreach( $request->get('Lines') as $lineInfo ) {
+        	$statement->updateLine($lineInfo['id'], $lineInfo['credit'], $lineInfo['amount'], $lineInfo['post_id']);
+        }        
+        
         return redirect('statement');
     }
 
@@ -157,6 +157,39 @@ class StatementController extends Controller
     		$filter['post_id'] = $postId;
     
     		return $filter;
+    }    
+    
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     *
+     * @return Response
+     */
+    protected function getDataForForm($statement, PostRepository $repository)
+    {
+    	// Make sure to specify a set of lines with data
+    	$numLines = self::NUM_STATEMENT_LINES;
+    	if( $statement ) {
+    		$numLines = max($numLines, count($statement->StatementLines));
+    	}
+    
+    	// Specify enough empty lines
+    	$preEnteredLines = array_fill(0, $numLines, [ 'id' => null, 'credit' => 0, 'amount' => null, 'post_id' => null ]);
+    	$sum = 0;
+    
+    	// Overwrite the first lines with existing data
+    	if( $statement ) {
+    		foreach( $statement->StatementLines as $idx => $line ) {
+   				$preEnteredLines[$idx] = [ 'id' => $line->id, 'credit' => $line->credit, 'amount' => number_format($line->bedrag, 2, '.', ''), 'post_id' => $line->post_id ];
+   				$sum += $line->getSignedAmount();
+    		}
+    	}
+    
+    	// Add a list of posts to choose from
+    	$posts = $repository->getListForPostSelect();
+    
+    	return compact('statement', 'numLines', 'preEnteredLines', 'sum',  'posts');
     }    
 
 }

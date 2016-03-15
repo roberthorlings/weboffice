@@ -30,7 +30,7 @@ class TransactionController extends Controller
     {
     	$filter = $this->getFilterFromRequest($request);
     	 
-        $query = Transaction::with(['Statement', 'Statement.StatementLines', 'Statement.StatementLines.Post'])->orderBy('datum', 'desc');
+        $query = Transaction::with(['Account', 'Statement', 'Statement.StatementLines', 'Statement.StatementLines.Post'])->orderBy('datum', 'desc');
 
         // Apply filtering on date
         $query->where( 'datum', '>=', $filter['start']);
