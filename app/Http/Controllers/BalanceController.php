@@ -7,7 +7,7 @@ use Weboffice\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Session;
-use Weboffice\Models\Balance;
+use Weboffice\Models\Finance\Balance;
 
 class BalanceController extends Controller
 {
@@ -19,8 +19,9 @@ class BalanceController extends Controller
      */
     public function index()
     {
-    	$balance = new Balance( Carbon::now() );
-        return view('balance.index', compact('balance'));
+    	$date = Carbon::now();
+    	$balance = new Balance( $date );
+        return view('balance.index', compact('balance', 'date'));
     }
 
 }

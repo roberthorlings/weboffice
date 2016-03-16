@@ -52,7 +52,7 @@ Route::group(['middleware' => ['web']], function () {
 	
 	// Financial overviews
 	Route::get('balance', 'BalanceController@index');
-	Route::get('profit_and_loss', 'ProfitAndLossController@index');
+	Route::get('results', 'ResultsController@index');
 	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
