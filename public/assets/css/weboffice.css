@@ -66,3 +66,8 @@ table.statements tbody tr td { border-width: 0; }
 .results .totals { font-weight: bold; }
 .results .total { display: none; }
 .collapsed-box .total { display: inline-block; position: absolute; right: 8.333%; padding-right: 22px; font-weight: bold; }
+
+/* Amounts overdue */
+.amount-overdue-danger { color: red; }
+.amount-overdue-warning { color: #FC0; }
+.closed-saldo td { color: #999; }

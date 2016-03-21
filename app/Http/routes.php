@@ -66,7 +66,6 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('quote', 'QuoteController');
 	Route::resource('travelexpense', 'TravelExpenseController');
 	Route::resource('invoice', 'InvoiceController');
-	Route::resource('invoice', 'InvoiceController');
 	Route::resource('configuration', 'ConfigurationController');
 	Route::resource('statement', 'StatementController');
 	Route::resource('asset', 'AssetController');

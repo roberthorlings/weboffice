@@ -41,7 +41,7 @@
             <li><a href="{{ url( 'statement' )}}"><i class="fa fa-circle-o"></i> Statements</a></li>
             <li><a href="{{ url( 'results' )}}"><i class="fa fa-circle-o"></i> Results</a></li>
             <li><a href="{{ url( 'balance' )}}"><i class="fa fa-circle-o"></i> Balance</a></li>
-            <li><a href="{{ url( 'amounts_due' )}}"><i class="fa fa-circle-o"></i> Amounts due</a></li>
+            <li><a href="{{ url( 'saldo' )}}"><i class="fa fa-circle-o"></i> Amounts due</a></li>
             
            	<li> 
                   <a href="#"><i class="fa fa-circle-o"></i> More <i class="fa fa-angle-left pull-right"></i></a>

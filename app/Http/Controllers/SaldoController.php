@@ -17,11 +17,19 @@ class SaldoController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $saldo = Saldo::paginate(15);
+    	$includes = ['StatementLines', 'StatementLines.Statement', 'Relation'];
+    	
+        if( $request->get('filter') == 'all' ) {
+    		$query = Saldo::with($includes);
+        } else {
+        	$query = Saldo::open()->with($includes);
+        }
+        
+        $amounts = $query->orderBy('id', 'desc')->paginate(15);
 
-        return view('saldo.index', compact('saldo'));
+        return view('saldo.index', ['amounts' => $amounts, 'filter' => $request->get('filter', 'open')]);
     }
 
     /**

@@ -1,5 +1,6 @@
 @extends('layouts/adminlte')
-
+@section('page_title', "Amounts due")
+@section('page_description', $filter == 'all' ? 'all' : 'open');
 @section('content')
     <div class='row'>
         <div class='col-md-8 col-sm-12'>
@@ -16,13 +17,31 @@
 			        <table class="table table-bordered table-striped table-hover">
 			            <thead>
 			                <tr>
-			                    <th>Omschrijving</th><th>Relatie</th><th>Actions</th>
+			                    <th>Description</th><th>Opposing party</th><th class="amount">Amount</th><th>Since</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
-			            @foreach($saldo as $item)
-			                <tr>
-			                    <td><a href="{{ url('saldo', $item->id) }}">{{ $item->omschrijving }}</a></td><td>{{ $item->relatie_id }}</td>
+			            @foreach($amounts as $item)
+			                <tr class="
+			                	@if($item->isOpen()) 
+			                		open-saldo
+			                	@else
+			                		closed-saldo
+			                	@endif
+			                ">
+			                    <td>{{ $item->omschrijving }}</td>
+			                    <td>{{ $item->Relation->bedrijfsnaam }}</td>
+			                    <td class="amount">@amount($item->getOpenAmount())</td>
+			                    
+			                    <?php $daysOpen = $item->getStartDate() ? $item->getStartDate()->diffInDays($item->getEndDate()) : 0; ?>
+			                    <td class="
+			                    	@if($daysOpen > 45) 
+			                    		amount-overdue-danger
+			                    	@elseif($daysOpen > 30)
+			                    		amount-overdue-warning
+			                    	@endif
+			                    ">{{ $daysOpen }} d</td>
+			                    
 			                    <td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
@@ -30,12 +49,7 @@
 			                            'style' => 'display:inline',
 			                            'data-confirm' => 'Are you sure you want to delete this item?'
 			                        ]) !!}
-				                    	<div class="btn-group btn-group-xs">
-					                        <a class="btn btn-default btn-xs" href="{{ url('saldo/' . $item->id . '/edit') }}">
-					                            <i class="fa fa-fw fa-pencil"></i>
-					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
-					                    </div>
+			                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
 			                        {!! Form::close() !!}
 			                    </td>
 			                </tr>
@@ -44,7 +58,7 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $saldo->render() !!} </div>
+			        <div class="pull-right"> {!! $amounts->appends(['filter' => $filter ])->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->
@@ -52,16 +66,15 @@
             <!-- Box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add Saldo</h3>
+                    <h3 class="box-title">Filter</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('saldo/create') }}" class="btn btn-primary btn-sm">Add New Saldo</a><br /><br />
-                	
-                	A form could be added here, although it is out of scope for scaffolding.
+                	<a href="{{ route('saldo.index', [ 'filter' => 'open']) }}" class="btn btn-primary">Open amounts</a>
+                	<a href="{{ route('saldo.index', [ 'filter' => 'all']) }}" class="btn btn-default">All amounts</a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col -->
