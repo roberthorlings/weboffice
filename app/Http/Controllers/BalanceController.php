@@ -6,7 +6,6 @@ use Weboffice\Http\Controllers\Controller;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Session;
 use Weboffice\Models\Finance\Balance;
 
 class BalanceController extends Controller
@@ -17,11 +16,27 @@ class BalanceController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-    	$date = Carbon::now();
-    	$balance = new Balance( $date );
-        return view('balance.index', compact('balance', 'date'));
+    	$filter = $this->getFilterFromRequest($request);
+    	$balance = new Balance( $filter['date'] );
+        return view('balance.index', compact('balance', 'filter'));
     }
+    
+
+    /**
+     *
+     * @param Request $request
+     */
+    protected function getFilterFromRequest(Request $request) {
+    	$date = new Carbon($request->input('date', Carbon::now()));
+    
+    	// Build filter to use
+    	$filter = [
+    			'date' => $date,
+    	];
+    
+    	return $filter;
+    }    
 
 }
