@@ -64,3 +64,5 @@ table.statements tbody tr td { border-width: 0; }
 /* Financial results */
 .results .post-type { margin-bottom: 5px; margin-top: 10px; font-weight: bold; border-bottom: 1px solid #bbb; }
 .results .totals { font-weight: bold; }
+.results .total { display: none; }
+.collapsed-box .total { display: inline-block; position: absolute; right: 8.333%; padding-right: 22px; font-weight: bold; }

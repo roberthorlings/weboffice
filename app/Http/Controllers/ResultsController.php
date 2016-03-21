@@ -22,7 +22,8 @@ class ResultsController extends Controller
     	$end = Carbon::now();
     	$statement = new ProfitAndLossStatement( $start, $end );
     	
-        return view('results.index', compact('statement', 'start', 'end'));
+    	$page_title = "Financial esults " . $start->format( 'd-m-Y' ) . " - " . $end->format('d-m-Y');
+        return view('results.index', compact('statement', 'start', 'end', 'page_title'));
     }
 
 }

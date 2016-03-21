@@ -4,21 +4,33 @@
     <div class='row'>
         <div class='col-md-8'>
             <!-- Box -->
-            <div class="box box-primary results">
-            	@include('results/partials/result-overview', ['title' => 'Results', 'statementPart' => $statement->getResults(), 'totalTitle' => 'Bedrijfsresultaat', 'totalAmount' => $statement->getResultTotal() ])
+            <div class="box 
+				@if($statement->getResultTotal() < 0)
+					box-success
+				@else
+					box-danger
+				@endif 
+				results">
+            	@include('results/partials/result-overview', ['collapsed' => false, 'title' => 'Results', 'statementPart' => $statement->getResults(), 'totalTitle' => 'Results', 'totalAmount' => $statement->getResultTotal() ])
             </div><!-- /.box -->
             
 			@if(abs($statement->getOtherTotal()) > 0.005)
 	            <!-- Box -->
-	            <div class="box results">
-	            	@include('results/partials/result-overview', ['title' => 'Equity changes', 'statementPart' => $statement->getOther(), 'totalTitle' => 'Totaal', 'totalAmount' => $statement->getOtherTotal() ])
+	            <div class="box results collapsed-box">
+	            	@include('results/partials/result-overview', ['collapsed' => true, 'title' => 'Other equity changes', 'statementPart' => $statement->getOther(), 'totalTitle' => 'Total', 'totalAmount' => $statement->getOtherTotal() ])
 	            </div><!-- /.box -->
+	            
+	            <!-- Box -->
+	            <div class="box box-primary results collapsed-box">
+	            	@include('results/partials/result-overview', ['collapsed' => true, 'title' => 'Change in equity', 'statementPart' => [], 'totalTitle' => 'Change in equity', 'totalAmount' => $statement->getEquityChangesTotal() ])
+	            </div><!-- /.box -->
+	            
 	        @endif
             
 			@if(abs($statement->getLimitedTotal()) > 0.005)
 	            <!-- Box -->
-	            <div class="box results">
-	            	@include('results/partials/result-overview', ['title' => 'Partially deductable', 'statementPart' => $statement->getLimited(), 'totalTitle' => 'Totaal', 'totalAmount' => $statement->getLimitedTotal() ])
+	            <div class="box results collapsed-box">
+	            	@include('results/partials/result-overview', ['collapsed' => true, 'title' => 'Partially deductable', 'statementPart' => $statement->getLimited(), 'totalTitle' => 'Total', 'totalAmount' => $statement->getLimitedTotal() ])
 	            </div><!-- /.box -->
 	        @endif
 	        

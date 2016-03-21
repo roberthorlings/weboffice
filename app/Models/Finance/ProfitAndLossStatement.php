@@ -3,6 +3,8 @@ namespace Weboffice\Models\Finance;
 
 use Carbon\Carbon;
 use Weboffice\Models\PostType;
+use Weboffice\Models\Post;
+use AppConfig;
 
 /**
  * Profit and loss statement.
@@ -80,6 +82,27 @@ class ProfitAndLossStatement {
 	
 	public function getLimitedTotal() {
 		return $this->limitedTotal;
+	}
+	
+	public function getEquityChanges() {
+		$evPost = Post::find(AppConfig::get('postEigenVermogen'));
+		$resultsPost = Post::find(AppConfig::get('postResultaat'));
+		
+		$results = new PostTotals('Results', [
+			new PostTotal($resultsPost, $this->getResultTotal())
+		]);
+		$other = new PostTotals('Equity changes', [
+				new PostTotal($evPost, $this->getOtherTotal())
+		]);
+		
+		return [
+			'results' => $results,
+			'other' => $other
+		];
+	}
+	
+	public function getEquityChangesTotal() {
+		return $this->getResultTotal() + $this->getOtherTotal();
 	}
 	
 	/**

@@ -1,10 +1,16 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">{{$title}}</h3>
-                    <span class="period">{{$start->format('d-m-Y')}} - {{$end->format('d-m-Y')}}</span>
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                    </div>
+                    <span class="total">@amount(-$totalAmount)</span>
+                    
+                    @if(count($statementPart) > 0)
+	                    <div class="box-tools pull-right">
+	                        @if($collapsed)
+	                        	<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Expand"><i class="fa fa-plus"></i></button>
+	                        @else
+	                        	<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+	                        @endif
+	                    </div>
+	                @endif
                 </div>
                 <div class="box-body">
 						@foreach($statementPart as $category => $posts)
