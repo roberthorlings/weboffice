@@ -5,6 +5,7 @@ namespace Weboffice\Http\Controllers;
 use Weboffice\Http\Controllers\Controller;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Session;
 use Weboffice\Models\Finance\ProfitAndLossStatement;
 
@@ -16,14 +17,29 @@ class ResultsController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-    	$start = Session::get('first');
-    	$end = Carbon::now();
-    	$statement = new ProfitAndLossStatement( $start, $end );
-    	
-    	$page_title = "Financial esults " . $start->format( 'd-m-Y' ) . " - " . $end->format('d-m-Y');
-        return view('results.index', compact('statement', 'start', 'end', 'page_title'));
+    	$filter = $this->getFilterFromRequest($request);
+    	 
+    	$statement = new ProfitAndLossStatement( $filter['start'], $filter['end']);
+        return view('results.index', compact('statement', 'filter'));
     }
+    
+    /**
+     *
+     * @param Request $request
+     */
+    protected function getFilterFromRequest(Request $request) {
+    	$start = new Carbon($request->input('start', Session::get('start')));
+    	$end  = new Carbon($request->input('end', Session::get('end')));
+    
+    	// Build filter to use
+    	$filter = [
+    			'start' => $start,
+    			'end' => $end
+    	];
+    	 
+    	return $filter;
+    }    
 
 }

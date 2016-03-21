@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{ $page_title or "Weboffice" }}</title>
+  <title>@yield('page_title') | * isdat weboffice </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.5 -->
@@ -41,8 +41,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{ $page_title or "* isdat weboffice" }}
-        <small>{{ $page_description or null }}</small>
+        @yield('page_title', '* isdat weboffice')
+        <small>@yield('page_description')</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>

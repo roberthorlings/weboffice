@@ -1,6 +1,9 @@
 @extends('layouts/adminlte')
+@section('page_title', "Transactions")
+@section('page_description', toTimespan($filter['start'], $filter['end']));
+
 @section('js')
-	{{HTML::script(asset('/assets/js/transactions.index.js'))}}
+	{{HTML::script(asset('/assets/js/date-range-filter.js'))}}
 @endsection
 @section('content')
     <div class='row'>
@@ -38,7 +41,8 @@
                 {!! Form::model($filter, [
                     'method'=>'GET',
                     'url' => ['transaction'],
-                    'id' => 'filter-transactions'
+                    'id' => 'filter-transactions',
+                    'class' => 'filter'
                 ]) !!}
                 <div class="box-header with-border">
                     <h3 class="box-title">Filter</h3>

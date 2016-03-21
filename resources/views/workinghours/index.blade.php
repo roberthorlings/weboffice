@@ -1,6 +1,10 @@
 @extends('layouts/adminlte')
+@section('page_title', "Working hours")
+@section('page_description', toTimespan($filter['start'], $filter['end']));
+
 @section('js')
 	{{HTML::script(asset('/assets/js/workinghours.index.js'))}}
+	{{HTML::script(asset('/assets/js/date-range-filter.js'))}}
 @endsection
 
 @section('content')
@@ -67,7 +71,8 @@
                 {!! Form::model($filter, [
                     'method'=>'GET',
                     'url' => ['workinghours'],
-                    'id' => 'filter-workinghours'
+                    'id' => 'filter-workinghours',
+                    'class' => 'filter'
                 ]) !!}
                 <div class="box-header with-border">
                     <h3 class="box-title">Filter</h3>

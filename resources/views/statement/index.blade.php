@@ -1,6 +1,9 @@
 @extends('layouts/adminlte')
+@section('page_title', "Financial statements")
+@section('page_description', toTimespan($filter['start'], $filter['end']));
+
 @section('js')
-	{{HTML::script(asset('/assets/js/statements.index.js'))}}
+	{{HTML::script(asset('/assets/js/date-range-filter.js'))}}
 @endsection
 @section('content')
     <div class='row'>
@@ -33,7 +36,8 @@
                 {!! Form::model($filter, [
                     'method'=>'GET',
                     'url' => ['statement'],
-                    'id' => 'filter-statements'
+                    'id' => 'filter-statements',
+                    'class' => 'filter'
                 ]) !!}
                 <div class="box-header with-border">
                     <h3 class="box-title">Filter</h3>
