@@ -20,7 +20,7 @@
                 <div class="box-body">
 			        <table class="table table-bordered statements">
 			            <tbody>
-			            @foreach($statements as $idx => $item)
+			            @foreach($statements as $idx => $statement)
 			            	@include('statement/partials/statement-row')
 			            @endforeach
 			            </tbody>

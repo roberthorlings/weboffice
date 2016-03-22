@@ -153,4 +153,12 @@ class Statement extends Model
     	return $this->updateLine(null, $credit, $amount, $postId, $saldoId);
     }    
 
+    /**
+     * Save this statement with lines belonging to it
+     */
+    public function saveCascaded() {
+    	$this->save();
+    	$this->StatementLines()->saveMany( $this->StatementLines );
+    }
+    
 }

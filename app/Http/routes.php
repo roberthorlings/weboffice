@@ -50,6 +50,10 @@ Route::group(['middleware' => ['web']], function () {
 	/* Delete the statement belonging to a transaction */
 	Route::delete('transaction/{id}/statement', 'TransactionController@deleteStatement');
 	
+	// Asset amortization
+	Route::get('asset/{id}/statements', 'AssetController@statements');
+	Route::post('asset/{id}/statements', 'AssetController@bookStatements');
+	
 	// Financial overviews
 	Route::get('balance', 'BalanceController@index');
 	Route::get('results', 'ResultsController@index');
@@ -69,4 +73,5 @@ Route::group(['middleware' => ['web']], function () {
 	Route::resource('configuration', 'ConfigurationController');
 	Route::resource('statement', 'StatementController');
 	Route::resource('asset', 'AssetController');
+	
 });

@@ -22,6 +22,8 @@ table tbody tr.odd { background-color: #f9f9f9; }
 /* Rows within boxes should not have a negative margin on both sides */
 .box .row { margin-left: 0; margin-right: 0; }
 
+.calculation-result { border-top: 1px solid #999; }
+
 /******************* Specific pages ******************/
 
 /* Working hours overview */
@@ -71,3 +73,8 @@ table.statements tbody tr td { border-width: 0; }
 .amount-overdue-danger { color: red; }
 .amount-overdue-warning { color: #FC0; }
 .closed-saldo td { color: #999; }
+
+/* Assets */
+.asset-booking .statements { border-color: #3C8DBC; }
+.asset-booking .statements .remarks, .asset-booking .statements .buttons { display: none; }
+.asset-calculation .row { margin-top: 3px; margin-bottom: 3px; }

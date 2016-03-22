@@ -16,13 +16,30 @@
 			        <table class="table table-bordered table-striped table-hover">
 			            <thead>
 			                <tr>
-			                    <th>Omschrijving</th><th>Aanschafdatum</th><th>Begin Afschrijving</th><th>Actions</th>
+			                    <th>Omschrijving</th>
+			                    <th>Aanschafdatum</th>
+			                    <th class="amount">Aanschafwaarde</th>
+			                    <th class="amount">Huidige waarde</th>
+			                    <th class="amount">Afschrijving</th>
+			                    <th>Status</th>
+			                    <th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
 			            @foreach($asset as $item)
 			                <tr>
-			                    <td><a href="{{ url('asset', $item->id) }}">{{ $item->omschrijving }}</a></td><td>{{ $item->aanschafdatum }}</td><td>{{ $item->begin_afschrijving }}</td>
+			                    <td><a href="{{ url('asset', $item->id) }}">{{ $item->omschrijving }}</a></td>
+			                    <td>{{ $item->aanschafdatum->format('d-m-Y') }}</td>
+			                    <td class="amount">@amount($item->bedrag)</td>
+			                    <td class="amount">@amount($item->amortization()->getCurrentValue())</td>
+			                    <td class="amount">@amount($item->amortization()->getAmount()) / {{ $item->amortization()->getPeriodDescription() }}</td>
+			                    <td>
+			                    	@if($item->amortization()->isFinished())
+			                    		Amortized
+			                    	@else
+			                    		{{ $item->amortization()->getPeriodsAmortized() }} / {{ $item->afschrijvingsduur }} {{ $item->amortization()->getPeriodDescription() }}
+			                    	@endif
+			                    </td>
 			                    <td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
@@ -33,6 +50,9 @@
 				                    	<div class="btn-group btn-group-xs">
 					                        <a class="btn btn-default btn-xs" href="{{ url('asset/' . $item->id . '/edit') }}">
 					                            <i class="fa fa-fw fa-pencil"></i>
+					                        </a>
+					                        <a class="btn btn-default btn-xs" href="{{ url('asset/' . $item->id . '/statements') }}">
+					                            <i class="fa fa-fw fa-eur"></i>
 					                        </a>
 				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
 					                    </div>

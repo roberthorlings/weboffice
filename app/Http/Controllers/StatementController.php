@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Session;
 use Weboffice\Models\Statement;
 use Weboffice\Repositories\PostRepository;
+use Weboffice\Models\Asset;
 
 
 class StatementController extends Controller
@@ -188,8 +189,9 @@ class StatementController extends Controller
     
     	// Add a list of posts to choose from
     	$posts = $repository->getListForPostSelect();
+    	$assets = Asset::lists('omschrijving', 'id');
     
-    	return compact('statement', 'numLines', 'preEnteredLines', 'sum',  'posts');
+    	return compact('statement', 'numLines', 'preEnteredLines', 'sum',  'posts', 'assets');
     }    
 
 }

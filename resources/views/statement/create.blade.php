@@ -61,6 +61,13 @@
 			                    {!! $errors->first('omschrijving', '<p class="help-block">:message</p>') !!}
 			                </div>
 			            </div>
+			            <div class="form-group {{ $errors->has('omschrijving') ? 'has-error' : ''}}">
+			                {!! Form::label('activum_id', 'Activum: ', ['class' => 'col-sm-3 control-label']) !!}
+			                <div class="col-sm-6">
+			                    {!! Form::select('activum_id', $assets, null, ['class' => 'form-control', 'placeholder' => ' - No asset - ']) !!}
+			                    {!! $errors->first('activum_id', '<p class="help-block">:message</p>') !!}
+			                </div>
+			            </div>			            
 			            <div class="form-group {{ $errors->has('opmerkingen') ? 'has-error' : ''}}">
 			                {!! Form::label('opmerkingen', 'Opmerkingen: ', ['class' => 'col-sm-3 control-label']) !!}
 			                <div class="col-sm-6">
