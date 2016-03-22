@@ -42,7 +42,7 @@ trait FinancialStatement {
 	 * 
 	 * The sum of amounts that is booked onto the debet or credit side of a post is returned
 	 */
-	protected function loadPostStatistics($start, $end) {
+	protected function loadPostStatistics($start = null, $end = null, $postIds = []) {
 		$query = StatementLine::select('post_id', 'credit', DB::raw('SUM(bedrag) / 100 as total'))
 			->join('boekingen', 'boekingen.id', '=', 'boeking_delen.boeking_id')
 			->groupBy('post_id', 'credit')
@@ -54,6 +54,10 @@ trait FinancialStatement {
 		
 		if($end != null) {
 			$query->where('datum', '<=', $end);
+		}
+		
+		if($postIds && count($postIds) > 0) {
+			$query->whereIn('post_id', $postIds);
 		}
 		
 		$statistics = $query->get();
