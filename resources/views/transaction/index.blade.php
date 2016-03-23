@@ -32,7 +32,7 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $transaction->render() !!} </div>
+			        <div class="pull-right"> {!! $transaction->appends(paginationSafeFilter($filter))->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->

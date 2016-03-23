@@ -61,7 +61,7 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $workinghours->appends(Request::except('page'))->render() !!} </div>
+			        <div class="pull-right"> {!! $workinghours->appends(paginationSafeFilter($filter))->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->

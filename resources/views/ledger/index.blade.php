@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered statements">
+			        <table class="table ledgers">
 			            <tbody>
 			            @foreach($ledgers->getLedgers() as $idx => $ledger)
 			            	@include('ledger/partials/ledger-row')
@@ -27,7 +27,7 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $posts->render() !!} </div>
+			        <div class="pull-right"> {!! $posts->appends(paginationSafeFilter($filter))->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->

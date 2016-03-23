@@ -27,7 +27,7 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $statements->render() !!} </div>
+			        <div class="pull-right"> {!! $statements->appends(paginationSafeFilter($filter))->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->
