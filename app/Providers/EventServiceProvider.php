@@ -33,7 +33,7 @@ class EventServiceProvider extends ServiceProvider
 		// hash and checking for duplicate
 		Transaction::creating(function($transaction)
 		{
-		    if( $transaction->datum && $transaction->bedrag && $transaction->rekening_id && $transaction->omschrijving ) {
+		    if( $transaction->datum && $transaction->bedrag && $transaction->rekening_id ) {
 		    	// Generate a hash and see if it already exists
 		    	$hash = $transaction->createHash();
 		    	

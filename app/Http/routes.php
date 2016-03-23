@@ -59,6 +59,10 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('results', 'ResultsController@index');
 	Route::get('ledger',  'LedgerController@index');
 	
+	// Importing transactions
+	Route::get('transaction/import', 'TransactionController@import');
+	Route::post('transaction/import', 'TransactionController@storeImport');
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');

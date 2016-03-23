@@ -48,6 +48,24 @@ input.not-balanced { background: repeating-linear-gradient(135deg, rgba(188,96,9
 .transactions td.description { white-space: normal; }
 .transactions td.buttons { min-width: 80px; }
 
+
+/* Import transactions */
+.import-results { padding-left: 0; }
+.import-results li { display: block; border-bottom: 1px solid #ccc; padding: 10px 10px 10px 70px; margin: 5px 0; line-height: 1.6em; }
+.import-results li:last-child { border-bottom-width: 0; }
+
+.import-results .count { display: block; }
+.import-results .rekeningnummer { font-size: 16px; display: inline-block; }
+.import-results .rekening { display: inline-block; margin-left: 10px;}
+
+.import-results  li.bank_ING { background: url(../img/banks/ing.gif) no-repeat 5px 50%; }
+.import-results  li.bank_ABN { background: url(../img/banks/abn.gif) no-repeat 5px 50%; }
+.import-results  li.bank_Rabo { background: url(../img/banks/rabobank.gif) no-repeat 5px 50%; }
+.import-results  li.bank_ING .rekening { color: #ff6600; }
+.import-results  li.bank_ABN .rekening { color: #009286; }
+.import-results  li.bank_Rabo .rekening { color: #01278d; }
+.import-results  li.no_account .rekening { color: red; }
+
 /* Transaction edit form */
 .statement-total-amount { font-weight: bold; }
 

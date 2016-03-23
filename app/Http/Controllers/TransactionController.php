@@ -16,6 +16,7 @@ use Weboffice\Models\Statement;
 use Weboffice\Models\Transaction;
 use Weboffice\Repositories\PostRepository;
 use Weboffice\Repositories\TransactionRepository;
+use Weboffice\Import\Importer;
 
 class TransactionController extends Controller
 {
@@ -364,6 +365,83 @@ class TransactionController extends Controller
     	// Redirect
     	Flash::message( 'Statement has been deleted');
     	return redirect('transaction');
+    }
+    
+    /**
+     * Shows a form for the user to import data
+     */
+    public function import() {
+    	return view('transaction.import');
+    }
+    
+    /**
+     * Performs the actual import
+     * @return number
+     */
+    public function storeImport(Request $request) {
+    	$file = $request->file('transactions');
+    	
+    	if(!$file->isValid()) {
+    		Flash::error('No or invalid file was uploaded for import.');
+    		return redirect('transaction/import');
+    	}
+    	
+    	// Determine whether we can import this file
+    	$importer = Importer::getImporter($file);
+    	
+    	if( !$importer) {
+    		Flash::error("The uploaded file was not recognized as one of the supported file types (ABN, ING or Rabo). No transactions were imported.");
+    		return redirect('transaction/import');
+    	}
+    	
+    	// Parse the file
+    	$transactions = $importer->parse();
+    	
+    	if(count($transactions) == 0) {
+    		Flash::warning("The uploaded file is supported, but did not contain any transaction.");
+    		return redirect('transaction/import');
+    	}
+    	
+    	// Store transactions in database
+    	$results = $this->storeTransactions($transactions);
+    	
+    	// Fetch account data for results
+    	$accountList = Account::whereIn("id", array_keys($results))->get();
+    	$accounts = [];
+    	foreach($accountList as $account) {
+    		$accounts[$account->id] = $account;
+    	}
+    	
+    	return view('transaction.import-results', compact('results', 'accounts'));
+    }
+    
+    /**
+     * Stores newly created/imported transactions
+     * @param array $transactions
+     */
+    protected function storeTransactions($transactions) {
+    	$initialResult = [    		
+    		"total" => 0,
+    		"succesful" => 0,
+    		"existing" => 0
+    	];  
+    	
+    	$results = [];
+    	
+    	foreach($transactions as $transaction) {
+    		if(!array_key_exists($transaction->rekening_id, $results)) {
+    			$results[$transaction->rekening_id] = $initialResult;
+    		}
+    		
+    		$results[$transaction->rekening_id]["total"]++;
+     		if($transaction->save()) {
+     			$results[$transaction->rekening_id]["succesful"]++;
+     		} else {
+	   			$results[$transaction->rekening_id]["existing"]++;
+    		}
+    	}
+    	
+    	return $results;
     }
     
     /**

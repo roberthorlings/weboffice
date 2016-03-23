@@ -118,6 +118,6 @@ class Transaction extends Model
 	 * Create a unique hash for this transaction, to prevent importing duplicates
 	 */
 	public function createHash() {
-		return sha1( $this->rekening_id . "-" . $this->datum . $this->bedrag . $this->omschrijving );
+		return sha1( $this->rekening_id . "-" . $this->datum->format( 'Y-m-d') . number_format($this->bedrag) . $this->omschrijving );
 	}
 }
