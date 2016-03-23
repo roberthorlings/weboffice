@@ -1,6 +1,7 @@
 @extends('layouts/adminlte')
 @section('page_title', "Balance")
-@section('page_description', $filter['date']->format('d-m-Y'));
+@section('page_description', $filter['date']->format('d-m-Y'))
+
 @section('js')
 	{{HTML::script(asset('/assets/js/date-range-filter.js'))}}
 @endsection

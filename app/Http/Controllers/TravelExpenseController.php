@@ -7,96 +7,34 @@ use Weboffice\Http\Controllers\Controller;
 use Weboffice\Models\TravelExpense;
 use Illuminate\Http\Request;
 use Flash;
+use Carbon\Carbon;
+use Session;
+use Weboffice\Repositories\RelationRepository;
+use Weboffice\Repositories\TravelExpenseRepository;
 
 class TravelExpenseController extends Controller
 {
 
+
+	
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index()
+    public function index(TravelExpenseRepository $repository, RelationRepository $relationRepository, Request $request)
     {
-        $travelexpense = TravelExpense::paginate(15);
-
-        return view('travelexpense.index', compact('travelexpense'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-    	$lists = [];
-    	$lists["werktijd_id"] = \Weboffice\WorkingHour::all()->lists("description", "id");
-    
-        return view('travelexpense.create', compact('lists'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
-    {
+    	$filter = $this->getFilterFromRequest($request);
         
-        TravelExpense::create($request->all());
-
-        Flash::message( 'TravelExpense added!');
-
-        return redirect('travelexpense');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        $travelexpense = TravelExpense::findOrFail($id);
-
-        return view('travelexpense.show', compact('travelexpense'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return Response
-     */
-    public function edit($id)
-    {
-        $travelexpense = TravelExpense::findOrFail($id);
-    	$lists = [];
-    	$lists["werktijd_id"] = \Weboffice\WorkingHour::all()->lists("description", "id");
-    	
-        return view('travelexpense.edit', compact('lists', 'travelexpense'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     *
-     * @return Response
-     */
-    public function update($id, Request $request)
-    {
+    	// Determine list of travel expenses and statistics about it
+        $travelexpenses = $repository->withFilter($filter)->orderBy('datum', 'desc')->paginate(15);
+        $stats 			= $repository->getStats($repository->withFilter($filter))->orderBy('wijze')->get();
+        $total 			= array_sum(array_map(function($stat) { return $stat->total; }, $stats->all()));
         
-        $travelexpense = TravelExpense::findOrFail($id);
-        $travelexpense->update($request->all());
+        // Retrieve relation to show in filter
+        $relations = $relationRepository->getRelationsWithProjects();
 
-        Flash::message( 'TravelExpense updated!');
-
-        return redirect('travelexpense');
+        return view('travelexpense.index', compact('travelexpenses', 'relations', 'stats', 'filter', 'total'));
     }
 
     /**
@@ -114,5 +52,40 @@ class TravelExpenseController extends Controller
 
         return redirect('travelexpense');
     }
+    
+
+    /**
+     *
+     * @param Request $request
+     */
+    protected function getFilterFromRequest(Request $request) {
+    	$relatieId = $request->input('relatie_id');
+    	$projectId = $request->input('project_id');
+    	$start = new Carbon($request->input('start', Session::get('start')));
+    	$end  = new Carbon($request->input('end', Session::get('end')));
+    	$type = $request->input('type');
+    	
+    	// Build filter to use
+    	$filter = [
+    		'start' => $start,
+    		'end' => $end,
+    		'type' => $type	
+    	];
+    	 
+    	if($relatieId) {
+    		$filter['relatie_id'] = $relatieId;
+    
+    		// To handle project, a relatie_id is required as well
+    		if($projectId) {
+    			$filter['project_id'] = $projectId;
+    			$filter['relation_project'] = 'project.' . $relatieId . '.' . $projectId;
+    		} else {
+    			$filter['relation_project'] = 'klant.' . $relatieId;
+    		}
+    	}
+    	 
+    	 
+    	return $filter;
+    }    
 
 }

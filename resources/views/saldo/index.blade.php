@@ -1,6 +1,7 @@
 @extends('layouts/adminlte')
 @section('page_title', "Amounts due")
-@section('page_description', $filter == 'all' ? 'all' : 'open');
+@section('page_description', $filter == 'all' ? 'all' : 'open')
+
 @section('content')
     <div class='row'>
         <div class='col-md-8 col-sm-12'>

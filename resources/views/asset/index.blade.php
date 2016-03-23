@@ -1,4 +1,5 @@
 @extends('layouts/adminlte')
+@section('page_title', "Assets")
 
 @section('content')
     <div class='row'>

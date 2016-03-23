@@ -48,7 +48,7 @@
                   <ul class="treeview-menu">
 		            <li><a href="{{ url( 'asset' )}}"><i class="fa fa-circle-o"></i> Assets</a></li>
 		            <li><a href="{{ url( 'ledger' )}}"><i class="fa fa-circle-o"></i> Ledgers</a></li>
-		            <li><a href="{{ url( 'travel' )}}"><i class="fa fa-circle-o"></i> Travel registration</a></li>
+		            <li><a href="{{ url( 'travelexpense' )}}"><i class="fa fa-circle-o"></i> Travel registration</a></li>
 		            <li><a href="{{ url( 'transaction/import' )}}"><i class="fa fa-circle-o"></i> Import</a></li>
                   </ul>
             </li>

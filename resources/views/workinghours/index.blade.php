@@ -1,6 +1,6 @@
 @extends('layouts/adminlte')
 @section('page_title', "Working hours")
-@section('page_description', toTimespan($filter['start'], $filter['end']));
+@section('page_description', toTimespan($filter['start'], $filter['end']))
 
 @section('js')
 	{{HTML::script(asset('/assets/js/workinghours.index.js'))}}
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered table-striped table-hover">
+			        <table class="table table-bordered table-striped table-hover workinghours">
 			            <thead>
 			                <tr>
 			                    <th>Datum</th><th>Duur</th><th>Klant</th><th>Opmerkingen</th><th>Km</th><th></th>

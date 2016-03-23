@@ -1,6 +1,6 @@
 @extends('layouts/adminlte')
 @section('page_title', "General ledgers")
-@section('page_description', toTimespan($filter['start'], $filter['end']));
+@section('page_description', toTimespan($filter['start'], $filter['end']))
 
 @section('js')
 	{{HTML::script(asset('/assets/js/date-range-filter.js'))}}

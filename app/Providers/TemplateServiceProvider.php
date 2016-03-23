@@ -26,6 +26,11 @@ class TemplateServiceProvider extends ServiceProvider
     	Blade::directive('amount', function($expression) {
     		return "&euro; <?php echo number_format((" . $expression . "), 2, ',', '.'); ?>";
     	});
+    	
+   		// Register directive to show a large number
+   		Blade::directive('number', function($expression) {
+   			return "<?php echo number_format((" . $expression . "), 0, ',', '.'); ?>";
+   		});
 
    		// Register directive to show a post description
    		Blade::directive('post', function($expression) {

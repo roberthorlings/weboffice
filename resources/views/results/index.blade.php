@@ -1,6 +1,7 @@
 @extends('layouts/adminlte')
 @section('page_title', "Financial results")
-@section('page_description', toTimespan($filter['start'], $filter['end']));
+@section('page_description', toTimespan($filter['start'], $filter['end']))
+
 @section('js')
 	{{HTML::script(asset('/assets/js/date-range-filter.js'))}}
 @endsection
