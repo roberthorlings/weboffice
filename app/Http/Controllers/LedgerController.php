@@ -21,11 +21,18 @@ class LedgerController extends Controller
     public function index(Request $request)
     {
     	$filter = $this->getFilterFromRequest($request);
-    	 
-        $posts = Post::paginate(15);
-        $start = Carbon::now()->subYear();
-        $end = Carbon::now();
-		$ledgers = new Ledgers($start, $end, $posts);
+    	
+    	// Fetch posts to show ledger for
+    	$query = Post::orderBy('nummer', 'asc');
+    	
+    	if(array_key_exists('post_id', $filter)) {
+    		$query->where('id', $filter['post_id']);
+    	}
+    	
+    	$posts = $query->paginate(15);
+		
+        // Generate ledgers
+    	$ledgers = new Ledgers($filter['start'], $filter['end'], $posts);
 		
         return view('ledger.index', compact( 'posts', 'ledgers', 'filter'));
     }
@@ -49,7 +56,7 @@ class LedgerController extends Controller
     	if($postId)
     		$filter['post_id'] = $postId;
     
-    		return $filter;
+    	return $filter;
     }
         
 }

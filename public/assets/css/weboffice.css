@@ -78,3 +78,9 @@ table.statements tbody tr td { border-width: 0; }
 .asset-booking .statements { border-color: #3C8DBC; }
 .asset-booking .statements .remarks, .asset-booking .statements .buttons { display: none; }
 .asset-calculation .row { margin-top: 3px; margin-bottom: 3px; }
+
+/* Ledgers */
+table.ledgers tbody tr td { border-width: 0; }
+.ledgers .header-line td { padding-top: 20px; border-bottom: 1px solid #999; }
+.ledgers .detail-line td { font-size: 0.9em; padding-top: 2px; padding-bottom: 2px; }
+.ledgers .total-line td { font-size: 0.9em; font-weight: bold; padding-top: 2px; padding-bottom: 2px; border-top: 1px solid #999; }

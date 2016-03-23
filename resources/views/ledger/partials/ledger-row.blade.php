@@ -10,6 +10,27 @@
 	</td>
 </tr>
 
+@if(abs($ledger->getInitial()) > 0)
+	<tr	class="initial detail-line 
+		{{ $idx % 2 == 0 ? 'even' : 'odd' }}
+		">
+		<td>-</td>
+		<td>Van balans</td>
+		<td>{{ ucfirst($ledger->initialSide() ) }}</td>
+		
+		<td class="amount">
+			@if( $ledger->getInitial() >= 0 ) 
+				@amount($ledger->getInitial())
+			@endif
+		</td>
+		<td class="amount">
+			@if( $ledger->getInitial() < 0 ) 
+				@amount(-$ledger->getInitial())
+			@endif
+		</td>
+	</tr>
+@endif
+
 @foreach($ledger->getStatementLines() as $statementLine)
 	<tr	class="detail-line 
 		{{ $idx % 2 == 0 ? 'even' : 'odd' }}
@@ -18,12 +39,12 @@
 		<td>{{ $statementLine->Statement->omschrijving }}</td>
 		<td>{{ $statementLine->credit ? 'Credit' : 'Debet' }}</td>
 		
-		<td>
+		<td class="amount">
 			@if(!$statementLine->credit)
 				@amount($statementLine->bedrag)
 			@endif
 		</td>
-		<td>
+		<td class="amount">
 			@if($statementLine->credit)
 				@amount($statementLine->bedrag)
 			@endif
@@ -33,7 +54,7 @@
 
 <tr
 	class="
-		ledger-total-line
+		total-line
 		{{ $idx % 2 == 0 ? "even" : "odd" }}
 	"
 	>
@@ -42,14 +63,14 @@
 		Totaal
 	</td>
 	<td>
-		{{ $ledger->totalSide() }}
+		{{ ucfirst($ledger->totalSide()) }}
 	</td>
-	<td>
+	<td class="amount">
 		@if( $ledger->getTotal() >= 0 ) 
 			@amount($ledger->getTotal())
 		@endif
 	</td>
-	<td>
+	<td class="amount">
 		@if( $ledger->getTotal() < 0 ) 
 			@amount(-$ledger->getTotal())
 		@endif

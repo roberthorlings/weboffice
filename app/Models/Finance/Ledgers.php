@@ -4,6 +4,7 @@ namespace Weboffice\Models\Finance;
 use Carbon\Carbon;
 use Weboffice\Models\Post;
 use Weboffice\Models\StatementLine;
+use Weboffice\Models\PostType;
 
 /**
  * General ledger data.
@@ -62,13 +63,17 @@ class Ledgers {
 		return $this->ledgers;
 	}
 	
+	protected function getPostIds() {
+		return array_map(function($post) { return $post->id; }, $this->posts);
+	}
+	
 	/**
 	 * Initializes the ledgers, based on the given dates
 	 */
 	protected function initialize() {
 		// Load statistics from statement lines for all posts
 		// before the start date
-		$this->loadPostStatistics(null, $this->start, array_map(function($post) { return $post->id; }, $this->posts));
+		$this->loadPostStatistics(null, $this->start, $this->getPostIds() );
 		
 		// Load statement lines for all posts in a single query
 		$this->loadStatementLines();
@@ -85,6 +90,7 @@ class Ledgers {
 			->join('boekingen', 'boekingen.id', '=', 'boeking_delen.boeking_id')
 			->join('posten', 'posten.id', '=', 'boeking_delen.post_id')
 			->whereBetween('datum', [$this->start, $this->end])
+			->whereIn('post_id', $this->getPostIds())
 			->orderBy('nummer', 'asc')
 			->orderBy('datum', 'asc')
 			->get();
@@ -105,21 +111,31 @@ class Ledgers {
 	 * 
 	 */
 	protected function createLedgers() {
-		foreach( $this->statementLines as $postId => $lines ) {
-			$ledger = new Ledger($this->start, $this->end, $lines[0]->Post);
+		$typesBalance = PostType::whereIn('type', ['balans', 'eigen vermogen'])->select('id')->get();
+		$balanceTypeIds = array_map(function($type) { return $type->id; }, $typesBalance->all());
+		
+		foreach( $this->posts as $post ) {
+			// Create a ledger for this post
+			$ledger = new Ledger($this->start, $this->end, $post);
+			
+			// Add all lines for the current period
+			$lines = array_key_exists($post->id, $this->statementLines) ? $this->statementLines[$post->id] : [];
 			$ledger->setStatementLines($lines);
 			
 			// Check whether we have an initial value for this ledger.
-			if( array_key_exists( $postId, $this->postStatistics ) ) {
+			if( in_array($post->post_type_id, $balanceTypeIds) && array_key_exists($post->id, $this->postStatistics) ) {
 				$initial = 0;
-				foreach( $this->postStatistics[$postId] as $stat ) {
+				foreach( $this->postStatistics[$post->id] as $stat ) {
 					$initial += ( $stat->credit ? -1 : 1) * $stat->total;
 				}
 				
 				$ledger->setInitial($initial);
 			}
 			
-			$this->ledgers[$postId] = $ledger;
+			// Only store ledger if there is something relevant
+			if(abs($ledger->getTotal()) > 0) {
+				$this->ledgers[$post->id] = $ledger;
+			}
 		}
 	}
 	

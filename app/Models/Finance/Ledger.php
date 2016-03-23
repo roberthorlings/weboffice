@@ -103,6 +103,11 @@ class Ledger {
 		return $this->total < 0 ? 'credit' : 'debet';
 	}
 	
+	public function initialSide() {
+		return $this->initial < 0 ? 'credit' : 'debet';
+	}
+	
+	
 	protected function updateTotal() {
 		$total = $this->initial;
 		foreach( $this->statementLines as $line ) {
