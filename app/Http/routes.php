@@ -63,6 +63,9 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('transaction/import', 'TransactionController@import');
 	Route::post('transaction/import', 'TransactionController@storeImport');
 	
+	// Handle documents - mark as final
+	Route::post('invoice/{id}/mark_as_final', 'InvoiceController@markAsFinal');
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');

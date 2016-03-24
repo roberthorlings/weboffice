@@ -109,3 +109,5 @@ table.ledgers tbody tr td { border-width: 0; }
 .travelregistration .visiting-address { color: #367fa9; }
 .stats .totals { font-weight: bold; }
 
+/* Documents (invoices, quotes) */
+.documents .concept, .documents .concept a.title { color: #aaa; }
