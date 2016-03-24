@@ -4,6 +4,7 @@ namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use AppConfig;
+use Carbon\Carbon;
 
 class Invoice extends Model
 {
@@ -42,6 +43,11 @@ class Invoice extends Model
     {
     	return $this->hasMany('\Weboffice\Models\InvoiceLine', 'factuur_id');
     }
+    public function InvoiceProjects() 
+    {
+    	return $this->hasMany('\Weboffice\Models\InvoiceProject', 'invoice_id');
+    }
+    
     
     /**
      * Get a specific attribute for use in forms. Dates and times have to be formatted properly
@@ -120,6 +126,64 @@ class Invoice extends Model
     public function addLine($description, $extra, $number, $price, $postId) {
     	return $this->updateLine(null, $description, $extra, $number, $price, $postId);
     }
+    
+    /**
+     * Handle updating an invoice project, as edited by the user.
+     * Only lines with a proper project id are stored.
+     *
+     * @param unknown $id			Existing ID for the invoice project. If none is given, a new one will be created
+     * @param int	  $projectId	Project to base the invoice on
+     * @param Carbon  $start 		Start date for the period to invoice
+     * @param Carbon  $end			End date for the period to invoice
+     * @param string  $hoursType	Type to include the workinghours
+     * @return InvoiceProject		The InvoiceProject object or null if no proper data was specified.
+     */
+    public function updateProject($id, $projectId, $start, $end, $hoursType) {
+    	$project = null;
+    
+    	// If ID is specified, reuse existing line
+    	if($id) {
+    		$project = InvoiceProject::find($id);
+    	}
+    
+    	// If no number, price or postId is specified, don't store anything (or delete existing)
+    	if( !$projectId ) {
+    		if($project && $project->id)
+    			$project->delete();
+    
+    		return null;
+    	}
+    
+    	// If no or invalid id was specified, create a new line
+    	if(!$project) {
+    		$project = new InvoiceProject();
+    	}
+    
+    	// Update line properites
+    	$project->project_id = $projectId;
+    	$project->start = $start;
+    	$project->end = $end;
+    	$project->hours_overview_type = $hoursType;
+    
+    	// Save the line itself
+    	$this->InvoiceProjects()->save($project);
+    
+    	return $project;
+    }
+    
+    /**
+     * Adds a new invoice project
+     * Only lines with a proper project id are stored.
+     *
+     * @param int	  $projectId	Project to base the invoice on
+     * @param Carbon  $start 		Start date for the period to invoice
+     * @param Carbon  $end			End date for the period to invoice
+     * @param string  $hoursType	Type to include the workinghours
+     * @return InvoiceProject		The InvoiceProject object or null if no proper data was specified.
+     */
+    public function addProject($projectId, $start, $end, $hoursType) {
+    	return $this->updateProject(null, $projectId, $start, $end, $hoursType);
+    }    
     
 	/**
 	 * Returns the next available number for an invoice

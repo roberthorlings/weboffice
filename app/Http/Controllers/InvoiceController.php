@@ -10,10 +10,12 @@ use Weboffice\Http\Controllers\Controller;
 use Weboffice\Models\Invoice;
 use Weboffice\Repositories\PostRepository;
 use Weboffice\Repositories\RelationRepository;
+use Weboffice\Models\Project;
 
 class InvoiceController extends Controller
 {
 	const NUM_INVOICE_LINES = 8;
+	const NUM_PROJECT_LINES = 4;
 	
     /**
      * Display a listing of the resource.
@@ -58,8 +60,25 @@ class InvoiceController extends Controller
         $data['date'] = Carbon::now();
         $data['number'] = Invoice::nextNumber();
         
-        return view('invoice.create', $data);
+        return view('invoice.create-default', $data);
     }
+    
+    /**
+     * Show the form for creating a new project invoice
+     *
+     * @return Response
+     */
+    public function createProjectInvoice(RelationRepository $relationRepository, PostRepository $postRepository)
+    {
+    	$data = $this->getDataForForm(null, $relationRepository, $postRepository);
+    	$data = array_merge( $data, $this->getDataForProjectForm(null, $relationRepository));
+    	 
+    	// Set default values
+    	$data['date'] = Carbon::now();
+    	$data['number'] = Invoice::nextNumber();
+    	
+    	return view('invoice.create-project', $data);
+    }    
 
     /**
      * Store a newly created resource in storage.
@@ -68,13 +87,17 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        
         $invoice = Invoice::create($request->all());
 
         // Store the lines as well.
-        $linesToSave = [];
         foreach( $request->get('Lines') as $lineInfo ) {
         	$invoice->addLine($lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        }
+        
+        if( $invoice->uurtje_factuurtje ) {
+        	foreach( $request->get('Projects', []) as $projectInfo ) {
+        		$invoice->addProject($projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        	}
         }
         
         Flash::message( 'Invoice added!');
@@ -124,10 +147,16 @@ class InvoiceController extends Controller
      */
     public function edit($id, RelationRepository $relationRepository, PostRepository $postRepository)
     {
-        $invoice = Invoice::findOrFail($id);
+        $invoice = Invoice::with(['InvoiceProjects', 'InvoiceLines'])->findOrFail($id);
         
         $data = $this->getDataForForm($invoice, $relationRepository, $postRepository);
-        return view('invoice.edit', $data);
+        
+        if( $invoice->uurtje_factuurtje ) {
+        	$data = array_merge( $data, $this->getDataForProjectForm($invoice, $relationRepository));
+        	return view('invoice.edit-project', $data);
+        } else {
+        	return view('invoice.edit-default', $data);
+        }
     }
 
     /**
@@ -147,19 +176,29 @@ class InvoiceController extends Controller
         	$invoice = Invoice::create($data);
         	
         	// Store the lines as well. Please note that new lines will be created, so the id is irrelevant
-        	$linesToSave = [];
         	foreach( $request->get('Lines') as $lineInfo ) {
         		$invoice->updateLine(null, $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
         	}
+        	if( $invoice->uurtje_factuurtje ) {
+        		foreach( $request->get('Projects', []) as $projectInfo ) {
+        			$invoice->updateProject(null, $projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        		}
+        	}
+        	 
         } else {
         	// Update current version
         	$invoice = Invoice::findOrFail($id);
         	$invoice->update($request->all());
         	
         	// Store the lines as well.
-        	$linesToSave = [];
         	foreach( $request->get('Lines') as $lineInfo ) {
         		$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        	}
+        	
+        	if( $invoice->uurtje_factuurtje ) {
+        		foreach( $request->get('Projects', []) as $projectInfo ) {
+        			$invoice->updateProject($projectInfo['id'], $projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        		}
         	}
         }
         
@@ -258,6 +297,44 @@ class InvoiceController extends Controller
     	$relations = $relationRepository->getRelationsWithProjects();
     
     	return compact('invoice', 'numLines', 'preEnteredLines', 'sum',  'posts', 'relations', 'relation_project');
+    }
+    
+    /**
+     * Returns the data needed for the form to create/edit a project invoice
+     */
+    protected function getDataForProjectForm($invoice, RelationRepository $relationRepository) {
+    	// Add projects
+    	$relations = $relationRepository->getRelationsWithProjects(null, function($builder) {
+    		return $builder->where( 'status', Project::STATUS_ACTIEF );
+    	});
+    		 
+   		$projects = [];
+   		foreach( $relations as $relation ) {
+   			if(count($relation->Projects))
+   				$projects[ $relation->bedrijfsnaam ] = $relation->Projects->pluck("naam", "id")->all();
+  		}
+  		
+  		// Make sure to specify a set of lines with data
+  		$numProjects = self::NUM_PROJECT_LINES;
+  		if( $invoice ) {
+  			$numProjects = max($numProjects, count($invoice->InvoiceProjects));
+  		}
+  		
+  		// Specify enough empty lines
+  		$lastMonthStart = Carbon::now()->subMonth()->startOfMonth();
+  		$lastMonthEnd = Carbon::now()->subMonth()->endOfMonth();
+  		$preEnteredProjects = array_fill(0, $numProjects, [ 'id' => null, 'project_id' => null, 'start' => $lastMonthStart, 'end' => $lastMonthEnd, 'hours_overview_type' => 'defualt' ]);
+  		
+  		// Overwrite the first lines with existing data
+  		if( $invoice ) {
+  			foreach( $invoice->InvoiceProjects as $idx => $line ) {
+  				$preEnteredProjects[$idx] = $line->toArray();
+  				$preEnteredProjects[$idx]['start'] = $line->start;
+  				$preEnteredProjects[$idx]['end'] = $line->end;
+  			}
+  		}  		
+  		
+  		return compact( 'projects', 'numProjects', 'preEnteredProjects');
     }
     
 }

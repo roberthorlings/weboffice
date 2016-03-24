@@ -19,7 +19,6 @@ $(function() {
 			if($(el).val()) {
 				var sign = $(el).parents('.transaction-line').find( '.statement-sign' ).val() == '1' ? 1.0 : -1.0;
 				sum += parseFloat($(el).val()) * sign;
-				console.log($(el).parents('.transaction-line').find( '.statement-sign' ), sign, $(el).val());
 			}
 		});
 		

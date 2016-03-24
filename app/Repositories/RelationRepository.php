@@ -11,9 +11,9 @@ class RelationRepository {
 	public function getRelationsWithProjects($relationQueryBuilder = null, $projectQueryBuilder = null) {
 		// Determine whether to filter or order the projects
 		if($projectQueryBuilder) {
-			$builder = Relation::with(['projects' => $projectQueryBuilder]);
+			$builder = Relation::with(['Projects' => $projectQueryBuilder]);
 		} else {
-			$builder = Relation::with('projects');
+			$builder = Relation::with('Projects');
 		}
 		
 		// Determine whether to filter or order the relations

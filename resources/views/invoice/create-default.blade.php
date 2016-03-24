@@ -1,5 +1,7 @@
 @extends('layouts/adminlte')
-
+@section('js')
+	{{HTML::script(asset('/assets/js/invoices.form.js'))}}
+@endsection
 @section('content')
 
     {!! Form::open(['url' => 'invoice', 'class' => 'form-horizontal']) !!}
@@ -49,18 +51,6 @@
 		                </div>
 		            </div>
 
-		            <div class="form-group {{ $errors->has('uurtje_factuurtje') ? 'has-error' : ''}}">
-		                {!! Form::label('uurtje_factuurtje', 'Uurtje Factuurtje: ', ['class' => 'col-sm-3 control-label']) !!}
-		                <div class="col-sm-9">
-                            <div class="checkbox">
-				                <label>{!! Form::radio('uurtje_factuurtje', '1') !!} Yes</label>
-				            </div>
-				            <div class="checkbox">
-				                <label>{!! Form::radio('uurtje_factuurtje', '0', true) !!} No</label>
-				            </div>
-		                    {!! $errors->first('uurtje_factuurtje', '<p class="help-block">:message</p>') !!}
-		                </div>
-		            </div>
 		            <div class="form-group {{ $errors->has('btw') ? 'has-error' : ''}}">
 		                {!! Form::label('btw', 'Btw: ', ['class' => 'col-sm-3 control-label']) !!}
 		                <div class="col-sm-9">

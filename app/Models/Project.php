@@ -34,6 +34,11 @@ class Project extends Model
     public function Post()
     {
         return $this->belongsTo('\Weboffice\Models\Post', 'post_id');
-    }    	
+    }
+    public function WorkingHours() 
+    {
+    	return $this->hasMany('\Weboffice\Models\WorkingHour', 'project_id');
+    }
+    
 
 }

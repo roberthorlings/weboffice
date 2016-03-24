@@ -62,13 +62,13 @@
           <ul class="treeview-menu">
             <li><a href="{{ url( 'invoice' )}}"><i class="fa fa-circle-o"></i> Invoices</a></li>
             <li><a href="{{ url( 'quote' )}}"><i class="fa fa-circle-o"></i> Quotes</a></li>
-            <li><a href="{{ url( 'invoice/project' )}}"><i class="fa fa-circle-o"></i> Add project invoice</a></li>
+            <li><a href="{{ url( 'invoice/create/project' )}}"><i class="fa fa-circle-o"></i> Add project invoice</a></li>
             <li><a href="{{ url( 'invoice/create' )}}"><i class="fa fa-circle-o"></i> Add normal invoice</a></li>
             
            	<li> 
                   <a href="#"><i class="fa fa-circle-o"></i> More <i class="fa fa-angle-left pull-right"></i></a>
                   <ul class="treeview-menu">
-		            <li><a href="{{ url( 'quote/add' )}}"><i class="fa fa-circle-o"></i> Add quote</a></li>
+		            <li><a href="{{ url( 'quote/create' )}}"><i class="fa fa-circle-o"></i> Add quote</a></li>
 		            <li><a href="{{ url( 'invoice/credit' )}}"><i class="fa fa-circle-o"></i> Add credit note</a></li>
 		            <li><a href="{{ url( 'invoice/receive' )}}"><i class="fa fa-circle-o"></i> Receive invoice</a></li>
 		            <li><a href="{{ url( 'entries/costs' )}}"><i class="fa fa-circle-o"></i> Report costs</a></li>
