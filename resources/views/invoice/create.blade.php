@@ -15,14 +15,14 @@
 		            <div class="form-group {{ $errors->has('datum') ? 'has-error' : ''}}">
 		                {!! Form::label('datum', 'Datum: ', ['class' => 'col-sm-3 control-label']) !!}
 		                <div class="col-sm-9">
-		                    {!! Form::date('datum', null, ['class' => 'form-control']) !!}
+		                    {!! Form::date('datum', $date, ['class' => 'form-control']) !!}
 		                    {!! $errors->first('datum', '<p class="help-block">:message</p>') !!}
 		                </div>
 		            </div>
 				    <div class="form-group {{ $errors->has('factuurnummer') ? 'has-error' : ''}}">
 		                {!! Form::label('factuurnummer', 'Factuurnummer: ', ['class' => 'col-sm-3 control-label']) !!}
 		                <div class="col-sm-9">
-		                    {!! Form::text('factuurnummer', null, ['class' => 'form-control']) !!}
+		                    {!! Form::text('factuurnummer', $number, ['class' => 'form-control']) !!}
 		                    {!! $errors->first('factuurnummer', '<p class="help-block">:message</p>') !!}
 		                </div>
 		            </div>

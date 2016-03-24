@@ -65,8 +65,14 @@ class StatementController extends Controller
     public function store(Request $request)
     {
         
-        Statement::create($request->all());
+        $statement = Statement::create($request->all());
 
+        // Store the lines as well.
+        $linesToSave = [];
+        foreach( $request->get('Lines') as $lineInfo ) {
+        	$statement->addLine($lineInfo['credit'], $lineInfo['amount'], $lineInfo['post_id']);
+        }
+        
         Flash::message( 'Statement added!');
 
         return redirect('statement');

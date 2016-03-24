@@ -3,6 +3,7 @@
 namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Weboffice\Support\Facades\AppConfig;
 
 class InvoiceLine extends Model
 {
@@ -49,4 +50,26 @@ class InvoiceLine extends Model
     	$this->attributes['prijs' ] = $amount * 100;
     }
     
+    /**
+     * Returns the subtotal (i.e. price * amount) without VAT
+     */
+    public function getSubtotal() {
+    	return round($this->prijs * $this->aantal, 2);
+    }
+    
+
+    /**
+     * Returns the VAT for this line
+     */
+    public function getVAT() {
+   		return round($this->getSubtotal() * ( AppConfig::get('btwPercentage') / 100 ), 2);
+    }
+    
+
+    /**
+     * Returns the grand total for this line
+     */
+    public function getTotal() {
+    	 return $this->getSubtotal() + $this->getVAT();
+    }
 }

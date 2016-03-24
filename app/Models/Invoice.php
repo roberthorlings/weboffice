@@ -3,10 +3,17 @@
 namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use AppConfig;
 
 class Invoice extends Model
 {
 
+	/**
+	 * Cache variable to hold the subtotal
+	 * @var unknown $subTotal
+	 */
+	protected $subTotal = null;
+	
     /**
      * The database table used by the model.
      *
@@ -114,5 +121,69 @@ class Invoice extends Model
     	return $this->updateLine(null, $description, $extra, $number, $price, $postId);
     }
     
+	/**
+	 * Returns the next available number for an invoice
+	 */
+	public static function nextNumber() {
+		return sprintf( AppConfig::get('factuurNummerFormat'), AppConfig::get('factuurNummer') + 1 );
+	}
+	
+	/**
+	 * Returns the next invoice version for the given invoice number
+	 * @param unknown $invoiceNumber
+	 */
+	public static function nextVersionNumber($invoiceNumber) {
+		$current = Invoice::where('factuurnummer', $invoiceNumber)->max('versie');
+		
+		if( $current ) {
+			return $current + 1;
+		} else {
+			return 1;
+		}
+	}
+	
 
+	/**
+	 * Returns the subtotal (i.e. price * amount) without VAT
+	 */
+	public function getSubtotal() {
+		if( is_null($this->subTotal) ) 
+			$this->subTotal = $this->calculateSubTotal();
+		
+		return $this->subTotal;
+	}
+	
+	/**
+	 * Calculates the subtotal for the current invoice
+	 */
+	protected function calculateSubTotal() {
+		return array_sum(
+			array_map(
+				function($line) { return $line->getSubtotal(); },
+				$this->InvoiceLines->all()
+			)
+		);		
+	}
+	
+	/**
+	 * Returns the VAT percentage for this invoice
+	 */
+	public function getVATPercentage() {
+		return $this->btw ? AppConfig::get('btwPercentage') : 0;
+	}
+	
+	/**
+	 * Returns the VAT for this line
+	 */
+	public function getVAT() {
+		return round($this->getSubtotal() * ( $this->getVATPercentage() / 100 ), 2);
+	}
+	
+	
+	/**
+	 * Returns the grand total for this line
+	 */
+	public function getTotal() {
+		return $this->getSubtotal() + $this->getVAT();
+	}	
 }

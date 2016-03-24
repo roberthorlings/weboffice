@@ -33,7 +33,7 @@
 			                    <td>{{ $item->datum->format('d-m-Y')}}</td>
 			                    <td>{{ $item->factuurnummer }}</td>
 			                    <td>{{ $item->versie }}</td>
-			                    <td>{{ $item->Relation->bedrijfsnaam }}</td>
+			                    <td>{{ $item->Relation ? $item->Relation->bedrijfsnaam : ''}}</td>
 			                    <td><a href="{{ url('invoice', $item->id) }}" class="title">{{ $item->titel }}</a></td>
 			                    <td class="amount">@amount($item->totaalbedrag)</td>
 			                    <td align="right">

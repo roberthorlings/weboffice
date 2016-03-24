@@ -5,6 +5,10 @@ namespace Weboffice\Providers;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Weboffice\Models\Transaction;
+use AppConfig;
+use Weboffice\Models\Invoice;
+use Weboffice\Models\Quote;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -54,6 +58,15 @@ class EventServiceProvider extends ServiceProvider
 		    }
 		});
         
+		// Handle invoice and quote creation, storing the newly created 
+		// invoice number in configuration
+		Invoice::created(function($invoice) {
+			AppConfig::set('factuurNummer', $invoice->factuurnummer);
+		});
+		
+		Quote::created(function($quote) {
+			AppConfig::set('offerteNummer', $quote->offertenummer);
+		});
         
     }
 }

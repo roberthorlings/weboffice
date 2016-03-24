@@ -2,14 +2,14 @@
 
 namespace Weboffice\Http\Controllers;
 
-use Weboffice\Http\Controllers\Controller;
 use Carbon\Carbon;
-use Session;
 use Flash;
 use Illuminate\Http\Request;
+use Session;
+use Weboffice\Http\Controllers\Controller;
 use Weboffice\Models\Invoice;
-use Weboffice\Repositories\RelationRepository;
 use Weboffice\Repositories\PostRepository;
+use Weboffice\Repositories\RelationRepository;
 
 class InvoiceController extends Controller
 {
@@ -54,6 +54,10 @@ class InvoiceController extends Controller
     {
         $data = $this->getDataForForm(null, $relationRepository, $postRepository);
     	
+        // Set default values
+        $data['date'] = Carbon::now();
+        $data['number'] = Invoice::nextNumber();
+        
         return view('invoice.create', $data);
     }
 
@@ -65,8 +69,14 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         
-        Invoice::create($request->all());
+        $invoice = Invoice::create($request->all());
 
+        // Store the lines as well.
+        $linesToSave = [];
+        foreach( $request->get('Lines') as $lineInfo ) {
+        	$invoice->addLine($lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        }
+        
         Flash::message( 'Invoice added!');
 
         return redirect('invoice');
@@ -129,19 +139,33 @@ class InvoiceController extends Controller
      */
     public function update($id, Request $request)
     {
-        
-        $invoice = Invoice::findOrFail($id);
-        $invoice->update($request->all());
-
-        // Store the lines as well.
-        $linesToSave = [];
-        foreach( $request->get('Lines') as $lineInfo ) {
-        	$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        if( $request->get( 'save-method', 'new-version' ) == 'new-version' ) {
+        	// Create new invoice and update version number
+        	$data = $request->all();
+        	
+        	$data['versie'] = Invoice::nextVersionNumber($data['factuurnummer']);
+        	$invoice = Invoice::create($data);
+        	
+        	// Store the lines as well. Please note that new lines will be created, so the id is irrelevant
+        	$linesToSave = [];
+        	foreach( $request->get('Lines') as $lineInfo ) {
+        		$invoice->updateLine(null, $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        	}
+        } else {
+        	// Update current version
+        	$invoice = Invoice::findOrFail($id);
+        	$invoice->update($request->all());
+        	
+        	// Store the lines as well.
+        	$linesToSave = [];
+        	foreach( $request->get('Lines') as $lineInfo ) {
+        		$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        	}
         }
         
         Flash::message( 'Invoice updated!');
 
-        return redirect('invoice');
+        return redirect()->route('invoice.show', [$invoice->id]);
     }
 
     /**

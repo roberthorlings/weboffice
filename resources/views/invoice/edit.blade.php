@@ -7,7 +7,7 @@
         'url' => ['invoice', $invoice->id],
         'class' => 'form-horizontal'
     ]) !!}
-
+	
 	<div class="row">
 		<div class="col-sm-6 col-xs-12">
 			<div class="box box-primary">
@@ -162,8 +162,9 @@
 								
 			</div>
 			<!-- /.box-body -->
-			<div class="box-footer">
-				{!! Form::submit('Update', ['class' => 'btn	btn-primary form-control']) !!}
+			<div class="box-footer row">
+				{!! Form::button('Save as new version', ['type' => 'submit', 'name' => 'save-method', 'value' => 'new-version', 'class' => 'btn btn-primary col-sm-6']) !!}
+				{!! Form::button('Update current version', ['type' => 'submit', 'name' => 'save-method', 'value' => 'update-current', 'class' => 'btn	btn-default col-sm-6']) !!}
 			</div>
 			<!-- box-footer -->
 			
