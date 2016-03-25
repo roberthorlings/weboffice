@@ -87,17 +87,33 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $invoice = Invoice::create($request->all());
+        // Create the new invoice
+    	$data = $request->all();
+    	$data['versie'] = Invoice::nextVersionNumber($data['factuurnummer']);
+    	
+    	$invoice = Invoice::create($data);
 
-        // Store the lines as well.
-        foreach( $request->get('Lines') as $lineInfo ) {
-        	$invoice->addLine($lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
-        }
+        // Store optional projects belonging to the invoice
+        $lines = $request->get('Lines');
         
         if( $invoice->uurtje_factuurtje ) {
-        	foreach( $request->get('Projects', []) as $projectInfo ) {
-        		$invoice->addProject($projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        	foreach( $request->get('Projects', []) as $idx => $projectInfo ) {
+        		// Add the project to the invoice
+        		$invoiceProject = $invoice->addProject($projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        		
+        		// Update invoice lines accordingly
+        		if( $invoiceProject ) {
+        			$lines[$idx]['omschrijving' ] = $invoiceProject->Project->naam;
+        			$lines[$idx]['aantal'] = $invoiceProject->getTotalWorkingHours();
+        			$lines[$idx]['prijs'] = $invoiceProject->getHourlyRate();
+        			$lines[$idx]['post_id'] = $invoiceProject->Project->post_id;
+        		}
         	}
+        }
+        
+        // Store the lines as well.
+        foreach( $lines as $lineInfo ) {
+        	$invoice->addLine($lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
         }
         
         Flash::message( 'Invoice added!');
@@ -168,37 +184,56 @@ class InvoiceController extends Controller
      */
     public function update($id, Request $request)
     {
+    	$data = $request->all();
+    	$lines = $request->get('Lines');
+    	 
         if( $request->get( 'save-method', 'new-version' ) == 'new-version' ) {
         	// Create new invoice and update version number
-        	$data = $request->all();
-        	
         	$data['versie'] = Invoice::nextVersionNumber($data['factuurnummer']);
         	$invoice = Invoice::create($data);
-        	
-        	// Store the lines as well. Please note that new lines will be created, so the id is irrelevant
-        	foreach( $request->get('Lines') as $lineInfo ) {
-        		$invoice->updateLine(null, $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
-        	}
+
+        	// Store optional projects belonging to the invoice
         	if( $invoice->uurtje_factuurtje ) {
-        		foreach( $request->get('Projects', []) as $projectInfo ) {
-        			$invoice->updateProject(null, $projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        		foreach( $request->get('Projects', []) as $idx => $projectInfo ) {
+        			$invoiceProject = $invoice->updateProject(null, $projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        			 
+        			// Update invoice lines accordingly
+        			if( $invoiceProject ) {
+        				$lines[$idx]['omschrijving' ] = $invoiceProject->Project->naam;
+        				$lines[$idx]['aantal'] = $invoiceProject->getTotalWorkingHours();
+        				$lines[$idx]['prijs'] = $invoiceProject->getHourlyRate();
+        				$lines[$idx]['post_id'] = $invoiceProject->Project->post_id;
+        			}
         		}
         	}
         	 
+        	// Store the lines as well. Please note that new lines will be created, so the id is irrelevant
+        	foreach( $lines as $lineInfo ) {
+        		$invoice->updateLine(null, $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        	}
         } else {
         	// Update current version
         	$invoice = Invoice::findOrFail($id);
-        	$invoice->update($request->all());
+        	$invoice->update($data);
         	
-        	// Store the lines as well.
-        	foreach( $request->get('Lines') as $lineInfo ) {
-        		$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        	// Store optional projects belonging to the invoice
+        	if( $invoice->uurtje_factuurtje ) {
+        		foreach( $request->get('Projects', []) as $idx => $projectInfo ) {
+        			$invoiceProject = $invoice->updateProject($projectInfo['id'], $projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
+        			 
+        			// Update invoice lines accordingly
+        			if( $invoiceProject ) {
+        				$lines[$idx]['omschrijving' ] = $invoiceProject->Project->naam;
+        				$lines[$idx]['aantal'] = $invoiceProject->getTotalWorkingHours();
+        				$lines[$idx]['prijs'] = $invoiceProject->getHourlyRate();
+        				$lines[$idx]['post_id'] = $invoiceProject->Project->post_id;
+        			}
+        		}
         	}
         	
-        	if( $invoice->uurtje_factuurtje ) {
-        		foreach( $request->get('Projects', []) as $projectInfo ) {
-        			$invoice->updateProject($projectInfo['id'], $projectInfo['project_id'], $projectInfo['start'], $projectInfo['end'], $projectInfo['hours_overview_type']);
-        		}
+        	// Store the lines as well.
+        	foreach( $lines as $lineInfo ) {
+        		$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
         	}
         }
         
@@ -278,7 +313,9 @@ class InvoiceController extends Controller
     	if( $invoice ) {
     		foreach( $invoice->InvoiceLines as $idx => $line ) {
     			$preEnteredLines[$idx] = $line->toArray();
-    			$sum += $line->bedrag;
+    			$preEnteredLines[$idx]['aantal'] = (float) $line->aantal;
+    			$preEnteredLines[$idx]['prijs'] = (float) $line->prijs;
+    			$sum += $line->getSubtotal();
     		}
     	}
     

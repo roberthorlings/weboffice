@@ -79,22 +79,7 @@
 			    <h3 class="box-title">Projects</h3>
 			  </div><!-- /.box-header -->
 			  <div class="box-body">
-				@for($i = 0; $i < $numProjects; $i++)
-					{!! Form::hidden('Projects[' . $i . '][id]', $preEnteredProjects[$i]['id']) !!} 
-					<div class="row invoice-project">
-						<div class="col-sm-4">
-							{!! Form::select('Projects[' . $i . '][project_id]', $projects,  $preEnteredProjects[$i]['project_id'], ['class' => 'form-control', 'placeholder' => ' - Select project - ']) !!} 
-						</div>
-						<div class="col-sm-4">
-		                    {!! Form::text('Projects[' . $i . '][period]', $preEnteredProjects[$i]['start']->format( 'd-m-Y') . ' - ' . $preEnteredProjects[$i]['end']->format( 'd-m-Y'), ['class' => 'form-control date-range-input', 'readonly' => 'readonly', 'data-selector-start' => '#project-' . $i . '-start', 'data-selector-end' => '#project-' . $i . '-end'] ) !!}
-		                    {!! Form::hidden('Projects[' . $i . '][start]', $preEnteredProjects[$i]['start']->format( 'Y-m-d'), ['id' => 'project-' . $i . '-start'] ) !!}
-		                    {!! Form::hidden('Projects[' . $i . '][end]', $preEnteredProjects[$i]['end']->format( 'Y-m-d'), ['id' => 'project-' . $i . '-end'] ) !!}
-						</div>
-						<div class="col-sm-4">
-							{!! Form::select('Projects[' . $i . '][hours_overview_type]', ['default' => 'Default', 'short' => 'Short', 'none' => 'None'],  $preEnteredProjects[$i]['hours_overview_type'], ['class' => 'form-control']) !!} 
-						</div>
-					</div>
-				@endfor
+				@include('invoice/partials/project-lines')
 			  </div><!-- /.box-body -->
 			</div><!-- /.box -->
 		</div>
@@ -106,33 +91,7 @@
 			</div>
 			<!-- /.box-header -->
 			<div class="box-body">
-				@for($i = 0; $i < $numLines; $i++)
-					{!! Form::hidden('Lines[' . $i . '][id]', $preEnteredLines[$i]['id']) !!} 
-					<div class="row transaction-line">
-						<div class="col-sm-4">
-							{!! Form::text('Lines[' . $i . '][omschrijving]',  $preEnteredLines[$i]['omschrijving'], ['class' => 'form-control']) !!} 
-						</div>
-						<div class="col-sm-3">
-							{!! Form::text('Lines[' . $i . '][extra]',  $preEnteredLines[$i]['extra'], ['class' => 'form-control']) !!} 
-						</div>
-						<div class="col-sm-1">
-							{!! Form::input('number', 'Lines[' . $i . '][aantal]', $preEnteredLines[$i]['aantal'], ['class' => 'form-control statement-amount', 'step' => 'any']) !!} 
-						</div>
-						<div class="col-sm-1">
-							{!! Form::input('number', 'Lines[' . $i . '][prijs]', $preEnteredLines[$i]['prijs'], ['class' => 'form-control statement-amount', 'step' => 'any']) !!} 
-						</div>
-						<div class="col-sm-3">
-							{!! Form::postSelect('Lines[' . $i . '][post_id]', $posts, $preEnteredLines[$i]['post_id'], ['class' => 'form-control', 'placeholder' => ' - No post selected - ']) !!} 
-						</div>
-					</div>
-				@endfor
-				
-				<div class="row total">
-					<div class="col-sm-1 col-sm-offset-8">
-						{!! Form::input('number', 'totaalbedrag', null, ['class' => 'form-control statement-total-amount', 'readonly' => 'readonly']) !!} 
-					</div>
-				</div>
-								
+				@include('invoice/partials/invoice-lines')
 			</div>
 			<!-- /.box-body -->
 			<div class="box-footer row">

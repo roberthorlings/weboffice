@@ -41,4 +41,20 @@ class Project extends Model
     }
     
 
+    /**
+     * Accessor for amount
+     */
+    public function getUurtariefAttribute($value) {
+    	return round($value) / 100;
+    }
+    
+    /**
+     * Mutator for amount
+     */
+    public function setUurtariefAttribute($amount) {
+    	$this->attributes['uurtarief' ] = $amount * 100;
+    }
+    
+    
+
 }

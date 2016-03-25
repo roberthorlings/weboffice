@@ -107,11 +107,23 @@ class WorkingHour extends Model
 
     /**
      * Returns the duration for the current registration, excluding break time
+     * @return DateInterval
      */
     public function getDurationAttribute() {
     	$break = $this->pauze ?: 0;
     	return $this->eindtijd->subMinutes($break)->diff($this->begintijd);
     }
+    
+    /**
+     * Returns the duration in minutes for the current registration, excluding break time
+     * @return int
+     */
+    public function getDurationInMinutesAttribute() {
+    	$duration = $this->duration;
+    	
+    	return $duration->format( '%d' ) * 24 * 60 + $duration->format( '%h' ) * 60 + $duration->format( '%i' );
+    }
+    
     
     /**
      * Get a specific attribute for use in forms. Dates and times have to be formatted properly

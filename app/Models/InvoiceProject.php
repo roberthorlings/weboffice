@@ -4,6 +4,8 @@ namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use AppConfig;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 
 class InvoiceProject extends Model
 {
@@ -70,7 +72,6 @@ class InvoiceProject extends Model
     	if(is_null($this->totalWorkingHours)) {
     		$this->totalWorkingHours = $this->calculateTotalWorkingHours();
     	}
-    	
     	return $this->totalWorkingHours;
     }
     
@@ -90,13 +91,15 @@ class InvoiceProject extends Model
     
     /**
      * Calculates the total amount of working hours
+     * @return float
      */
     protected function calculateTotalWorkingHours() {
-    	return array_sum(
-    		array_map(
-    			function($workingHour) { return $workingHour->duration; },
-    			$this->WorkingHours()->all()
-    		)
-    	);
+    	$sum = 0;
+    	
+    	foreach( $this->WorkingHours()->get() as $workingHour ) {
+    		$sum += $workingHour->durationInMinutes;
+    	}
+    	
+    	return $sum / 60;
     } 
 }
