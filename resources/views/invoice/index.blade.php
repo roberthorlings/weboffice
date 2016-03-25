@@ -22,7 +22,7 @@
 			        <table class="table table-bordered table-striped table-hover documents invoices">
 			            <thead>
 			                <tr>
-			                    <th>Date</th><th>Factuurnummer</th><th>Versie</th><th>Relation</th><th>Titel</th><th>Amount</th><th></th>
+			                    <th>Date</th><th>#</th><th>Version</th><th>Type</th><th>Relation</th><th>Title</th><th>Amount</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
@@ -33,6 +33,7 @@
 			                    <td>{{ $item->datum->format('d-m-Y')}}</td>
 			                    <td>{{ $item->factuurnummer }}</td>
 			                    <td>{{ $item->versie }}</td>
+			                    <td>{{ $item->uurtje_factuurtje ? 'project' : 'default' }}</td>
 			                    <td>{{ $item->Relation ? $item->Relation->bedrijfsnaam : ''}}</td>
 			                    <td><a href="{{ url('invoice', $item->id) }}" class="title">{{ $item->titel }}</a></td>
 			                    <td class="amount">@amount($item->totaalbedrag)</td>
