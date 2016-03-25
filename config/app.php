@@ -169,6 +169,11 @@ return [
     	 */
     	Barryvdh\Debugbar\ServiceProvider::class,    		
     		
+    	/**
+    	 * Easy menu's
+    	 */
+   		Lavary\Menu\ServiceProvider::class,
+    		
         /*
          * Application Service Providers...
          */
@@ -228,6 +233,7 @@ return [
     	'HTML'      => Collective\Html\HtmlFacade::class,
     	
     	'Flash' 	=> Laracasts\Flash\Flash::class,
+    	'Menu'      => Lavary\Menu\Facade::class,
     		
     	'AppConfig' => Weboffice\Support\Facades\AppConfig::class
     ],
