@@ -42,25 +42,31 @@
 				                        {!! Form::open([
 				                            'method'=>'POST',
 				                            'url' => ['invoice', $item->id, 'mark_as_final'],
-				                            'style' => 'display:inline',
+				                            'class' => 'mark_as_final'
 				                        ]) !!}
-					                        {!! Form::button('<i class="fa fa-fw fa-anchor"></i>', ['class' => 'btn btn-default btn-xs', 'type' => 'submit']) !!}
 			                        	{!! Form::close() !!}
 						            @endif
 			                    
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
 			                            'url' => ['invoice', $item->id],
-			                            'style' => 'display:inline',
-			                            'data-confirm' => 'Are you sure you want to delete this item?'
+			                            'data-confirm' => 'Are you sure you want to delete this item?',
+				                        'class' => 'delete'
 			                        ]) !!}
-				                    	<div class="btn-group btn-group-xs">
-					                        <a class="btn btn-default btn-xs" href="{{ url('invoice/' . $item->id . '/edit') }}">
-					                            <i class="fa fa-fw fa-pencil"></i>
-					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs', 'type' => 'submit']) !!}
-					                    </div>
 			                        {!! Form::close() !!}
+			                        
+			                          <div class="btn-group">
+							             <a class="btn btn-default btn-xs" href="{{ route('invoice.edit', [ 'id' => $item->id ]) }}" title="Edit"><i class="fa fa-pencil fa-fw"></i></a></li>
+							             <a class="btn btn-default btn-xs" href="{{ route('invoice.pdf', [ 'id' => $item->id ]) }}" title="Download as PDF"><i class="fa fa-download fa-fw"></i></a></li>
+							             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
+							             <ul class="dropdown-menu" role="menu">
+			                           		<li><a href="{{ route( 'invoice.statement', [ 'id' => $item->id ]) }}"><i class="fa fa-fw fa-bookmark"></i> Create statement</a></li>
+			                        		@if(!$item->definitief)
+				                           		<li><a href="#" onClick="$(this).parents('td').find( 'form.mark_as_final').submit(); return false;"><i class="fa fa-fw fa-anchor"></i> Mark as final</a></li>
+				                           	@endif
+				                           <li><a href="#" class="delete-link" onClick="$(this).parents('td').find( 'form.delete').submit(); return false;"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+							             </ul>
+			                          </div>
 			                    </td>
 			                </tr>
 			            @endforeach

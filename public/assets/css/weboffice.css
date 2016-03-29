@@ -1,4 +1,7 @@
-.a@CHARSET "UTF-8";
+@CHARSET "UTF-8";
+
+/* Delete link */
+.delete-link { color: #dd4b39 !important; }
 
 /* Remove margin from pagination buttons */
 .pagination-footer .pagination { margin-top: 0; margin-bottom: 0; }

@@ -66,7 +66,8 @@ Route::group(['middleware' => ['web']], function () {
 	// Handle documents - mark as final
 	Route::post('invoice/{id}/mark_as_final', 'InvoiceController@markAsFinal');
 	Route::get('invoice/create/project', 'InvoiceController@createProjectInvoice');
-	Route::get('invoice/{id}/pdf', 'InvoiceController@pdf');
+	Route::get('invoice/{id}/pdf', [ 'as' => 'invoice.pdf', 'uses' => 'InvoiceController@pdf' ]);
+	Route::get('invoice/{id}/statement', [ 'as' => 'invoice.statement', 'uses' => 'InvoiceController@create_statement' ]);
 	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');

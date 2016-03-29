@@ -9,7 +9,16 @@
             <span class="version">
                	v{{ $invoice->versie }}
             </span>
-      </h3>
+      	</h3>
+      	<div class="box-tools pull-right">
+          <div class="btn-group">
+             <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
+             <ul class="dropdown-menu" role="menu">
+               <li><a href="{{ route('invoice.edit', [ 'id' => $invoice->id ]) }}"><i class="fa fa-pencil fa-fw"></i>Edit</a></li>
+               <li><a href="{{ route('invoice.pdf', [ 'id' => $invoice->id ]) }}"><i class="fa fa-download fa-fw"></i>Download as PDF</a></li>
+             </ul>
+		  </div>
+        </div>
 	  </div><!-- /.box-header -->
 	  <div class="box-body">
             <div class="row">
