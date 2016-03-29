@@ -277,4 +277,8 @@ class IsdatPDF extends \FPDF {
 		return $this->lMargin;
 	}
 	
+	public function getPageBreakTrigger() {
+		return $this->PageBreakTrigger;
+	}
+	
 }

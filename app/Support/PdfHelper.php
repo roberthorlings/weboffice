@@ -97,7 +97,14 @@ class PdfHelper
 		return $pdf;
 	}
 	
-	function werktijd( $pdf, $relatie, $werktijden, $totale_duur ) {
+	/**
+	 * Writes a full report on the hours for a project
+	 * @param unknown $pdf
+	 * @param unknown $invoiceProject
+	 * @param unknown $werktijden
+	 * @param unknown $totale_duur
+	 */
+	static function hoursFull( $pdf, $invoiceProject ) {
 		// zet de titels van de kolommen neer
 		$pdf->setFont( "Gill", "B" );
 		$pdf->Cell( 25, 5, "Datum", 0, 0, "L", 1 );
@@ -111,29 +118,33 @@ class PdfHelper
 		// Zet alle regels met specificatie neer
 		$pdf->SetDrawColor( 150 );
 			
-		foreach( $werktijden as $werktijd ) {
+		// Hardcoded flag to disable showing the company name for now
+		// TODO: consider removing this code if it turns out not to be used
+		$showRelation = false;
+		
+		foreach( $invoiceProject->WorkingHours as $registration ) {
 			// Zet eerst een lijn neer
 			$pdf->Cell( 160, 1,"", "T", 2 );
 	
-			if( $pdf->getY() + 5 + 5 + ( is_null( $relatie ) ? 4 : 0 ) + 5 > $pdf->PageBreakTrigger ) {
+			if( $pdf->getY() + 5 + 5 + ( $showRelation ? 4 : 0 ) + 5 > $pdf->getPageBreakTrigger() ) {
 				$pdf->addPage();
 			}
 	
 			$y_regel = $pdf->getY();
 	
 	
-			$pdf->Cell( 25, 5, $werktijd['Werktijd']['datum']->format( 'd-m' ) );
+			$pdf->Cell( 25, 5, $registration->datum->format( 'd-m' ) );
 	
 			// Zet eerst de omschrijving neer
-			$pdf->MultiCell( 105, 5, $werktijd['Werktijd']['opmerkingen'] );
+			$pdf->MultiCell( 105, 5, $registration->opmerkingen );
 	
 			// Zet de klantnaam iets kleiner en schuin neer
-			if( is_null( $relatie ) ) {
+			if( $showRelation ) {
 				$pdf->Cell( 25, 4 );
 				$pdf->setFontSize( $pdf->stdFontSize - 1 );
 				$pdf->setFont( "Gill", "I" );
 					
-				$pdf->MultiCell( 105, 4, $werktijd[ "Relatie" ][ "bedrijfsnaam" ] );
+				$pdf->MultiCell( 105, 4, $registration->Relation->bedrijfsnaam );
 					
 				$pdf->setFont( "Gill" );
 				$pdf->setFontSize( $pdf->stdFontSize );
@@ -143,7 +154,7 @@ class PdfHelper
 	
 			// Zet ook de getallen neer
 			$pdf->setXY( 130 + $pdf->getLeftMargin(), $y_regel );
-			$pdf->Cell( 30, 5, $werktijd['Werktijd'][ 'tijdsduur' ]->format( '%H:%I' ), 0, 0, "R" );
+			$pdf->Cell( 30, 5, $registration->duration->format( '%H:%I' ), 0, 0, "R" );
 	
 			$pdf->setY( $y_volgende_regel + 2 );
 		}
@@ -153,10 +164,11 @@ class PdfHelper
 	
 		$pdf->SetDrawColor( 0 );
 			
-		// Toon het totaal
+		// Show the total sum
+		$totalMinutes = $invoiceProject->getTotalWorkingHours() * 60;
 		$pdf->Cell( 25, 5, "", "T" );
 		$pdf->Cell( 105, 5, "Totaal:", "T" );
-		$pdf->Cell( 30, 5, sprintf( '%d:%02d', floor( $totale_duur / 60 ), $totale_duur % 60 ), "T", 1, "R" );
+		$pdf->Cell( 30, 5, sprintf( '%d:%02d', floor( $totalMinutes / 60 ), $totalMinutes % 60 ), "T", 1, "R" );
 	
 		// Zorg voor een klein beetje ruimte
 		$pdf->setFont( "Gill" );
@@ -164,8 +176,25 @@ class PdfHelper
 	
 		return $pdf;
 	}
+
+	/**
+	 * Shows the registration in the short overview
+	 * @param unknown $pdf
+	 * @param unknown $registration
+	 */
+	protected static function registrationShort( $pdf, $registration ) {
+		$pdf->Cell( 35, 5, $registration->datum->format( 'd-m' ) );
+		$pdf->Cell( 35, 5, $registration->duration->format( '%H:%I' ), 0, 0, "R" );
+	}
 	
-	function werktijdVerkort( $pdf, $relatie, $werktijden, $totale_duur ) {
+	/**
+	 * Shows a short overview of hour registration in PDF
+	 * @param unknown $pdf
+	 * @param unknown $relatie
+	 * @param unknown $werktijden
+	 * @param unknown $totale_duur
+	 */
+	static function hoursShort( $pdf, $invoiceProject ) {
 		// zet de titels van de kolommen neer
 		$pdf->setFont( "Gill", "B" );
 		$pdf->Cell( 35, 5, "Datum", 0, 0, "L", 1 );
@@ -182,32 +211,28 @@ class PdfHelper
 		// Zet alle regels met specificatie neer
 		$pdf->SetDrawColor( 150 );
 			
-		$aantalWerktijden = count( $werktijden );
-		$helftWerktijden = ceil( $aantalWerktijden / 2 );
+		// Divide registration in two columns
+		$numRegistrations = count( $invoiceProject->WorkingHours );
+		$halfRegistrations = ceil( $numRegistrations / 2 );
 			
-		for( $i = 0; $i < $helftWerktijden; $i++ ) {
+		for( $i = 0; $i < $halfRegistrations; $i++ ) {
 			// Zet eerst een lijn neer
 			$pdf->Cell( 160, 1,"", "T", 2 );
 	
 			// Ga naar de volgende pagina als deze regel er niet meer op past
-			if( $pdf->getY() + 5 + 5 + 5 > $pdf->PageBreakTrigger ) {
+			if( $pdf->getY() + 5 + 5 + 5 > $pdf->getPageBreakTrigger() ) {
 				$pdf->addPage();
 			}
 	
 			$y_regel = $pdf->getY();
 	
-			// Zet de eerste werktijd neer
-			$werktijd = $werktijden[ $i ];
-	
-			$pdf->Cell( 35, 5, $werktijd['Werktijd']['datum']->format( 'd-m' ) );
-			$pdf->Cell( 35, 5, $werktijd['Werktijd'][ 'tijdsduur' ]->format( '%H:%I' ), 0, 0, "R" );
+			// Show the left column
+			self::registrationShort($pdf, $invoiceProject->WorkingHours[$i]);
 	
 			// Zet ook de tweede werktijd neer
-			if( $i + $helftWerktijden < $aantalWerktijden ) {
-				$werktijd = $werktijden[ $i + $helftWerktijden ];
+			if( $i + $halfRegistrations < $numRegistrations ) {
 				$pdf->Cell( 20, 5, '' );
-				$pdf->Cell( 35, 5, $werktijd['Werktijd']['datum']->format( 'd-m' ) );
-				$pdf->Cell( 35, 5, $werktijd['Werktijd'][ 'tijdsduur' ]->format( '%H:%I' ), 0, 0, "R" );
+				self::registrationShort($pdf, $invoiceProject->WorkingHours[$i + $halfRegistrations]);
 			}
 	
 			$pdf->ln();
@@ -220,7 +245,8 @@ class PdfHelper
 			
 		// Toon het totaal
 		$pdf->Cell( 125, 5, "Totaal:", "T" );
-		$pdf->Cell( 35, 5, sprintf( '%d:%02d', floor( $totale_duur / 60 ), $totale_duur % 60 ), "T", 1, "R" );
+		$totalMinutes = $invoiceProject->getTotalWorkingHours() * 60;
+		$pdf->Cell( 35, 5, sprintf( '%d:%02d', floor( $totalMinutes / 60 ), $totalMinutes % 60 ), "T", 1, "R" );
 	
 		// Zorg voor een klein beetje ruimte
 		$pdf->setFont( "Gill" );
@@ -248,7 +274,7 @@ class PdfHelper
 			// Zet eerst een lijn neer
 			$pdf->Cell( 160, 1,"", "T", 2 );
 	
-			if( $pdf->getY() + 5 + 5 > $pdf->PageBreakTrigger ) {
+			if( $pdf->getY() + 5 + 5 > $pdf->getPageBreakTrigger() ) {
 				$pdf->addPage();
 			}
 	

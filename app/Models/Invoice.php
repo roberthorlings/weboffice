@@ -249,5 +249,21 @@ class Invoice extends Model
 	 */
 	public function getTotal() {
 		return $this->getSubtotal() + $this->getVAT();
-	}	
+	}
+	
+	/**
+	 * Checks whether hour registration should be shown for this invoice
+	 */
+	public function shouldShowHours() {
+		if(!$this->uurtje_factuurtje)
+			return false;
+		
+		// Only show hours if the is a project to show data for
+		foreach( $this->InvoiceProjects as $invoiceProject ) {
+			if( $invoiceProject->hours_overview_type != 'none' )
+				return true;
+		}
+		
+		return false;
+	}
 }
