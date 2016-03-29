@@ -15,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+    	// Set FPDF font path
+    	define( 'FPDF_FONTPATH', env('FPDF_FONTPATH', base_path('resources/fonts')));
     }
 
     /**

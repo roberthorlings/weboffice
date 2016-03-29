@@ -4,6 +4,7 @@ namespace Weboffice\Http\Controllers;
 
 use Carbon\Carbon;
 use Flash;
+use AppConfig;
 use Illuminate\Http\Request;
 use Session;
 use Weboffice\Http\Controllers\Controller;
@@ -134,6 +135,22 @@ class InvoiceController extends Controller
 
         return view('invoice.show', compact('invoice'));
     }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     *
+     * @return Response
+     */
+    public function pdf($id)
+    {
+    	$invoice = Invoice::findOrFail($id);
+    	$filename = 'invoice ' . $invoice->factuurnummer . '.pdf';
+    	$invoiceNumberPrefix = AppConfig::get('factuurNummerPrefix');
+    	return response()->view('invoice.pdf', compact('invoice', 'filename', 'invoiceNumberPrefix'))->header('Content-Type', 'application/pdf');
+    }
+    
 
     /**
      * Marks the given invoice as final

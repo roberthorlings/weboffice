@@ -235,7 +235,8 @@ return [
     	'Flash' 	=> Laracasts\Flash\Flash::class,
     	'Menu'      => Lavary\Menu\Facade::class,
     		
-    	'AppConfig' => Weboffice\Support\Facades\AppConfig::class
+    	'AppConfig' => Weboffice\Support\Facades\AppConfig::class,
+    	'Pdf'       => Weboffice\Support\PdfHelper::class
     ],
 
 ];
