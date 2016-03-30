@@ -85,32 +85,39 @@
 			    <h3 class="box-title">Creditnote</h3>
 			  </div><!-- /.box-header -->
 			  <div class="box-body">
-	            <div class="form-group {{ $errors->has('creditfactuur') ? 'has-error' : ''}}">
+	            <div class="form-group creditnote-radio {{ $errors->has('creditfactuur') ? 'has-error' : ''}}">
 	                {!! Form::label('creditfactuur', 'Creditfactuur: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-9">
 	                                <div class="checkbox">
 	                <label>{!! Form::radio('creditfactuur', '1') !!} Yes</label>
 	            </div>
 	            <div class="checkbox">
-	                <label>{!! Form::radio('creditfactuur', '0', true) !!} No</label>
+	                <label>{!! Form::radio('creditfactuur', '0') !!} No</label>
 	            </div>
 	                    {!! $errors->first('creditfactuur', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
-	            <div class="form-group {{ $errors->has('oorspronkelijk_factuurnummer') ? 'has-error' : ''}}">
+	            <div class="form-group {{ $errors->has('oorspronkelijk_factuurnummer') ? 'has-error' : ''}} creditnote-fields" @if(!$invoice->creditfactuur)style="display: none;"@endif">
 	                {!! Form::label('oorspronkelijk_factuurnummer', 'Oorspronkelijk Factuurnummer: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-9">
 	                    {!! Form::text('oorspronkelijk_factuurnummer', null, ['class' => 'form-control']) !!}
 	                    {!! $errors->first('oorspronkelijk_factuurnummer', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
-	            <div class="form-group {{ $errors->has('oorspronkelijk_datum') ? 'has-error' : ''}}">
+	            <div class="form-group {{ $errors->has('oorspronkelijk_datum') ? 'has-error' : ''}} creditnote-fields" @if(!$invoice->creditfactuur)style="display: none;"@endif">
 	                {!! Form::label('oorspronkelijk_datum', 'Oorspronkelijk Datum: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-9">
 	                    {!! Form::date('oorspronkelijk_datum', null, ['class' => 'form-control']) !!}
 	                    {!! $errors->first('oorspronkelijk_datum', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
+	            <div class="form-group {{ $errors->has('saldo_id') ? 'has-error' : ''}} creditnote-fields" @if(!$invoice->creditfactuur)style="display: none;"@endif>
+	                {!! Form::label('saldo_id', 'Verrekenen met: ', ['class' => 'col-sm-3 control-label']) !!}
+	                <div class="col-sm-9">
+	                    {!! Form::select('saldo_id', $saldos, null, ['class' => 'form-control', 'placeholder' => ' - No saldo - ']) !!}
+	                    {!! $errors->first('saldo_id', '<p class="help-block">:message</p>') !!}
+	                </div>
+	            </div>	            
 			  </div><!-- /.box-body -->
 			</div><!-- /.box -->
 		</div>

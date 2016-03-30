@@ -107,6 +107,14 @@
 	                    {!! $errors->first('oorspronkelijk_datum', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
+	            <div class="form-group {{ $errors->has('saldo_id') ? 'has-error' : ''}} creditnote-fields" @if(!$creditnote)style="display: none;"@endif>
+	                {!! Form::label('saldo_id', 'Verrekenen met: ', ['class' => 'col-sm-3 control-label']) !!}
+	                <div class="col-sm-9">
+	                    {!! Form::select('saldo_id', $saldos, null, ['class' => 'form-control', 'placeholder' => ' - No saldo - ']) !!}
+	                    {!! $errors->first('saldo_id', '<p class="help-block">:message</p>') !!}
+	                </div>
+	            </div>
+	            
 			  </div><!-- /.box-body -->
 			</div><!-- /.box -->
 		</div>

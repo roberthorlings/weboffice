@@ -12,6 +12,7 @@ use Weboffice\Models\Invoice;
 use Weboffice\Repositories\PostRepository;
 use Weboffice\Repositories\RelationRepository;
 use Weboffice\Models\Project;
+use Weboffice\Models\Saldo;
 
 class InvoiceController extends Controller
 {
@@ -384,7 +385,10 @@ class InvoiceController extends Controller
     		return count($relation->Projects) > 0;
     	});
     	
-    	return compact('invoice', 'numLines', 'preEnteredLines', 'sum',  'posts', 'relations', 'relation_project');
+    	// Add a list of open saldos
+    	$saldos = Saldo::open()->lists('omschrijving', 'id');
+    	
+    	return compact('invoice', 'numLines', 'preEnteredLines', 'sum',  'posts', 'relations', 'saldos', 'relation_project');
     }
     
     /**

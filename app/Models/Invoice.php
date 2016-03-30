@@ -27,7 +27,7 @@ class Invoice extends Model
      *
      * @var array
      */
-    protected $fillable = ['factuurnummer', 'versie', 'titel', 'referentie', 'totaalbedrag', 'datum', 'definitief', 'uurtje_factuurtje', 'btw', 'creditfactuur', 'oorspronkelijk_factuurnummer', 'oorspronkelijk_datum', 'relatie_id', 'project_id'];
+    protected $fillable = ['factuurnummer', 'versie', 'titel', 'referentie', 'totaalbedrag', 'datum', 'definitief', 'uurtje_factuurtje', 'btw', 'creditfactuur', 'oorspronkelijk_factuurnummer', 'oorspronkelijk_datum', 'saldo_id', 'relatie_id', 'project_id'];
 
     protected $dates = [ 'datum', 'oorspronkelijk_datum' ];
     
@@ -39,6 +39,10 @@ class Invoice extends Model
     {
         return $this->belongsTo('\Weboffice\Models\Project', 'project_id');
     }    	
+    public function Saldo()
+    {
+    	return $this->belongsTo('\Weboffice\Models\Saldo', 'saldo_id');
+    }
     public function InvoiceLines()
     {
     	return $this->hasMany('\Weboffice\Models\InvoiceLine', 'factuur_id');
@@ -269,19 +273,35 @@ class Invoice extends Model
 	}
 	
 	/**
-	 * Creates a statement for the given invoice
+	 * Creates a statement for the given invoice (either a normal invoice or a creditnote
 	 */
 	public function saveStatement() {
+		if($this->creditfactuur) {
+			return $this->saveCreditnoteStatement();
+		} else {
+			return $this->saveInvoiceStatement();
+		}
+	}
+	
+	/**
+	 * Creates a statement for the current invoice
+	 */
+	protected function saveInvoiceStatement() {
 		$description = 'Factuur ' . $this->factuurnummer;
+		$remarks = $this->titel;
 		
 		// Create a new saldo to keep track of the payment for this invoice
-		$saldo = Saldo::create(['relatie_id' => $this->relatie_id, 'omschrijving' => $description . ' - ' . $this->titel ]);
+		if( $this->saldo_id ) {
+			$saldo = $this->Saldo;
+		} else {
+			$saldo = Saldo::create(['relatie_id' => $this->relatie_id, 'omschrijving' => $description . ' - ' . $this->titel ]);
+		}
 		
 		// Create the statement itself
 		$statement = Statement::create([
-			'datum' => $this->datum, 
-			'omschrijving' => $description . ' - ' . $this->Relation->bedrijfsnaam, 
-			'opmerkingen' => $this->titel,
+				'datum' => $this->datum,
+				'omschrijving' => $description . ' - ' . $this->Relation->bedrijfsnaam,
+				'opmerkingen' => $remarks,
 		]);
 		
 		/*
@@ -290,7 +310,7 @@ class Invoice extends Model
 		 * aan 181 Af te dragen BTW
 		 * aan 80x Omzet ...
 		 * aan 80x Omzet ...
-		 */		
+		 */
 		$statement->StatementLines()->save(new StatementLine(['bedrag' => $this->getTotal(), 'credit' => 0, 'post_id' => AppConfig::get('postDebiteuren'), 'saldo_id' => $saldo->id ]));
 		
 		if($this->btw) {
@@ -300,12 +320,72 @@ class Invoice extends Model
 		foreach($this->InvoiceLines as $invoiceLine) {
 			$statementLine = new StatementLine(['bedrag' => $invoiceLine->getSubtotal(), 'credit' => 1, 'post_id' => $invoiceLine->post_id ]);
 			$statement->StatementLines()->save($statementLine);
-			
+				
 			// Associate statement line with projects
-			if($invoiceLine->project_id) 
+			if($invoiceLine->project_id)
 				$statementLine->associateWithProject($invoiceLine->project_id);
+			elseif($this->project_id)
+				$statementLine->associateWithProject($this->project_id);
 		}
 		
 		return $statement;
+	}
+	
+	/**
+	 * Creates a statement for the current creditnote
+	 */
+	protected function saveCreditnoteStatement() {
+		$description = 'Creditnota ' . $this->factuurnummer;
+		$remarks = "Creditnota heeft betrekking op factuur " . $this->oorspronkelijk_factuurnummer . " van " . $this->oorspronkelijk_datum->format( 'd-m-Y' ) . "; " . $this->titel;
+		
+		// Create a new saldo to keep track of the payment for this invoice
+		if( $this->saldo_id ) {
+			$saldo = $this->Saldo;
+		} else {
+			$saldo = Saldo::create(['relatie_id' => $this->relatie_id, 'omschrijving' => $description . ' - ' . $this->titel . ' (factuur ' . $this->oorspronkelijk_factuurnummer . ')']);
+		}
+		
+		// Create the statement itself
+		$statement = Statement::create([
+			'datum' => $this->datum,
+			'omschrijving' => $description . ' - ' . $this->Relation->bedrijfsnaam,
+			'opmerkingen' => $remarks,
+		]);
+		
+		/*
+		 * Boeking: Factuur uitgeven
+		 *     130 Debiteuren
+		 * aan 181 Af te dragen BTW
+		 * aan 80x Omzet ...
+		 * aan 80x Omzet ...
+		 */
+		
+		// If a creditnote is booked, and it is not put onto an existing saldo,
+		// apparently the original invoice has been paid already. In that case, the amount
+		// should be explicitly paid back, and be put onto the post 'creditors'
+		if( $this->saldo_id ) {
+			$post = AppConfig::get('postDebiteuren');
+		} else {
+			$post = AppConfig::get('postCrediteuren');
+		}
+					
+		$statement->StatementLines()->save(new StatementLine(['bedrag' => $this->getTotal(), 'credit' => 1, 'post_id' => $post, 'saldo_id' => $saldo->id ]));
+		
+		if($this->btw) {
+			$statement->StatementLines()->save(new StatementLine(['bedrag' => $this->getVAT(), 'credit' => 0, 'post_id' => AppConfig::get('postAfTeDragenBTW') ]));
+		}
+		
+		foreach($this->InvoiceLines as $invoiceLine) {
+			$statementLine = new StatementLine(['bedrag' => $invoiceLine->getSubtotal(), 'credit' => 0, 'post_id' => $invoiceLine->post_id ]);
+			$statement->StatementLines()->save($statementLine);
+		
+			// Associate statement line with projects
+			if($invoiceLine->project_id)
+				$statementLine->associateWithProject($invoiceLine->project_id);
+			elseif($this->project_id)
+				$statementLine->associateWithProject($this->project_id);
+		}
+		
+		return $statement;		
 	}
 }

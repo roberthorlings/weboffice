@@ -11,7 +11,12 @@
 	<div class="box box-primary document">
 	  <div class="box-header with-border">
 	    <h3 class="box-title">
-	    	Invoice {{ $invoice->factuurnummer }}
+	    	@if($invoice->creditfactuur)
+	    		Creditnote
+	    	@else
+	    		Invoice
+	    	@endif
+	    	{{ $invoice->factuurnummer }}
             <span class="version">
                	v{{ $invoice->versie }}
             </span>
@@ -29,14 +34,13 @@
 	  </div><!-- /.box-header -->
 	  <div class="box-body">
             <div class="row">
-                {!! Form::label('datum', 'Invoice date: ', ['class' => 'col-sm-3 control-label']) !!}
+                {!! Form::label('datum', 'Date: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {{ $invoice->datum->format('d-m-Y') }}
                 </div>
             </div>
-
             <div class="row">
-                {!! Form::label('factuurnummer', 'Invoice number: ', ['class' => 'col-sm-3 control-label']) !!}
+                {!! Form::label('factuurnummer', 'Number: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {{ $invoice->factuurnummer }}
                     
@@ -45,6 +49,16 @@
                     </span>
                 </div>
             </div>
+            
+            @if($invoice->creditfactuur)
+	            <div class="row">
+	                {!! Form::label('datum', 'Original invoice: ', ['class' => 'col-sm-3 control-label']) !!}
+	                <div class="col-sm-6">
+	                    Invoice {{$invoice->oorspronkelijk_factuurnummer}} (dd {{$invoice->oorspronkelijk_datum->format('d-m-Y')}})
+	                </div>
+	            </div>
+	         @endif
+            
             <div class="row">
                 {!! Form::label('relatie', 'Customer: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
