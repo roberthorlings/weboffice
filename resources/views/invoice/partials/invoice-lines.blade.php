@@ -2,6 +2,7 @@
 	{!! Form::hidden('Lines[' . $i . '][id]', $preEnteredLines[$i]['id']) !!}
 	<div class="row invoice-line">
 		<div class="col-sm-4">
+			{!! Form::hidden('Lines[' . $i . '][project_id]', $preEnteredLines[$i]['project_id'], [ 'class' => 'invoice-line-project-id' ]) !!}
 			{!! Form::text('Lines[' . $i . '][omschrijving]',  $preEnteredLines[$i]['omschrijving'], ['class' => 'form-control invoice-line-description']) !!}
 		</div>
 		<div class="col-sm-3">

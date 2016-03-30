@@ -81,20 +81,21 @@
 	
 		// Zet de werktijden neer
 		foreach( $invoice->InvoiceProjects as $index => $invoiceProject ) {
-	
-			// Zet de informatie neer over de datum en het project
-			$output->Cell( 25, 5, "Project:" );
-			$output->Cell( 135, 5, $invoice->InvoiceLines[$index]->omschrijving, 0, 1 );
-			$output->Cell( 25, 5, "Periode:");
-			$output->Cell( 135, 5, toTimespan($invoiceProject->start, $invoiceProject->end), 0, 1 );
-				
-			// Zet wat ruimte neer
-			$output->ln();
-				
-			if( $invoiceProject->hours_overview_type == 'short' ) {
-				$output = Pdf::hoursShort( $output, $invoiceProject );
-			} elseif( $invoiceProject->hours_overview_type == 'default' ) {
-				$output = Pdf::hoursFull( $output, $invoiceProject );
+			if( $invoiceProject->hours_overview_type != 'none' ) {
+				// Zet de informatie neer over de datum en het project
+				$output->Cell( 25, 5, "Project:" );
+				$output->Cell( 135, 5, $invoice->InvoiceLines[$index]->omschrijving, 0, 1 );
+				$output->Cell( 25, 5, "Periode:");
+				$output->Cell( 135, 5, toTimespan($invoiceProject->start, $invoiceProject->end), 0, 1 );
+					
+				// Zet wat ruimte neer
+				$output->ln();
+					
+				if( $invoiceProject->hours_overview_type == 'short' ) {
+					$output = Pdf::hoursShort( $output, $invoiceProject );
+				} elseif( $invoiceProject->hours_overview_type == 'default' ) {
+					$output = Pdf::hoursFull( $output, $invoiceProject );
+				}
 			}
 		}
 		$output->ln();

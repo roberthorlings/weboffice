@@ -78,7 +78,7 @@ class Invoice extends Model
      * @param unknown $postId		ID of the post to associate the statementline with.
      * @return InvoiceLine			The InvoiceLine object or null if no proper data was specified.
      */
-    public function updateLine($id, $description, $extra, $number, $price, $postId) {
+    public function updateLine($id, $description, $extra, $number, $price, $postId, $projectId = null) {
     	$line = null;
     	 
     	// If ID is specified, reuse existing line
@@ -105,6 +105,7 @@ class Invoice extends Model
     	$line->aantal = $number;
     	$line->prijs = $price;
     	$line->post_id = $postId;
+    	$line->project_id = $projectId;
     	 
     	// Save the line itself
     	$this->InvoiceLines()->save($line);
@@ -123,8 +124,8 @@ class Invoice extends Model
      * @param unknown $postId		ID of the post to associate the statementline with.
      * @return InvoiceLine			The InvoiceLine object or null if no proper data was specified.
      */
-    public function addLine($description, $extra, $number, $price, $postId) {
-    	return $this->updateLine(null, $description, $extra, $number, $price, $postId);
+    public function addLine($description, $extra, $number, $price, $postId, $projectId = null) {
+    	return $this->updateLine(null, $description, $extra, $number, $price, $postId, $projectId);
     }
     
     /**
@@ -265,5 +266,46 @@ class Invoice extends Model
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Creates a statement for the given invoice
+	 */
+	public function saveStatement() {
+		$description = 'Factuur ' . $this->factuurnummer;
+		
+		// Create a new saldo to keep track of the payment for this invoice
+		$saldo = Saldo::create(['relatie_id' => $this->relatie_id, 'omschrijving' => $description . ' - ' . $this->titel ]);
+		
+		// Create the statement itself
+		$statement = Statement::create([
+			'datum' => $this->datum, 
+			'omschrijving' => $description . ' - ' . $this->Relation->bedrijfsnaam, 
+			'opmerkingen' => $this->titel,
+		]);
+		
+		/*
+		 * Boeking: Factuur uitgeven
+		 *     130 Debiteuren
+		 * aan 181 Af te dragen BTW
+		 * aan 80x Omzet ...
+		 * aan 80x Omzet ...
+		 */		
+		$statement->StatementLines()->save(new StatementLine(['bedrag' => $this->getTotal(), 'credit' => 0, 'post_id' => AppConfig::get('postDebiteuren'), 'saldo_id' => $saldo->id ]));
+		
+		if($this->btw) {
+			$statement->StatementLines()->save(new StatementLine(['bedrag' => $this->getVAT(), 'credit' => 1, 'post_id' => AppConfig::get('postAfTeDragenBTW') ]));
+		}
+		
+		foreach($this->InvoiceLines as $invoiceLine) {
+			$statementLine = new StatementLine(['bedrag' => $invoiceLine->getSubtotal(), 'credit' => 1, 'post_id' => $invoiceLine->post_id ]);
+			$statement->StatementLines()->save($statementLine);
+			
+			// Associate statement line with projects
+			if($invoiceLine->project_id) 
+				$statementLine->associateWithProject($invoiceLine->project_id);
+		}
+		
+		return $statement;
 	}
 }

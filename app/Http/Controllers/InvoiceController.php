@@ -56,14 +56,32 @@ class InvoiceController extends Controller
     public function create(RelationRepository $relationRepository, PostRepository $postRepository)
     {
         $data = $this->getDataForForm(null, $relationRepository, $postRepository);
-    	
+        $data['creditnote' ] = false;
+        
         // Set default values
         $data['date'] = Carbon::now();
         $data['number'] = Invoice::nextNumber();
         
         return view('invoice.create-default', $data);
     }
+
+    /**
+     * Show the form for creating a credit note
+     *
+     * @return Response
+     */
+    public function createCreditNote(RelationRepository $relationRepository, PostRepository $postRepository)
+    {
+    	$data = $this->getDataForForm(null, $relationRepository, $postRepository);
+    	$data['creditnote' ] = true;
+    	
+    	// Set default values
+    	$data['date'] = Carbon::now();
+    	$data['number'] = Invoice::nextNumber();
     
+    	return view('invoice.create-default', $data);
+    }
+        
     /**
      * Show the form for creating a new project invoice
      *
@@ -151,26 +169,6 @@ class InvoiceController extends Controller
     	return response()->view('invoice.pdf', compact('invoice', 'filename', 'invoiceNumberPrefix'))->header('Content-Type', 'application/pdf');
     }
     
-
-    /**
-     * Marks the given invoice as final
-     * @param unknown $id
-     */
-    public function markAsFinal($id) 
-    {
-    	$invoice = Invoice::findOrFail($id);
-    	 
-    	// Make sure only one is marked as final
-    	Invoice::where('factuurnummer', $invoice->factuurnummer)->update(['definitief' => false]);
-    	
-    	// Mark the current invoice as final
-    	$invoice->definitief = true;
-    	$invoice->save();
-    	
-    	Flash::message( 'Invoice marked as final' );
-    	return redirect('invoice');
-    }
-    
     /**
      * Show the form for editing the specified resource.
      *
@@ -226,7 +224,7 @@ class InvoiceController extends Controller
         	 
         	// Store the lines as well. Please note that new lines will be created, so the id is irrelevant
         	foreach( $lines as $lineInfo ) {
-        		$invoice->updateLine(null, $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        		$invoice->updateLine(null, $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id'], $lineInfo['project_id']);
         	}
         } else {
         	// Update current version
@@ -250,7 +248,7 @@ class InvoiceController extends Controller
         	
         	// Store the lines as well.
         	foreach( $lines as $lineInfo ) {
-        		$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id']);
+        		$invoice->updateLine($lineInfo['id'], $lineInfo['omschrijving'], $lineInfo['extra'], $lineInfo['aantal'], $lineInfo['prijs'], $lineInfo['post_id'], $lineInfo['project_id']);
         	}
         }
         
@@ -275,6 +273,37 @@ class InvoiceController extends Controller
         return redirect('invoice');
     }
 
+
+    /**
+     * Marks the given invoice as final
+     * @param unknown $id
+     */
+    public function markAsFinal($id)
+    {
+    	$invoice = Invoice::findOrFail($id);
+    
+    	// Make sure only one is marked as final
+    	Invoice::where('factuurnummer', $invoice->factuurnummer)->update(['definitief' => false]);
+    	 
+    	// Mark the current invoice as final
+    	$invoice->definitief = true;
+    	$invoice->save();
+    	 
+    	Flash::message( 'Invoice marked as final' );
+    	return redirect('invoice');
+    }
+    
+    /**
+     * Creates a statement for the given invoice
+     */
+    public function bookStatement($id)
+    {
+    	$invoice = Invoice::findOrFail($id);
+    	$invoice->saveStatement();
+
+    	Flash::success( 'A statement has been created for the given invoice' );
+    	return redirect('invoice');
+    }
     
     /**
      *
@@ -323,7 +352,7 @@ class InvoiceController extends Controller
     	}
     
     	// Specify enough empty lines
-    	$preEnteredLines = array_fill(0, $numLines, [ 'id' => null, 'omschrijving' => '', 'extra' => '', 'aantal' => null, 'prijs' => null, 'post_id' => null ]);
+    	$preEnteredLines = array_fill(0, $numLines, [ 'id' => null, 'omschrijving' => '', 'extra' => '', 'aantal' => null, 'prijs' => null, 'post_id' => null, 'project_id' => null ]);
     	$sum = 0;
     
     	// Overwrite the first lines with existing data
@@ -332,6 +361,7 @@ class InvoiceController extends Controller
     			$preEnteredLines[$idx] = $line->toArray();
     			$preEnteredLines[$idx]['aantal'] = (float) $line->aantal;
     			$preEnteredLines[$idx]['prijs'] = (float) $line->prijs;
+    			$preEnteredLines[$idx]['project_id'] = (float) $line->project_id;
     			$sum += $line->getSubtotal();
     		}
     	}
@@ -348,8 +378,12 @@ class InvoiceController extends Controller
     	
     	// Add a list of posts to choose from
     	$posts = $postRepository->getListForPostSelect();
-    	$relations = $relationRepository->getRelationsWithProjects();
-    
+    	$relations = $relationRepository->getRelationsWithProjects(null, function($builder) {
+    		return $builder->where( 'status', Project::STATUS_ACTIEF );
+    	})->filter(function($relation) {
+    		return count($relation->Projects) > 0;
+    	});
+    	
     	return compact('invoice', 'numLines', 'preEnteredLines', 'sum',  'posts', 'relations', 'relation_project');
     }
     
@@ -360,6 +394,8 @@ class InvoiceController extends Controller
     	// Add projects
     	$relations = $relationRepository->getRelationsWithProjects(null, function($builder) {
     		return $builder->where( 'status', Project::STATUS_ACTIEF );
+    	})->filter(function($relation) {
+    		return count($relation->Projects) > 0;
     	});
     		 
    		$projects = [];
@@ -388,7 +424,7 @@ class InvoiceController extends Controller
   			}
   		}  		
   		
-  		return compact( 'projects', 'numProjects', 'preEnteredProjects');
+  		return compact( 'projects', 'numProjects', 'preEnteredProjects', 'relations');
     }
     
 }

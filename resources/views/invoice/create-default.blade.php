@@ -81,26 +81,26 @@
 			    <h3 class="box-title">Creditnote</h3>
 			  </div><!-- /.box-header -->
 			  <div class="box-body">
-	            <div class="form-group {{ $errors->has('creditfactuur') ? 'has-error' : ''}}">
+	            <div class="form-group creditnote-radio {{ $errors->has('creditfactuur') ? 'has-error' : ''}}">
 	                {!! Form::label('creditfactuur', 'Creditfactuur: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-9">
 	                                <div class="checkbox">
-	                <label>{!! Form::radio('creditfactuur', '1') !!} Yes</label>
+	                <label>{!! Form::radio('creditfactuur', '1', $creditnote) !!} Yes</label>
 	            </div>
 	            <div class="checkbox">
-	                <label>{!! Form::radio('creditfactuur', '0', true) !!} No</label>
+	                <label>{!! Form::radio('creditfactuur', '0', !$creditnote) !!} No</label>
 	            </div>
 	                    {!! $errors->first('creditfactuur', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
-	            <div class="form-group {{ $errors->has('oorspronkelijk_factuurnummer') ? 'has-error' : ''}}">
+	            <div class="form-group {{ $errors->has('oorspronkelijk_factuurnummer') ? 'has-error' : ''}} creditnote-fields" @if(!$creditnote)style="display: none;"@endif>
 	                {!! Form::label('oorspronkelijk_factuurnummer', 'Oorspronkelijk Factuurnummer: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-9">
 	                    {!! Form::text('oorspronkelijk_factuurnummer', null, ['class' => 'form-control']) !!}
 	                    {!! $errors->first('oorspronkelijk_factuurnummer', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>
-	            <div class="form-group {{ $errors->has('oorspronkelijk_datum') ? 'has-error' : ''}}">
+	            <div class="form-group {{ $errors->has('oorspronkelijk_datum') ? 'has-error' : ''}} creditnote-fields" @if(!$creditnote)style="display: none;"@endif>
 	                {!! Form::label('oorspronkelijk_datum', 'Oorspronkelijk Datum: ', ['class' => 'col-sm-3 control-label']) !!}
 	                <div class="col-sm-9">
 	                    {!! Form::date('oorspronkelijk_datum', null, ['class' => 'form-control']) !!}
@@ -113,7 +113,7 @@
 	</div>
 
     
-		<div class="box box-primary">
+		<div class="box box-primary invoice-details">
 			<div class="box-header with-border">
 				<h3 class="box-title">Invoice lines</h3>
 			</div>

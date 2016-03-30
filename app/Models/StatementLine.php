@@ -35,6 +35,11 @@ class StatementLine extends Model
     {
     	return $this->belongsTo('\Weboffice\Models\Saldo', 'saldo_id');
     }
+    
+    public function Finances()
+    {
+    	return $this->hasMany('\Weboffice\Models\ProjectFinance', 'boeking_deel_id');
+    }    
 
     /**
      * Returns the signed amount for this line.
@@ -58,5 +63,13 @@ class StatementLine extends Model
      */
     public function setBedragAttribute($amount) {
     	$this->attributes['bedrag' ] = $amount * 100;
-    }    
+    }
+    
+    /**
+     * Associate this statement line with a project
+     * @param int $projectId
+     */
+    public function associateWithProject($projectId) {
+    	$this->Finances()->save(new ProjectFinance(['boeking_deel_id' => $this->id, 'project_id' => $projectId]));
+    }
 }

@@ -39,7 +39,10 @@ class Project extends Model
     {
     	return $this->hasMany('\Weboffice\Models\WorkingHour', 'project_id');
     }
-    
+	public function Finances()
+	{
+		return $this->hasMany('\Weboffice\Models\ProjectFinance', 'project_id');
+	}
 
     /**
      * Accessor for amount

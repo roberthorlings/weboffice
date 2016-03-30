@@ -47,7 +47,7 @@ class RelationRepository {
 		
 		foreach($relations as $relation) {
 			$options['klant.' . $relation->id] = $relation->bedrijfsnaam;
-			foreach($relation->projects as $project) {
+			foreach($relation->Projects as $project) {
 				$options['project.' . $relation->id . '.' . $project->id] = $project->naam;
 			}
 		

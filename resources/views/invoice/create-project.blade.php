@@ -43,6 +43,13 @@
 		                    {!! $errors->first('referentie', '<p class="help-block">:message</p>') !!}
 		                </div>
 		            </div>
+		            <div class="form-group {{ $errors->has('relatie_id') ? 'has-error' : ''}}">
+		                {!! Form::label('relatie_id', 'Klant: ', ['class' => 'col-sm-3 control-label']) !!}
+		                <div class="col-sm-9">
+		                    {!! Form::select('relatie_id', $relations->lists('bedrijfsnaam', 'id'), null, ['class' => 'form-control']) !!}
+		                    {!! $errors->first('relatie_id', '<p class="help-block">:message</p>') !!}
+		                </div>
+		            </div>		            
 
 		            <div class="form-group {{ $errors->has('btw') ? 'has-error' : ''}}">
 		                {!! Form::label('btw', 'Btw: ', ['class' => 'col-sm-3 control-label']) !!}
@@ -81,7 +88,7 @@
 		</div>
 	</div>
     
-		<div class="box box-primary">
+		<div class="box box-primary invoice-details">
 			<div class="box-header with-border">
 				<h3 class="box-title">Invoice lines</h3>
 			</div>

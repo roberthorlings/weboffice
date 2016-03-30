@@ -1,7 +1,13 @@
 @extends('layouts/adminlte')
 
 @section('content')
-
+                        
+    {!! Form::open([
+         'method'=>'POST',
+         'url' => route( 'invoice.statement', [ 'id' => $invoice->id ]),
+         'class' => 'create-statement'
+    ]) !!}
+    {!! Form::close() !!}
 	<div class="box box-primary document">
 	  <div class="box-header with-border">
 	    <h3 class="box-title">
@@ -15,6 +21,7 @@
              <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
              <ul class="dropdown-menu" role="menu">
                <li><a href="{{ route('invoice.edit', [ 'id' => $invoice->id ]) }}"><i class="fa fa-pencil fa-fw"></i>Edit</a></li>
+               <li><a href="#" onClick="$('form.create-statement').submit(); return false;"><i class="fa fa-fw fa-bookmark"></i> Create statement</a></li>
                <li><a href="{{ route('invoice.pdf', [ 'id' => $invoice->id ]) }}"><i class="fa fa-download fa-fw"></i>Download as PDF</a></li>
              </ul>
 		  </div>

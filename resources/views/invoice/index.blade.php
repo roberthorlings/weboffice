@@ -55,12 +55,19 @@
 			                        ]) !!}
 			                        {!! Form::close() !!}
 			                        
+			                        {!! Form::open([
+			                            'method'=>'POST',
+			                            'url' => route( 'invoice.statement', [ 'id' => $item->id ]),
+				                        'class' => 'create-statement'
+			                        ]) !!}
+			                        {!! Form::close() !!}
+			                        
 			                          <div class="btn-group">
 							             <a class="btn btn-default btn-xs" href="{{ route('invoice.edit', [ 'id' => $item->id ]) }}" title="Edit"><i class="fa fa-pencil fa-fw"></i></a></li>
 							             <a class="btn btn-default btn-xs" href="{{ route('invoice.pdf', [ 'id' => $item->id ]) }}" title="Download as PDF"><i class="fa fa-download fa-fw"></i></a></li>
 							             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
 							             <ul class="dropdown-menu" role="menu">
-			                           		<li><a href="{{ route( 'invoice.statement', [ 'id' => $item->id ]) }}"><i class="fa fa-fw fa-bookmark"></i> Create statement</a></li>
+			                           		<li><a href="#" onClick="$(this).parents('td').find( 'form.create-statement').submit(); return false;"><i class="fa fa-fw fa-bookmark"></i> Create statement</a></li>
 			                        		@if(!$item->definitief)
 				                           		<li><a href="#" onClick="$(this).parents('td').find( 'form.mark_as_final').submit(); return false;"><i class="fa fa-fw fa-anchor"></i> Mark as final</a></li>
 				                           	@endif
