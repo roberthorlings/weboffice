@@ -118,3 +118,6 @@ table.ledgers tbody tr td { border-width: 0; }
 .document .version { color: #999; font-size: 0.8em; }
 .document-lines tfoot { border-top: 2px dashed #3c8dbc; }
 .document-lines .totals { font-weight: bold; border-top: 2px solid #3c8dbc; }
+.quote-details .box-body { padding: 10px 25px; }
+.quote-details h4 { font-weight: bold; margin-bottom:4px; }
+.quote-details p { margin-bottom: 18px; }
