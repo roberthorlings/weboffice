@@ -4,7 +4,7 @@
       @if(array_key_exists('icon', $item->attributes))
       	<i class="fa {{$item->attributes['icon']}}"></i>
 	  @endif 
-      {!! $item->title !!}
+      <span>{!! $item->title !!}</span>
       @if($item->hasChildren()) <i class="fa fa-angle-left pull-right"></i> @endif
     </a>
     @else

@@ -9,9 +9,9 @@
   <!-- Bootstrap 3.3.5 -->
   <link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href="{{ asset("/bower_components/components-font-awesome/css/font-awesome.min.css") }}" rel="stylesheet">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link href="{{ asset("/bower_components/Ionicons/css/ionicons.min.css") }}" rel="stylesheet">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -76,9 +76,9 @@
 <script src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}"></script>
 <script src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}"></script>
 <!-- Slimscroll -->
-<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="{{ asset ("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- FastClick -->
-<script src="plugins/fastclick/fastclick.js"></script>
+<script src="{{ asset ("/bower_components/admin-lte/plugins/fastclick/fastclick.js") }}"></script>
 
 <!-- Date range picker scripts -->
 <script type="text/javascript" src="{{ asset ("/bower_components/admin-lte/plugins/daterangepicker/moment.min.js") }}"></script>

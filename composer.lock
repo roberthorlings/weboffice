@@ -217,16 +217,16 @@
         },
         {
             "name": "gazsp/baum",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gazsp/baum.git",
-                "reference": "f7cbbf06832acc4162ec12f6b026264f8b24d8f1"
+                "reference": "d720bd67ad4cba2c877215db032aec5020674f8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gazsp/baum/zipball/f7cbbf06832acc4162ec12f6b026264f8b24d8f1",
-                "reference": "f7cbbf06832acc4162ec12f6b026264f8b24d8f1",
+                "url": "https://api.github.com/repos/gazsp/baum/zipball/d720bd67ad4cba2c877215db032aec5020674f8f",
+                "reference": "d720bd67ad4cba2c877215db032aec5020674f8f",
                 "shasum": ""
             },
             "require": {
@@ -273,7 +273,7 @@
                 "laravel 5",
                 "nested set"
             ],
-            "time": "2016-01-05 22:13:11"
+            "time": "2016-03-27 14:49:46"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -465,16 +465,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.2.25",
+            "version": "v5.2.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "d2817d2773dc3f405b561762489a76bbe66bd673"
+                "reference": "ccda783ffa253ed27dd1d4b41dbbc95e76e48a2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/d2817d2773dc3f405b561762489a76bbe66bd673",
-                "reference": "d2817d2773dc3f405b561762489a76bbe66bd673",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ccda783ffa253ed27dd1d4b41dbbc95e76e48a2a",
+                "reference": "ccda783ffa253ed27dd1d4b41dbbc95e76e48a2a",
                 "shasum": ""
             },
             "require": {
@@ -589,7 +589,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2016-03-24 15:06:38"
+            "time": "2016-03-29 13:32:58"
         },
         {
             "name": "laravelcollective/html",
