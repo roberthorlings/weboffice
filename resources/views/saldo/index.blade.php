@@ -30,7 +30,7 @@
 			                		closed-saldo
 			                	@endif
 			                ">
-			                    <td>{{ $item->omschrijving }}</td>
+			                    <td><a href="{{ route( 'saldo.show', [ 'id' => $item->id ] ) }}">{{ $item->omschrijving }}</a></td>
 			                    <td>{{ $item->Relation->bedrijfsnaam }}</td>
 			                    <td class="amount">@amount($item->getOpenAmount())</td>
 			                    

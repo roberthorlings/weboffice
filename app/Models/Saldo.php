@@ -147,4 +147,8 @@ class Saldo extends Model
     	return $this->endDate = $endDate;
     }
     
+    public function totalSide() {
+    	return $this->totalAmount < 0 ? 'credit' : 'debet';
+    }    
+    
 }

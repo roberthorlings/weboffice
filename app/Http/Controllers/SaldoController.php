@@ -69,7 +69,7 @@ class SaldoController extends Controller
      */
     public function show($id)
     {
-        $saldo = Saldo::findOrFail($id);
+        $saldo = Saldo::with(['StatementLines', 'StatementLines.Statement'])->findOrFail($id);
 
         return view('saldo.show', compact('saldo'));
     }

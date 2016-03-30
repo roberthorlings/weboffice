@@ -95,6 +95,7 @@ table.statements tbody tr td { border-width: 0; }
 .amount-overdue-danger { color: red; }
 .amount-overdue-warning { color: #FC0; }
 .closed-saldo td { color: #999; }
+.saldo-detail .total-line { font-weight: bold; }
 
 /* Assets */
 .asset-booking .statements { border-color: #3C8DBC; }
