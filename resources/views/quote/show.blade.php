@@ -71,7 +71,7 @@
 
 	<div class="box box-default quote-details">
 	  <div class="box-body">
-         @foreach($quote->QuoteLines as $quoteLine)
+         @foreach($quote->getAllLines() as $quoteLine)
 	  		<h4>{{$quoteLine->titel}}</h4>
 	  		<p>
 	  			{{$quoteLine->inhoud}}

@@ -274,7 +274,6 @@ class InvoiceController extends Controller
         return redirect('invoice');
     }
 
-
     /**
      * Marks the given invoice as final
      * @param unknown $id

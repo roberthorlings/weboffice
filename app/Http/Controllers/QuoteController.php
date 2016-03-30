@@ -3,7 +3,7 @@
 namespace Weboffice\Http\Controllers;
 
 use Weboffice\Http\Controllers\Controller;
-
+use AppConfig;
 use Illuminate\Http\Request;
 use Weboffice\Models\Quote;
 use Flash;
@@ -102,6 +102,22 @@ class QuoteController extends Controller
 
         return view('quote.show', compact('quote'));
     }
+    
+    /**
+     * Display the specified resource as pdf
+     *
+     * @param  int  $id
+     *
+     * @return Response
+     */
+    public function pdf($id)
+    {
+    	$quote = Quote::findOrFail($id);
+    	$filename = 'quote ' . $quote->offertenummer . '.pdf';
+    	$quoteNumberPrefix = AppConfig::get('offerteNummerPrefix');
+    	return response()->view('quote.pdf', compact('quote', 'filename', 'quoteNumberPrefix'))->header('Content-Type', 'application/pdf');
+    }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -174,6 +190,25 @@ class QuoteController extends Controller
         return redirect('quote');
     }
 
+    /**
+     * Marks the given quote as final
+     * @param unknown $id
+     */
+    public function markAsFinal($id)
+    {
+    	$quote = Quote::findOrFail($id);
+    
+    	// Make sure only one is marked as final
+    	Quote::where('offertenummer', $quote->offertenummer)->update(['definitief' => false]);
+    
+    	// Mark the current invoice as final
+    	$quote->definitief = true;
+    	$quote->save();
+    
+    	Flash::message( 'Quote marked as final' );
+    	return redirect('quote');
+    }
+    
     /**
      *
      * @param Request $request

@@ -4,6 +4,7 @@ namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use AppConfig;
+use Illuminate\Support\Collection;
 
 class Quote extends Model
 {
@@ -73,7 +74,7 @@ class Quote extends Model
     	}
     
     	// If no title is specified, don't store anything (or delete existing)
-    	if( !$title ) {
+    	if( !$title || !$contents ) {
     		if($line && $line->id)
     			$line->delete();
     
@@ -105,6 +106,45 @@ class Quote extends Model
      */
     public function addLine($title, $contents) {
     	return $this->updateLine(null, $title, $contents);
+    }
+    
+    /**
+     * Returns a list of all quote lines to be shown in the quote
+     * 
+     * This includes default lines with expiry date and applicable terms 
+     */
+    public function getAllLines() {
+    	// Create a list of titles of explicitly added lines
+    	$titles = $this->QuoteLines->map(function($line) { return $line->titel; })->all();
+    	
+    	// Add default lines to all quote lines but only the 
+    	// lines for which we don't have an explicit line
+    	return array_merge(
+    		$this->QuoteLines->all(),
+    	 	$this->getDefaultLines()->filter(function($line) use($titles) {
+    	 		return !in_array($line->titel, $titles);
+    	 	})->all()
+    	 );
+    }
+    
+    /**
+     * Returns a list of default quote lines
+     * @return Collection
+     */
+    protected function getDefaultLines() {
+    	return collect([
+    		new QuoteLine([
+    			'titel' 	=> 'Geldigheidsduur', 
+    			'inhoud' 	=> "Deze offerte is geldig tot " . $this->vervaldatum->format( 'd-m-Y' ) . 
+    							". Indien u akkoord gaat met deze offerte, wil ik u verzoeken deze offerte " . 
+    							"ondertekend terug te sturen naar bovenstaand adres of per e-mail naar robert@isdat.nl."
+    		]),	
+    		new QuoteLine([
+    			'titel' 	=> 'Voorwaarden', 
+    			'inhoud' 	=> "Op deze offerte zijn onze algemene voorwaarden van toepassing. Wij hebben een " . 
+    							"exemplaar van de algemene voorwaarden toegevoegd."
+    		]),	
+    	]);
     }
     
     /**

@@ -174,17 +174,17 @@ class IsdatPDF extends \FPDF {
 	
 	function addTo( $klant, $postadres = true ) {
 		$this->setFontSize( $this->stdFontSize );
-		$this->cell( 80, 5, $klant[ "bedrijfsnaam" ], 0, 1 );
-		if( $klant[ "contactpersoon" ] != "" ) {
-			$this->cell( 80, 5, "t.a.v " . $klant[ "contactpersoon" ], 0, 1 );
+		$this->cell( 80, 5, $klant->bedrijfsnaam, 0, 1 );
+		if( $klant->contactpersoon != "" ) {
+			$this->cell( 80, 5, "t.a.v " . $klant->contactpersoon, 0, 1 );
 		}
 		
-		if( $klant[ "postadres" ] != "" && $postadres ) {
-			$adres = $klant[ "postadres" ];
-			$pcplaats = $klant[ "postpostcode" ] . " " . $klant[ "postplaats" ];
+		if( $klant->postadres != "" && $postadres ) {
+			$adres = $klant->postadres;
+			$pcplaats = $klant->postpostcode . " " . $klant->postplaats;
 		} else {
-			$adres = $klant[ "adres" ];
-			$pcplaats = $klant[ "postcode" ] . " " . $klant[ "plaats" ];
+			$adres = $klant->adres;
+			$pcplaats = $klant->postcode . " " . $klant->plaats;
 		}
 		$this->cell( 80, 5, $adres, 0, 1 );
 		$this->cell( 80, 5, $pcplaats, 0, 1 );
