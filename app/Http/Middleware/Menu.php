@@ -21,7 +21,7 @@ class Menu
     		
     		$finances = $menu->add('Finances', [ 'url' => '#', 'icon' => 'fa-eur' ]);
 	    		$finances->add('Transactions', [ 'url' => 'transaction', 'icon' => 'fa-eur' ])->active('transaction/(?!import).*');
-	    		$finances->add('Statements', [ 'url' => 'statement', 'icon' => 'fa-eur' ])->active('statement/*');
+	    		$finances->add('Statements', [ 'url' => 'statement', 'icon' => 'fa-eur' ])->active('statement/(?!create/).*');
 				$finances->add('Results', [ 'url' => 'results', 'icon' => 'fa-eur' ])->active('results/*');
 				$finances->add('Balance', [ 'url' => 'balance', 'icon' => 'fa-eur' ])->active('balance/*');
 				$finances->add('Amounts due', [ 'url' => 'saldo', 'icon' => 'fa-eur' ])->active('saldo/*');

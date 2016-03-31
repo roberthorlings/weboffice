@@ -68,7 +68,7 @@
 			<div class='col-md-6 col-sm-12'>
 				<div class="box">
 					<div class="box-header with-border">
-						<h3 class="box-title">Statement lines (incl. VAT)</h3>
+						<h3 class="box-title">Statement lines (excl. VAT)</h3>
 					</div>
 					<!-- /.box-header -->
 					<div class="box-body">

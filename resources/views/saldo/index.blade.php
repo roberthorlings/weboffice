@@ -50,7 +50,7 @@
 			                            'style' => 'display:inline',
 			                            'data-confirm' => 'Are you sure you want to delete this item?'
 			                        ]) !!}
-			                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
+			                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs']) !!}
 			                        {!! Form::close() !!}
 			                    </td>
 			                </tr>
