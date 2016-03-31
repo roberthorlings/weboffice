@@ -26,8 +26,18 @@ class Relation extends Model
     const TYPE_SUPPLIER = 2;
     const TYPE_OTHER = 3;
 	
-	public function projects() {
+	public function Projects() {
 		return $this->hasMany('Weboffice\Models\Project', 'relatie_id');
 	}
 
+	public function getRelationType() {
+		switch($this->type) {
+			case self::TYPE_ACTIVE_CUSTOMER: 	return "Customer";
+			case self::TYPE_INACTIVE_CUSTOMER: 	return "Customer";
+			case self::TYPE_SUPPLIER:			return "Supplier";
+			case self::TYPE_OTHER:				
+			default:							return "Other";
+		}
+	}
+	
 }

@@ -1,4 +1,5 @@
 @extends('layouts/adminlte')
+@section('page_title', "Projects")
 
 @section('content')
     <div class='row'>
@@ -6,23 +7,35 @@
             <!-- Table box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Project</h3>
+                    <h3 class="box-title">Projects</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered table-striped table-hover">
+			        <table class="table table-bordered table-striped table-hover projects">
 			            <thead>
 			                <tr>
-			                    <th>Naam</th><th>Opmerkingen</th><th>Status</th><th>Actions</th>
+			                    <th>Name</th><th>Relation</th><th>Status</th><th>Post</th><th>Revenue</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
 			            @foreach($project as $item)
-			                <tr>
-			                    <td><a href="{{ url('project', $item->id) }}">{{ $item->naam }}</a></td><td>{{ $item->opmerkingen }}</td><td>{{ $item->status }}</td>
+			                <tr class="project-status-{{$item->status}}">
+			                    <td><a href="{{ url('project', $item->id) }}">{{ $item->naam }}</a></td>
+			                    <td>
+			                    	@if($item->relatie_id)
+			                    		<a href="{{ url('relation', $item->relatie_id) }}">{{ $item->Relation->bedrijfsnaam}}</a>
+			                    	@endif
+			                    </td>
+			                    <td>{{ $item->getStatus() }}</td>
+			                    <td>
+			                    	@if($item->post_id)
+			                    		@post($item->Post)
+			                    	@endif
+			                    </td>
+			                    <td></td>
 			                    <td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
@@ -34,7 +47,7 @@
 					                        <a class="btn btn-default btn-xs" href="{{ url('project/' . $item->id . '/edit') }}">
 					                            <i class="fa fa-fw fa-pencil"></i>
 					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
+				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs']) !!}
 					                    </div>
 			                        {!! Form::close() !!}
 			                    </td>

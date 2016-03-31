@@ -20,7 +20,7 @@ class RelationController extends Controller
      */
     public function index()
     {
-        $relation = Relation::paginate(15);
+        $relation = Relation::orderBy('type')->paginate(15);
 
         return view('relation.index', compact('relation'));
     }

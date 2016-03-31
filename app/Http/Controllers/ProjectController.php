@@ -31,8 +31,8 @@ class ProjectController extends Controller
     public function create()
     {
     	$lists = [];
-    	$lists["relatie_id"] = \Weboffice\Relation::lists("bedrijfsnaam", "id");
-		$lists["post_id"] = \Weboffice\Post::all()->lists("description", "id");
+    	$lists["relatie_id"] = \Weboffice\Models\Relation::lists("bedrijfsnaam", "id");
+		$lists["post_id"] = \Weboffice\Models\Post::all()->lists("description", "id");
     
         return view('project.create', compact('lists'));
     }
@@ -77,8 +77,8 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
     	$lists = [];
-    	$lists["relatie_id"] = \Weboffice\Relation::lists("bedrijfsnaam", "id");
-		$lists["post_id"] = \Weboffice\Post::all()->lists("description", "id");
+    	$lists["relatie_id"] = \Weboffice\Models\Relation::lists("bedrijfsnaam", "id");
+		$lists["post_id"] = \Weboffice\Models\Post::all()->lists("description", "id");
 
         return view('project.edit', compact('lists', 'project'));
     }

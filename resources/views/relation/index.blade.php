@@ -1,4 +1,5 @@
 @extends('layouts/adminlte')
+@section('page_title', "Relations")
 
 @section('content')
     <div class='row'>
@@ -13,16 +14,25 @@
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered table-striped table-hover">
+			        <table class="table table-bordered table-striped table-hover relations">
 			            <thead>
 			                <tr>
-			                    <th>Bedrijfsnaam</th><th>Contactpersoon</th><th>Adres</th><th>Actions</th>
+			                    <th>Type</th><th>Bedrijfsnaam</th><th>Contactpersoon</th><th>Plaats</th><th>Telefoon</th><th>E-mail</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
 			            @foreach($relation as $item)
-			                <tr>
-			                    <td><a href="{{ url('relation', $item->id) }}">{{ $item->bedrijfsnaam }}</a></td><td>{{ $item->contactpersoon }}</td><td>{{ $item->adres }}</td>
+			                <tr class="relation-type-{{$item->type}}">
+			                    <td>{{ $item->getRelationType() }}</td>
+			                    <td><a href="{{ url('relation', $item->id) }}">{{ $item->bedrijfsnaam }}</a></td>
+			                    <td>{{ $item->contactpersoon }}</td>
+			                    <td>{{ $item->plaats }}</td>
+			                    <td>{{ $item->telefoon }}</td>
+			                    <td>
+			                    	@if($item->email)
+			                    		<a href="mailto: {{ $item->email }}">{{ $item->email }}</a>
+			                    	@endif
+			                    </td>
 			                    <td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
@@ -34,7 +44,7 @@
 					                        <a class="btn btn-default btn-xs" href="{{ url('relation/' . $item->id . '/edit') }}">
 					                            <i class="fa fa-fw fa-pencil"></i>
 					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
+				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs']) !!}
 					                    </div>
 			                        {!! Form::close() !!}
 			                    </td>
@@ -59,9 +69,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('relation/create') }}" class="btn btn-primary btn-sm">Add New Relation</a><br /><br />
-                	
-                	A form could be added here, although it is out of scope for scaffolding.
+                	<a href="{{ url('relation/create') }}" class="btn btn-primary">Add New Relation</a><br /><br />
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col -->

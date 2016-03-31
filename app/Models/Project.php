@@ -58,6 +58,17 @@ class Project extends Model
     	$this->attributes['uurtarief' ] = $amount * 100;
     }
     
-    
+    public function getStatus() {
+    	switch($this->status) {
+    		case self::STATUS_NIETBEGONNEN: 	return "Not started";
+    		case self::STATUS_OFFERTEVERSTUURD:	return "Quote sent";
+    		case self::STATUS_ACTIEF:			return "Active";
+    		case self::STATUS_FACTUURVERSTUURD:	return "Invoice sent";
+    		case self::STATUS_AFGEROND:			return "Finished";
+    		case self::STATUS_OFFERTEAFGEWEZEN: return "Quote rejected";
+    		default:							return "Unknown";
+    	}
+    	 
+    }
 
 }

@@ -121,3 +121,15 @@ table.ledgers tbody tr td { border-width: 0; }
 .quote-details .box-body { padding: 10px 25px; }
 .quote-details h4 { font-weight: bold; margin-bottom:4px; }
 .quote-details p { margin-bottom: 18px; }
+
+/* Relations overview */
+.relations .relation-type-1 td, .relations .relation-type-1 td a { color: #999; }
+.relations .relation-type-2 td a { color: #4EBC3C; }
+.relations .relation-type-3 td a { color: #BC3C63; }
+
+/* Projects overview */
+.projects .project-status-0 td a { color: #4EBC3C; }
+.projects .project-status-1 td a { color: #4EBC3C; }
+.projects .project-status-3 td a { color: #BC3C63; } 
+.projects .project-status-4 td, .projects .project-status-4 td a, 
+.projects .project-status-5 td, .projects .project-status-5 td a { color: #999; }
