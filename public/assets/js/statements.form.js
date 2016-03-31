@@ -1,13 +1,16 @@
 $(function() {
 	// Mark the total as balanced or not-balanced
 	function checkBalance() {
-		var total = Math.abs(parseFloat($('.statement-total-amount').val()));
-		var isBalanced = total < 0.005;
-		
-		if(isBalanced) {
-			$('.statement-total-amount').removeClass('not-balanced');
-		} else {
-			$('.statement-total-amount').addClass('not-balanced');
+		// Only check balance if indicated in the form
+		if( $('.statement-total-amount').hasClass( 'check-balance' ) ) {
+			var total = Math.abs(parseFloat($('.statement-total-amount').val()));
+			var isBalanced = total < 0.005;
+			
+			if(isBalanced) {
+				$('.statement-total-amount').removeClass('not-balanced');
+			} else {
+				$('.statement-total-amount').addClass('not-balanced');
+			}
 		}
 	}
 
@@ -23,6 +26,7 @@ $(function() {
 		});
 		
 		$('.statement-total-amount').val(sum.toFixed(2));
+		
 		checkBalance();
 	});
 	

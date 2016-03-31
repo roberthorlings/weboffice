@@ -8,9 +8,13 @@ use Carbon\Carbon;
 use Flash;
 use Illuminate\Http\Request;
 use Session;
+use Weboffice\Models\Asset;
+use Weboffice\Models\Project;
+use Weboffice\Models\Relation;
+use Weboffice\Models\Saldo;
 use Weboffice\Models\Statement;
 use Weboffice\Repositories\PostRepository;
-use Weboffice\Models\Asset;
+use AppConfig;
 
 
 class StatementController extends Controller
@@ -143,8 +147,133 @@ class StatementController extends Controller
 
         return redirect('statement');
     }
-    
 
+    /**
+     * Show a form to add a new statement for an incoming invoice
+     * @param PostReposity $repository
+     */
+    public function incomingInvoice(PostRepository $postRepository) {
+    	$data = $this->getDataForForm(null, $postRepository);
+    	$data['relations'] = Relation::orderBy('bedrijfsnaam')->lists( 'bedrijfsnaam', 'id' );
+    	$data['projects'] = Project::lists( 'naam', 'id' );
+    	$data['date'] = Carbon::now();
+        return view('statement.incoming-invoice', $data);
+    }
+    
+    /**
+     * Show a form to add a new statement for an cost declaration
+     * @param PostReposity $repository
+     */
+    public function costDeclaration(PostRepository $postRepository) {
+    	$data = $this->getDataForForm(null, $postRepository);
+    	$data['projects'] = Project::lists( 'naam', 'id' );
+    	$data['date'] = Carbon::now();
+    	return view('statement.cost-declaration', $data);
+    }
+    
+    /**
+     * Creates a statement for an incoming invoice
+     * @param Request $request
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function bookIncomingInvoice(Request $request) {
+    	$data = $request->all();
+    	$supplier = Relation::find($data['relatie_id']);
+    	 
+    	// Create statement with incoming data, and create a proper description
+    	$data['omschrijving'] = 'Ontvangst factuur ' . $data['factuurnummer'] . ' - ' . $supplier->bedrijfsnaam;
+    	$statement = Statement::create($data);
+    	
+    	// Handle invoice lines
+    	$sum = $this->handleLines( $request->get( 'Lines' ), $statement, $data['project_id'] );
+    	$vat = $this->bookVAT($data['btw'], $sum, $statement);
+    	
+    	// Create a new saldo to keep track of the payment for this invoice
+    	$saldo = Saldo::create(['relatie_id' => $data['relatie_id'], 'omschrijving' => 'Factuur ' . $data['factuurnummer'] . ' - ' . $data['opmerkingen']]);
+    	
+    	// Add total line
+    	$statement->addLine(1, $sum + $vat, AppConfig::get('postCrediteuren'), $saldo->id);
+    	
+    	Flash::message( 'Incoming invoice has been booked');
+    	
+    	return redirect('statement');
+    }
+    
+    /**
+     * Creates a statement for a cost declaration
+     * @param Request $request
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function bookCostDeclaration(Request $request) {
+    	$data = $request->all();
+    	 
+    	// Create statement with incoming data
+    	$statement = Statement::create($data);
+    	
+    	// Handle invoice lines
+    	$sum = $this->handleLines( $request->get( 'Lines' ), $statement, $data['project_id' ] );
+    	$vat = $this->bookVAT($data['btw'], $sum, $statement);
+    	 
+        if( $data[ 'handling' ] == 'pay' ) {
+	    	// Create a new saldo to keep track of the payment for this invoice
+        	$saldo = Saldo::create(['relatie_id' => AppConfig::get('relatiePrive'), 'omschrijving' => $data['omschrijving']]);
+        	
+        	// Add total line
+    		$statement->addLine(1, $sum + $vat, AppConfig::get('postCrediteuren'), $saldo->id);
+        } else {
+	    	// Add total line, without saldo
+        	$statement->addLine(1, $sum + $vat, AppConfig::get('postPriveInvesteringen'));
+        }
+    	 
+    	Flash::message( 'Cost declaration has been booked');
+    	 
+    	return redirect('statement');
+    }
+    
+    /**
+     * Stores the given lines with the statement
+     * @param unknown $statement
+     */
+    protected function handleLines( $lines, $statement, $projectId = null ) {
+    	// Store the lines as well.
+    	/*
+    	 *     40x Costs ...
+    	 *     40x Costs ...
+    	 *     180 Te vorderen BTW
+    	 * aan 140 Crebiteuren
+    	 */
+    	$sum = 0;
+    	foreach( $lines as $lineInfo ) {
+    		$statementLine = $statement->addLine(0, $lineInfo['amount'], $lineInfo['post_id']);
+    	
+    		if( $statementLine ) {
+    			// Associate costs with project, if specified
+    			if( $projectId ) {
+    				$statementLine->associateWithProject($projectId);
+    			}
+    			 
+    			$sum += $lineInfo['amount'];
+    		}
+    	}
+    	
+    	return $sum;
+    }
+    
+    /**
+     * Stores the given lines with the statement
+     * @param unknown $statement
+     */
+    protected function bookVAT( $percentage, $total, $statement ) {
+    	if( $percentage == 0 ) {
+    		return 0;
+    	}
+    	
+    	$vat = round( $total * ( $percentage / 100 ), 2 );
+    	$statement->addLine(0, $vat, AppConfig::get('postTeVorderenBTW'));
+    	
+    	return $vat;
+    }
+    
     /**
      *
      * @param Request $request

@@ -50,6 +50,12 @@ Route::group(['middleware' => ['web']], function () {
 	/* Delete the statement belonging to a transaction */
 	Route::delete('transaction/{id}/statement', 'TransactionController@deleteStatement');
 	
+	// Specific statements
+	Route::get('statement/create/incoming-invoice', [ 'as' => 'statement.incoming-invoice', 'uses' => 'StatementController@incomingInvoice' ]);
+	Route::post('statement/create/incoming-invoice', [ 'as' => 'statement.book-incoming-invoice', 'uses' => 'StatementController@bookIncomingInvoice' ]);
+	Route::get('statement/create/cost-declaration', [ 'as' => 'statement.cost-declaration', 'uses' => 'StatementController@costDeclaration' ]);
+	Route::post('statement/create/cost-declaration', [ 'as' => 'statement.book-cost-declaration', 'uses' => 'StatementController@bookCostDeclaration' ]);
+	
 	// Asset amortization
 	Route::get('asset/{id}/statements', 'AssetController@statements');
 	Route::post('asset/{id}/statements', 'AssetController@bookStatements');

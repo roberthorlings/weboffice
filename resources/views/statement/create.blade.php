@@ -30,7 +30,7 @@
 						@endfor
 						<div class="row total">
 							<div class="col-sm-3 col-sm-offset-9">
-								{!! Form::input('number', 'total', number_format($sum, 2, '.', ''), ['class' => 'form-control statement-total-amount', 'readonly' => 'readonly']) !!} 
+								{!! Form::input('number', 'total', number_format($sum, 2, '.', ''), ['class' => 'form-control statement-total-amount check-balance', 'readonly' => 'readonly']) !!} 
 							</div>
 						</div>
 					</div>

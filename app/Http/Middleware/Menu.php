@@ -42,7 +42,7 @@ class Menu
 					$documents_more->add('Add quote', [ 'url' => 'quote/create', 'icon' => 'fa-file-text-o' ])->active('quote/create');
 					$documents_more->add('Add credit note', [ 'url' => 'invoice/create/creditnote', 'icon' => 'fa-file-text-o' ])->active('invoice/create/creditnote');
 					$documents_more->add('Receive invoice', [ 'route' => 'statement.incoming-invoice', 'icon' => 'fa-eur' ]);
-					$documents_more->add('Report costs', [ 'url' => 'statement/report_costs', 'icon' => 'fa-eur' ]);
+					$documents_more->add('Report costs', [ 'route' => 'statement.cost-declaration', 'icon' => 'fa-eur' ]);
 						
 			$crm = $menu->add('CRM', [ 'url' => '#', 'icon' => 'fa-file-text-o' ]);
 				$crm->add('Relations', [ 'url' => 'relation', 'icon' => 'fa-file-text-o' ])->active('relation');
