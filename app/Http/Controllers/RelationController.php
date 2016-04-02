@@ -34,7 +34,6 @@ class RelationController extends Controller
     {
     	$lists = [];
     	
-    
         return view('relation.create', compact('lists'));
     }
 

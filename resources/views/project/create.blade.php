@@ -8,25 +8,17 @@
 	    <h3 class="box-title">Create new Project</h3>
 	  </div><!-- /.box-header -->
 	  <div class="box-body">
-
-		                <div class="form-group {{ $errors->has('naam') ? 'has-error' : ''}}">
+		    <div class="form-group {{ $errors->has('naam') ? 'has-error' : ''}}">
                 {!! Form::label('naam', 'Naam: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {!! Form::text('naam', null, ['class' => 'form-control']) !!}
                     {!! $errors->first('naam', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class="form-group {{ $errors->has('opmerkingen') ? 'has-error' : ''}}">
-                {!! Form::label('opmerkingen', 'Opmerkingen: ', ['class' => 'col-sm-3 control-label']) !!}
-                <div class="col-sm-6">
-                    {!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
-                    {!! $errors->first('opmerkingen', '<p class="help-block">:message</p>') !!}
-                </div>
-            </div>
             <div class="form-group {{ $errors->has('status') ? 'has-error' : ''}}">
                 {!! Form::label('status', 'Status: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::number('status', null, ['class' => 'form-control']) !!}
+                    {!! Form::select('status', $statuses, null, ['class' => 'form-control']) !!}
                     {!! $errors->first('status', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
@@ -40,18 +32,25 @@
             <div class="form-group {{ $errors->has('relatie_id') ? 'has-error' : ''}}">
                 {!! Form::label('relatie_id', 'Relatie: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::select('relatie_id', $lists["relatie_id"], null, ['class' => 'form-control', ]) !!}
+                    {!! Form::select('relatie_id', $relations, null, ['class' => 'form-control', ]) !!}
                     {!! $errors->first('relatie_id', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('post_id') ? 'has-error' : ''}}">
                 {!! Form::label('post_id', 'Post: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::select('post_id', $lists["post_id"], null, ['class' => 'form-control', ]) !!}
+                	{!! Form::postSelect('post_id', $posts, null, ['class' => 'form-control', 'placeholder' => ' - No post selected - ']) !!} 
                     {!! $errors->first('post_id', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
 
+            <div class="form-group {{ $errors->has('opmerkingen') ? 'has-error' : ''}}">
+                {!! Form::label('opmerkingen', 'Opmerkingen: ', ['class' => 'col-sm-3 control-label']) !!}
+                <div class="col-sm-6">
+                    {!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
+                    {!! $errors->first('opmerkingen', '<p class="help-block">:message</p>') !!}
+                </div>
+            </div>
 		
 		    @if ($errors->any())
 		        <ul class="alert alert-danger">

@@ -3,7 +3,7 @@
 
 @section('content')
     <div class='row'>
-        <div class='col-md-8 col-sm-12'>
+        <div class='col-md-10 col-sm-12'>
             <!-- Table box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -17,7 +17,7 @@
 			        <table class="table table-bordered table-striped table-hover projects">
 			            <thead>
 			                <tr>
-			                    <th>Name</th><th>Relation</th><th>Status</th><th>Post</th><th>Revenue</th><th></th>
+			                    <th>Name</th><th>Relation</th><th>Status</th><th>Post</th><th colspan="2">Revenue</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
@@ -35,7 +35,14 @@
 			                    		@post($item->Post)
 			                    	@endif
 			                    </td>
-			                    <td></td>
+			                    <td>
+									<span class="total-revenue">@amount($item->getTotalRevenue())</span>
+			                    </td>
+			                    <td>
+			                    	@if($item->hasRevenuePerHour()) 
+										<span class="revenue-per-hour">@amount($item->getRevenuePerHour()) / hour</span>
+									@endif
+			                    </td>
 			                    <td>
 			                        {!! Form::open([
 			                            'method'=>'DELETE',
@@ -57,11 +64,11 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $project->render() !!} </div>
+			        <div class="pull-right"> {!! $project->appends(['filter' => $filter])->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->
-        <div class='col-md-4 col-sm-12'>
+        <div class='col-md-2 col-sm-12'>
             <!-- Box -->
             <div class="box">
                 <div class="box-header with-border">
@@ -72,9 +79,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('project/create') }}" class="btn btn-primary btn-sm">Add New Project</a><br /><br />
-                	
-                	A form could be added here, although it is out of scope for scaffolding.
+                	<a href="{{ url('project/create') }}" class="btn btn-primary">Add New Project</a><br /><br />
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col -->

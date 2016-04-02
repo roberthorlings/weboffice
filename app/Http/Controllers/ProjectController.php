@@ -7,6 +7,8 @@ use Weboffice\Http\Controllers\Controller;
 use Flash;
 use Illuminate\Http\Request;
 use Weboffice\Models\Project;
+use Weboffice\Models\Relation;
+use Weboffice\Repositories\PostRepository;
 
 class ProjectController extends Controller
 {
@@ -16,11 +18,19 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $project = Project::paginate(15);
+    	$includes = ['Post', 'Relation'];
+    	
+    	if( $request->get('filter') == 'all' ) {
+    		$query = Project::with($includes);
+    	} else {
+    		$query = Project::active()->with($includes);
+    	}
+    	
+    	$project = $query->orderBy('created_at', 'desc' )->orderBy('id', 'desc')->paginate(15);
 
-        return view('project.index', compact('project'));
+        return view('project.index', ['project' => $project, 'filter' => $request->get('filter')]);
     }
 
     /**
@@ -28,13 +38,13 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(PostRepository $postRepository)
     {
-    	$lists = [];
-    	$lists["relatie_id"] = \Weboffice\Models\Relation::lists("bedrijfsnaam", "id");
-		$lists["post_id"] = \Weboffice\Models\Post::all()->lists("description", "id");
-    
-        return view('project.create', compact('lists'));
+		$relations = Relation::lists('bedrijfsnaam', 'id');
+		$posts = $postRepository->getListForPostSelect();
+		$statuses = $this->getStatuses();
+		
+        return view('project.create', compact('relations', 'posts', 'statuses'));
     }
 
     /**
@@ -73,14 +83,15 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, PostRepository $postRepository)
     {
         $project = Project::findOrFail($id);
-    	$lists = [];
-    	$lists["relatie_id"] = \Weboffice\Models\Relation::lists("bedrijfsnaam", "id");
-		$lists["post_id"] = \Weboffice\Models\Post::all()->lists("description", "id");
 
-        return view('project.edit', compact('lists', 'project'));
+        $relations = Relation::lists('bedrijfsnaam', 'id');
+        $posts = $postRepository->getListForPostSelect();
+        $statuses = $this->getStatuses();
+        
+        return view('project.edit', compact('project', 'relations', 'posts', 'statuses'));
     }
 
     /**
@@ -115,6 +126,17 @@ class ProjectController extends Controller
         Flash::message( 'Project deleted!');
 
         return redirect('project');
+    }
+    
+    protected function getStatuses() {
+    	return [
+	    	Project::STATUS_NIETBEGONNEN 		=> 'Not started',
+	    	Project::STATUS_OFFERTEVERSTUURD 	=> 'Quote sent',
+	    	Project::STATUS_ACTIEF 				=> 'Active',
+	    	Project::STATUS_FACTUURVERSTUURD 	=> 'Invoice sent',
+	    	Project::STATUS_AFGEROND			=> 'Finished',
+	    	Project::STATUS_OFFERTEAFGEWEZEN	=> 'Quote rejected'
+    	];    	
     }
 
 }
