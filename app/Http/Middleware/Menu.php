@@ -45,8 +45,8 @@ class Menu
 					$documents_more->add('Report costs', [ 'route' => 'statement.cost-declaration', 'icon' => 'fa-eur' ]);
 						
 			$crm = $menu->add('CRM', [ 'url' => '#', 'icon' => 'fa-file-text-o' ]);
-				$crm->add('Relations', [ 'url' => 'relation', 'icon' => 'fa-file-text-o' ])->active('relation');
-				$crm->add('Projects', [ 'url' => 'project', 'icon' => 'fa-file-text-o' ])->active('project');
+				$crm->add('Relations', [ 'url' => 'relation', 'icon' => 'fa-file-text-o' ])->active('relation/*');
+				$crm->add('Projects', [ 'url' => 'project', 'icon' => 'fa-file-text-o' ])->active('project/*');
 				
 			$other = $menu->add('Other', [ 'url' => '#', 'icon' => 'fa-ellipsis-v' ]);
 				$other->add('Export', [ 'url' => 'export', 'icon' => 'fa-file-text-o' ]);

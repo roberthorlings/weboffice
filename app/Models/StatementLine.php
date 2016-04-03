@@ -40,6 +40,11 @@ class StatementLine extends Model
     {
     	return $this->hasMany('\Weboffice\Models\ProjectFinance', 'boeking_deel_id');
     }    
+    public function Projects()
+    {
+    	return $this->belongsToMany('\Weboffice\Models\Project', 'project_financieen', 'boeking_deel_id', 'project_id');
+    }
+    
 
     /**
      * Returns the signed amount for this line.

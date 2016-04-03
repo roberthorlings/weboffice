@@ -54,11 +54,26 @@
 			        </table>
                 </div><!-- /.box-body -->
                 <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $relation->render() !!} </div>
+			        <div class="pull-right"> {!! $relation->appends(['filter' => $filter])->render() !!} </div>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->
         <div class='col-md-4 col-sm-12'>
+            <!-- Box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Filter</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                	<a href="{{ route('relation.index', [ 'filter' => 'active']) }}" class="btn btn-primary">Active customers</a>
+                	<a href="{{ route('relation.index', [ 'filter' => 'all']) }}" class="btn btn-default">All relations</a>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        
             <!-- Box -->
             <div class="box">
                 <div class="box-header with-border">

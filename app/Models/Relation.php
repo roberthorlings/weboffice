@@ -3,10 +3,12 @@
 namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Weboffice\Models\Stats\RevenueAndWorkingHourStats;
 
 class Relation extends Model
 {
-
+	use RevenueAndWorkingHourStats;
+	
     /**
      * The database table used by the model.
      *
@@ -29,7 +31,32 @@ class Relation extends Model
 	public function Projects() {
 		return $this->hasMany('Weboffice\Models\Project', 'relatie_id');
 	}
+	
+	public function StatementLines() {
+		$relationId = $this->id;
+		return StatementLine::whereHas('projects', function ($query) use($relationId) {
+			$query->where('relatie_id', $relationId);
+		});		
+	}
+	
+	public function WorkingHours()
+	{
+		return $this->hasMany('\Weboffice\Models\WorkingHour', 'relatie_id');
+	}
+	
+	/**
+	 * Scope a query to only include active customers
+	 *
+	 * @return \Illuminate\Database\Eloquent\Builder
+	 */
+	public function scopeActive($query)
+	{
+		return $query->where('type', self::TYPE_ACTIVE_CUSTOMER );
+	}
 
+	/**
+	 * Returns a human readable description of the relation type
+	 */
 	public function getRelationType() {
 		switch($this->type) {
 			case self::TYPE_ACTIVE_CUSTOMER: 	return "Customer";

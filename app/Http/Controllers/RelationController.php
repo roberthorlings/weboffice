@@ -18,11 +18,17 @@ class RelationController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $relation = Relation::orderBy('type')->paginate(15);
-
-        return view('relation.index', compact('relation'));
+    	if( $request->get('filter') == 'all' ) {
+    		$query = Relation::orderBy('type')->orderBy('bedrijfsnaam');
+    	} else {
+    		$query = Relation::active()->orderBy('bedrijfsnaam');
+    	}
+    	 
+    	$relation = $query->paginate(15);
+    	
+    	return view('relation.index', ['relation' => $relation, 'filter' => $request->get('filter')]);
     }
 
     /**

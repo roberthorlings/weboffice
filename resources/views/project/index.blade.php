@@ -72,6 +72,21 @@
             <!-- Box -->
             <div class="box">
                 <div class="box-header with-border">
+                    <h3 class="box-title">Filter</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                	<a href="{{ route('project.index', [ 'filter' => 'active']) }}" class="btn btn-primary">Active projects</a>
+                	<a href="{{ route('project.index', [ 'filter' => 'all']) }}" class="btn btn-default">All projects</a>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        
+            <!-- Box -->
+            <div class="box">
+                <div class="box-header with-border">
                     <h3 class="box-title">Add Project</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
