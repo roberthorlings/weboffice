@@ -63,6 +63,18 @@ class Ledgers {
 		return $this->ledgers;
 	}
 	
+	/**
+	 * Returns a single ledger from this collection
+	 * @param unknown $postId
+	 */
+	public function getLedger($postId) {
+		if(array_key_exists($postId, $this->ledgers)) {
+			return $this->ledgers[$postId];
+		} else {
+			return null;
+		}
+	}
+	
 	protected function getPostIds() {
 		return array_map(function($post) { return $post->id; }, $this->posts);
 	}
@@ -133,7 +145,7 @@ class Ledgers {
 			}
 			
 			// Only store ledger if there is something relevant
-			if(abs($ledger->getTotal()) > 0) {
+			if(abs($ledger->getTotal()) > 0 || count($lines) > 0) {
 				$this->ledgers[$post->id] = $ledger;
 			}
 		}

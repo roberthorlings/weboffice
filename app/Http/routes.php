@@ -64,6 +64,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('balance', 'BalanceController@index');
 	Route::get('results', 'ResultsController@index');
 	Route::get('ledger',  'LedgerController@index');
+	Route::get('vat', [ 'as' => 'vat.index', 'uses' => 'VATController@index']);
+	Route::post('vat', [ 'as' => 'vat.book', 'uses' => 'VATController@book']);
 	
 	// Importing transactions
 	Route::get('transaction/import', 'TransactionController@import');

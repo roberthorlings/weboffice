@@ -84,4 +84,12 @@ class Timespan {
 		}
 	}
 	
+	/**
+	 * Static creator to be able to easily work with the timespan
+	 * @param unknown $start
+	 * @param unknown $end
+	 */
+	public static function create($start, $end) {
+		return new self($start, $end);
+	}
 }

@@ -29,6 +29,7 @@ class Menu
 				$finances_more = $finances->add('More', [ 'url' => '#' ])->active(false);
 					$finances_more->add('Assets', [ 'url' => 'asset', 'icon' => 'fa-eur' ])->active('asset/*');
 					$finances_more->add('Ledgers', [ 'url' => 'ledger', 'icon' => 'fa-eur' ])->active('ledger/*');
+					$finances_more->add('VAT', [ 'url' => 'vat', 'icon' => 'fa-eur' ])->active('vat/*');
 					$finances_more->add('Travel registration', [ 'url' => 'travelexpense', 'icon' => 'fa-eur' ])->active('travelexpense/*');
 					$finances_more->add('Import', [ 'url' => 'transaction/import', 'icon' => 'fa-eur' ])->active('transaction/import');
 			

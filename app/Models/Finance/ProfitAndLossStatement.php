@@ -63,6 +63,13 @@ class ProfitAndLossStatement {
 	public function getResults() {
 		return $this->results;
 	}
+	public function getResult($type) {
+		if(array_key_exists($type, $this->results))
+			return $this->results[$type];
+		else
+			return null;
+	}
+	
 	
 	public function getResultTotal() {
 		return $this->resultsTotal;
