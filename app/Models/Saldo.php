@@ -4,6 +4,7 @@ namespace Weboffice\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Carbon\Carbon;
 
 class Saldo extends Model
 {
@@ -109,6 +110,24 @@ class Saldo extends Model
     			->select( DB::raw( 'sum(if(boeking_delen.credit = 0, boeking_delen.bedrag, -boeking_delen.bedrag)) as total' ) );
     	});
     }
+    
+    /**
+     * Scope a query to only include open saldos on the given date
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOpenOn($query, Carbon $date)
+    {
+    	return $query->where(DB::raw('0'), '!=', function($subquery) use($date){
+    		return $subquery
+	    		->from('boeking_delen')
+	    		->join('boekingen', 'boeking_delen.boeking_id', '=', 'boekingen.id')
+	    		->where('boeking_delen.saldo_id', '=', DB::raw('saldos.id'))
+	    		->where('boekingen.datum', '<=', $date)
+	    		->select( DB::raw( 'sum(if(boeking_delen.credit = 0, boeking_delen.bedrag, -boeking_delen.bedrag)) as total' ) );
+    	});
+    }
+    
     
     /**
      * Calculates the open amount for this saldo

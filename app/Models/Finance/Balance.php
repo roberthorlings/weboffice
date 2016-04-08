@@ -22,6 +22,12 @@ class Balance {
 	protected $date;
 	
 	/**
+	 * Determines whether the current balance contains data (i.e. statements)
+	 * @var unknown
+	 */
+	protected $hasData = false;
+	
+	/**
 	 * 
 	 * @var array $balance
 	 */
@@ -43,17 +49,41 @@ class Balance {
 	}
 	
 	/**
+	 * Returns true if there is data for the current balance
+	 * @return \Weboffice\Models\Finance\unknown
+	 */
+	public function hasData() {
+		return $this->hasData;
+	}
+	
+	/**
 	 * Returns a balance to be shown on the screen
 	 */
-	public function getBalance() {
-		return $this->balance;
+	public function getBalance($type = null) {
+		if($type) {
+			return $this->balance[$type];
+		} else {
+			return $this->balance;
+		}
 	}
 	
 	/**
 	 * Returns the total values on both sides of the balance
 	 */
-	public function getTotals() {
-		return $this->totals;
+	public function getTotals($type = null) {
+		if($type) {
+			return $this->totals[$type];
+		} else {
+			return $this->totals;
+		}
+	}
+	
+	/**
+	 * Returns the date for the current balance
+	 * @return \Carbon\Carbon
+	 */
+	public function getDate() {
+		return $this->date;
 	}
 	
 	/**
@@ -84,13 +114,20 @@ class Balance {
 		return $this->totals['credit'];
 	}
 	
-	
 	/**
 	 * Initializes the balance, based on the given date
 	 */
 	protected function initialize() {
 		// Load statistics from statement lines for all posts
 		$this->loadPostStatistics(null, $this->date);
+		
+		// If no data could be found in the current balance, return immediately
+		if(count($this->postStatistics) == 0) {
+			$this->hasData = false;
+			return;
+		} else {
+			$this->hasData = true;
+		}
 		
 		// Get the post hierarchy. Add only information on the 
 		// first level below the roots

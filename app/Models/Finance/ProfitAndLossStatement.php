@@ -60,6 +60,14 @@ class ProfitAndLossStatement {
 		$this->initialize();
 	}
 	
+	public function getStart() {
+		return $this->start;
+	}
+	
+	public function getEnd() {
+		return $this->end;
+	}
+	
 	public function getResults() {
 		return $this->results;
 	}

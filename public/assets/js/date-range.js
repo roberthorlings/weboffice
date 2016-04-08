@@ -70,4 +70,8 @@ $(function() {
 
         });
     });
+	
+	$('.default-date-range').each(function(idx,el) {
+		$(el).webofficeDefaultDateRange();
+	})
 });
