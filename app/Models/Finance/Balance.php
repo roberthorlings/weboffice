@@ -39,11 +39,18 @@ class Balance {
 	protected $totals = [ 'debet' => 0, 'credit' => 0 ];
 	
 	/**
+	 * Post for equity
+	 * @var unknown
+	 */
+	protected $postEquity;
+	
+	/**
 	 * Initializes the balance by loading all statements
 	 * @param Carbon $date
 	 */
 	public function __construct(Carbon $date) {
 		$this->date = $date;
+		$this->postEquity = Post::find(AppConfig::get('postEigenVermogen'));
 		
 		$this->initialize();
 	}
@@ -115,6 +122,29 @@ class Balance {
 	}
 	
 	/**
+	 * Returns a posttotal object for the given post or null if it is not found
+	 * @param Post $post
+	 * @return PostTotal
+	 */
+	public function getDataForPost(Post $post) {
+		foreach( $this->balance as $side => $totals ) {
+			if( array_key_exists( $post->id, $totals ) ) {
+				return $totals[$post->id];
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Returns the posttotal object for the equity
+	 * @return PostTotal
+	 */
+	public function getEquity() {
+		return $this->getDataForPost($this->postEquity);
+	}
+	
+	/**
 	 * Initializes the balance, based on the given date
 	 */
 	protected function initialize() {
@@ -152,7 +182,7 @@ class Balance {
 		// Posts can either show up at the balance, or contribute
 		// to the results. That depends on the post type.
 		// The results will be added to the equity
-		$postEquity = Post::find(AppConfig::get('postEigenVermogen'));
+		$postEquity = $this->postEquity;
 		$typeBalance = PostType::where('type', 'balans')->select('id')->first();
 		$result = 0;
 		
@@ -164,7 +194,7 @@ class Balance {
 			// Store the amount on the balance, if its type is the proper type
 			if( $postTotal->getPost()->post_type_id == $typeBalance->id ) {
 				$side = $postTotal->side();
-				$this->balance[$side][] = $postTotal;
+				$this->balance[$side][$postTotal->getPost()->id] = $postTotal;
 			} else {
 				$result += $postTotal->getSignedAmount();
 			}
@@ -173,7 +203,7 @@ class Balance {
 		
 		// Add the total amount of equity to the balance as well
 		$side = $this->side($result);
-		$this->balance[$side][] = new PostTotal($postEquity, $result);
+		$this->balance[$side][$postEquity->id] = new PostTotal($postEquity, $result);
 	}
 
 	/**
@@ -181,7 +211,7 @@ class Balance {
 	 */
 	protected function orderBalance() {
 		foreach( ['debet', 'credit'] as $side ) {
-			usort($this->balance[$side], function($a,$b) { 
+			uasort($this->balance[$side], function($a,$b) { 
 				// TODO PHP7: use spaceship operator
 				//return $a['post']->nummer <=> $b['post']->nummer;
 				$nA = $a->getPost()->nummer;

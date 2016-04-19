@@ -5,6 +5,8 @@ use Carbon\Carbon;
 use Weboffice\Models\PostType;
 use Weboffice\Models\Post;
 use AppConfig;
+use Illuminate\Database\Eloquent\Collection;
+use Weboffice\Models\StatementLine;
 
 /**
  * General ledger data for a single post
@@ -32,9 +34,9 @@ class Ledger {
 	protected $post;
 
 	/**
-	 * @var array
+	 * @var Collection
 	 */
-	protected $statementLines = [];
+	protected $statementLines;
 	
 	/**
 	 * Initial value
@@ -61,13 +63,14 @@ class Ledger {
 	public function loadStatementLines() {
 		$this->setStatementLines(
 				StatementLine::with('Statement')
-					->whereBetween('datum', [$this->start, $this->end])
 					->where('post_id', $this->post->id)
+					->join('boekingen', 'boekingen.id', '=', 'boeking_delen.boeking_id')
+					->whereBetween('datum', [$this->start, $this->end])
 					->get()
 		);
 	}
 	
-	public function setStatementLines(array $lines) {
+	public function setStatementLines($lines) {
 		$this->statementLines = $lines;
 		$this->updateTotal();
 	}

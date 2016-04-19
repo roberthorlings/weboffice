@@ -41,27 +41,36 @@ class Amortization
     public function getAmountAlreadyAmortized() {
     	if(is_null($this->amountAmortized)) {
 	    	$endOfMonth = Carbon::now()->endOfMonth();
-	    	
-	    	// Loop through the statements and check which statements to take into account
-	    	$amount = 0;
-	    	$relevantStatements = $this->asset->Statements()
-	    		->with('StatementLines')
-	    		->where('omschrijving', 'like', 'Afschrijving%')
-	    		->where('datum', '<=', $endOfMonth)
-	    		->get();
-	    	
-	    	foreach( $relevantStatements as $statement) {
-	    		// Check if the statement is actually about the amortization (i.e. the #statementlines 
-	    		// is correct and the description is about amortization
-	    		if(count($statement->StatementLines) == 2) {
-	    			$amount += $statement->StatementLines[1]->bedrag;
-	    		}
-	    	}
-	    	
-	    	$this->amountAmortized = $amount;
+	    	$this->amountAmortized = $this->getAmountAlreadyAmortizedOnDate($endOfMonth);
     	} 
     	
     	return $this->amountAmortized;
+    }
+    
+
+    /**
+     * Returns the amount that has already been amortized. This will include
+     * all amortization in the current month
+     * @return float
+     */
+    public function getAmountAlreadyAmortizedOnDate(Carbon $date) {
+    	// Loop through the statements and check which statements to take into account
+    	$amount = 0;
+    	$relevantStatements = $this->asset->Statements()
+    		->with('StatementLines')
+    		->where('omschrijving', 'like', 'Afschrijving%')
+    		->where('datum', '<=', $date)
+    		->get();
+    
+		foreach( $relevantStatements as $statement) {
+   			// Check if the statement is actually about the amortization (i.e. the #statementlines
+   			// is correct and the description is about amortization
+   			if(count($statement->StatementLines) == 2) {
+  				$amount += $statement->StatementLines[1]->bedrag;
+   			}
+   		}
+    
+   		return $amount;
     }
     
     /**

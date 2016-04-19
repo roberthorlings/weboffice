@@ -16,6 +16,8 @@ use Weboffice\Models\Finance\Ledgers;
 use Weboffice\Models\Statement;
 use Weboffice\Models\Post;
 use Weboffice\Models\Saldo;
+use Weboffice\Models\Finance\VATOverview;
+use Weboffice\Models\Asset;
 
 
 class ExportController extends Controller
@@ -51,11 +53,7 @@ class ExportController extends Controller
     	
     	// Add optional data
     	$options = $request->input('option');
-    	$data = [];
-    	
-    	foreach( $options as $type => $value ) {
-    		$data[$type] = $this->getData($type, $start, $end);
-    	}
+    	$data = $this->getMultiTypeData($options, $start, $end);
 
     	$filename = 'export-weboffice.pdf';
     	return response()->view('export.pdf', compact('data', 'filename', 'start', 'end'))->header('Content-Type', 'application/pdf');
@@ -66,19 +64,22 @@ class ExportController extends Controller
      * @param Request $request
      */
     public function year($year, Request $request) {
-    	$start = new Carbon($request->input('start', Carbon::now()->subMonth()->firstOfQuarter()));
-    	$end = new Carbon($request->input('end', $start->copy()->lastOfQuarter()));
-    
-    	// The filter is used to determine the period
-    	$filter = $this->getFilterFromRequest($request);
-    	$vatstatement = new VATStatement( $filter['start'], $filter['end'] );
-    	 
-    	// Store the bookings
-    	$vatstatement->saveStatements();
-    
-    	// Redirect the user
-    	Flash::message( 'VAT has been booked for ' . Timespan::create($filter['start'], $filter['end']));
-    	return redirect('statement');
+    	$start = Carbon::create($year, 1, 1, 0, 0, 0);
+    	$end = $start->copy()->endOfYear();
+    	
+    	// Add data for the current year
+    	$data = $this->getMultiTypeData(['balance' => 1, 'p-and-l' => 1, 'saldos' => 1, 'vat' => 1, 'assets' => 1], $start, $end);
+    	
+    	// Group saldos
+    	$data['grouped-saldos'] = $this->groupSaldosByPost($data['saldos']);
+    	
+    	// Add data for the previous year
+    	$previousYearStart = $start->copy()->subYear(1);
+    	$previousYearEnd = $start->copy()->endOfYear();
+    	$previousYearProfitAndLoss = $this->getData('p-and-l', $start, $end);
+    	
+    	$filename = 'year-' . $year . '.pdf';
+    	return response()->view('export.year', compact('data', 'previousYearProfitAndLoss', 'filename', 'start', 'end'))->header('Content-Type', 'application/pdf');
     }
     
     protected function getAvailableTypes() {
@@ -91,6 +92,15 @@ class ExportController extends Controller
 		];    	
     }
     
+    protected function getMultiTypeData($options, Carbon $start, Carbon $end) {
+    	$data = [];
+    	foreach( $options as $type => $value ) {
+    		$data[$type] = $this->getData($type, $start, $end);
+    	}
+    	 
+    	return $data;
+    }
+    
     protected function getData($type, Carbon $start, Carbon $end) {
     	switch($type) {
     		case 'statements': return $this->getStatements($start, $end);
@@ -98,6 +108,10 @@ class ExportController extends Controller
     		case 'balance': return $this->getBalance($start, $end);
     		case 'p-and-l': return $this->getProfitAndLoss($start, $end);
     		case 'saldos': return $this->getSaldos($start, $end);
+    		
+    		// Only relevant for yearly overviews
+    		case 'vat':	return $this->getVAT($start, $end);
+    		case 'assets': return $this->getAssets($start, $end);
     	}
     	 
     }
@@ -140,6 +154,43 @@ class ExportController extends Controller
     		return $query->where('datum', '<=', $end);
     	}]);
     	return $query->get();
+    }
+    
+    protected function groupSaldosByPost($saldos) {
+    	$grouped = [];
+    	
+    	foreach($saldos as $saldo) {
+    		foreach($saldo->StatementLines as $line) {
+    			if(!array_key_exists($line->post_id, $grouped))
+    				$grouped[$line->post_id] = ['post' => $line->Post, 'total' => 0, 'saldos' => []];
+    			
+    			$grouped[$line->post_id]['saldos'][$saldo->id] = $saldo;
+    			$grouped[$line->post_id]['total'] += $line->getSignedAmount();
+    		}
+    	}
+    	
+    	return $grouped;
+    }
+    
+    protected function getVAT(Carbon $start, Carbon $end) {
+    	// VAT is split per quarter, so compute all quarters
+    	$vatOverviews = [];
+    	
+    	$quarterStart = $start->copy()->firstOfQuarter();
+    	
+    	while($quarterStart->lte($end)) {
+    		$quarterEnd = $quarterStart->copy()->lastOfQuarter();
+    		$vatOverviews[] = new VATOverview($quarterStart, $quarterEnd);
+    		
+    		// Move to the next quarter
+    		$quarterStart = $quarterStart->copy()->addMonths(3);
+    	}
+    	
+    	return $vatOverviews;
+    }
+    
+    protected function getAssets(Carbon $start, Carbon $end) {
+    	return Asset::relevantBetween($start, $end)->orderBy('aanschafdatum')->get();
     }
     
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Weboffice\Models\Finance\Amortization;
 use AppConfig;
 use Carbon\Carbon;
+use DB;
 
 class Asset extends Model
 {
@@ -93,6 +94,25 @@ class Asset extends Model
     {
         return $this->belongsTo('\Weboffice\Models\Post', 'post_kosten');
     }
+
+    /**
+     * Scope a query to only include assets that have been bought or amortized in the given period
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRelevantBetween($query, Carbon $start, Carbon $end)
+    {
+    	return $query
+    				->whereBetween('aanschafdatum', [$start,$end])
+    				->orWhere(function($query) use($start, $end) {
+    					return $query->whereExists(function($query) use($start, $end){
+    						$query->select(DB::raw(1))
+    							->from('boekingen')
+    							->whereRaw('boekingen.activum_id = activa.id')
+    							->whereBetween('datum', [$start, $end]);
+    					});
+    				});
+    }
     
     /**
      * Returns an Amortization object with information about the amortization of this asset
@@ -143,6 +163,14 @@ class Asset extends Model
     	$statement->StatementLines->add(new StatementLine(['bedrag' => $this->bedrag * ( 1 + $vatPercentage / 100 ), 'credit' => 1, 'post_id' => AppConfig::get('postCrediteuren') ]));
     	
     	return $statement;
+    }
+    
+    /**
+     * Returns the value of this asset on the given date
+     * @param Carbon $date
+     */
+    public function getValueOnDate(Carbon $date) {
+    	return $this->bedrag - $this->amortization()->getAmountAlreadyAmortizedOnDate($date);
     }
     
     /**

@@ -73,8 +73,8 @@ Route::group(['middleware' => ['web']], function () {
 
 	// Exporting data
 	Route::get('export', ['as' => 'export.index', 'uses' => 'ExportController@index']);
+	Route::get('export/year/{year?}', ['as' => 'export.year', 'uses' => 'ExportController@year']);
 	Route::post('export/pdf', ['as' => 'export.pdf', 'uses' => 'ExportController@export']);
-	Route::post('export/year/{year?}', ['as' => 'export.year', 'uses' => 'TransactionController@storeImport']);
 	
 	// Handle documents
 	Route::get('invoice/create/project', 'InvoiceController@createProjectInvoice');

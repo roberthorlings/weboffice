@@ -14,6 +14,10 @@ use AppConfig;
 class ProfitAndLossStatement {
 	use FinancialStatement;
 	
+	const TYPE_RESULTS = "results";
+	const TYPE_OTHER = "other";
+	const TYPE_LIMITED = "limited";
+	
 	/**
 	 * 
 	 * @var Carbon
@@ -99,6 +103,23 @@ class ProfitAndLossStatement {
 		return $this->limitedTotal;
 	}
 	
+	public function getData($type) {
+		switch($type) {
+			case self::TYPE_RESULTS: return $this->getResults();
+			case self::TYPE_OTHER: return $this->getOther();
+			case self::TYPE_LIMITED: return $this->getLimited();
+			default: throw new Exception( "Unsupported data type" );
+		}
+	}
+	public function getTotal($type) {
+		switch($type) {
+			case self::TYPE_RESULTS: return $this->getResultTotal();
+			case self::TYPE_OTHER: return $this->getOtherTotal();
+			case self::TYPE_LIMITED: return $this->getLimitedTotal();
+			default: throw new Exception( "Unsupported data type" );
+		}
+	}
+	
 	public function getEquityChanges() {
 		$evPost = Post::find(AppConfig::get('postEigenVermogen'));
 		$resultsPost = Post::find(AppConfig::get('postResultaat'));
@@ -118,6 +139,26 @@ class ProfitAndLossStatement {
 	
 	public function getEquityChangesTotal() {
 		return $this->getResultTotal() + $this->getOtherTotal();
+	}
+	
+	/**
+	 * Convenience method to return the turnover
+	 */
+	public function getTurnover() {
+		$result = $this->getResult("baten");
+		
+		if( $result ) {
+			return -$result->getTotal();
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * Convenience method to return the total revenue
+	 */
+	public function getRevenue() {
+		return -$this->getResultTotal();
 	}
 	
 	/**
