@@ -84,8 +84,8 @@ class Ledgers {
 	 */
 	protected function initialize() {
 		// Load statistics from statement lines for all posts
-		// before the start date
-		$this->loadPostStatistics(null, $this->start, $this->getPostIds() );
+		// before the start date. For that reason, we load the post statistics up to the day before
+		$this->loadPostStatistics(null, $this->start->copy()->subDay(), $this->getPostIds() );
 		
 		// Load statement lines for all posts in a single query
 		$this->loadStatementLines();

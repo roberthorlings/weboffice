@@ -753,6 +753,19 @@ class PdfHelper
 	static function profitAndLossComparison($pdf, Timespan $period, ProfitAndLossStatement... $statements) {
 		$pdf->h2( "Winst en verliesrekening " . $period );
 		
+		// Compute widths
+		$statementCount = count($statements);
+		$numberWidth = 20;
+		$statementWidth = 2 * $numberWidth;
+		$remainingWidth = 160 - $statementCount * $statementWidth;
+		
+		$pdf->Cell( $remainingWidth, 5, "" );
+		foreach($statements as $statement) {
+			$pdf->Cell( $statementWidth, 5, $statement->getPeriod(), 0, 0, "C" );
+		}
+		$pdf->ln();
+		$pdf->setFont( "Gill", "" );		
+		
 		$pdf->setFontSize( 9 );
 		
 		// Zet nu de typen posten die bijdragen aan het resultaat in de PDF
@@ -949,7 +962,7 @@ class PdfHelper
 		
 		$pdf->Cell( $remainingWidth, 5, $totalDescription, "T" );
 		foreach($statements as $statement) {
-			$pdf->Cell( 20, 5, number_format( -$statement->getResultTotal(), 2, '.', '' ), "T", 0, "R" );
+			$pdf->Cell( 20, 5, number_format( -$statement->getResultTotal(), 2, '.', ',' ), "T", 0, "R" );
 			$pdf->Cell( 20,5, "", "T" );
 		}		
 		$pdf->setFont( "Gill", "" );

@@ -276,8 +276,9 @@
 			$pdf->Cell( 20, $stdLH, $asset->afschrijvingsduur . " " . $amortization->getPeriodDescription() );
 			
 			if( $asset->aanschafdatum->lte($start)) {
-				$startValue = $asset->getValueOnDate($start);
-				$pdf->Cell( 20, $stdLH, number_format( $asset->getValueOnDate($start), 2 ), "", 0, "R" );
+				// Take the value of the day before, as the value is computed at the end of the day
+				$startValue = $asset->getValueOnDate($start->copy()->subDay());
+				$pdf->Cell( 20, $stdLH, number_format($startValue, 2 ), "", 0, "R" );
 			} else {
 				$startValue = $asset->bedrag;
 				$pdf->Cell( 20, $stdLH, "-", "", 0, "R" );

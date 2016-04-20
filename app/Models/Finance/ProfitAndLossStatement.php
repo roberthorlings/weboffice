@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Weboffice\Models\PostType;
 use Weboffice\Models\Post;
 use AppConfig;
+use Weboffice\Support\Timespan;
 
 /**
  * Profit and loss statement.
@@ -70,6 +71,10 @@ class ProfitAndLossStatement {
 	
 	public function getEnd() {
 		return $this->end;
+	}
+	
+	public function getPeriod() {
+		return Timespan::create($this->start, $this->end);
 	}
 	
 	public function getResults() {

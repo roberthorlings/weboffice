@@ -75,8 +75,8 @@ class ExportController extends Controller
     	
     	// Add data for the previous year
     	$previousYearStart = $start->copy()->subYear(1);
-    	$previousYearEnd = $start->copy()->endOfYear();
-    	$previousYearProfitAndLoss = $this->getData('p-and-l', $start, $end);
+    	$previousYearEnd = $previousYearStart->copy()->endOfYear();
+    	$previousYearProfitAndLoss = $this->getData('p-and-l', $previousYearStart, $previousYearEnd);
     	
     	$filename = 'year-' . $year . '.pdf';
     	return response()->view('export.year', compact('data', 'previousYearProfitAndLoss', 'filename', 'start', 'end'))->header('Content-Type', 'application/pdf');
