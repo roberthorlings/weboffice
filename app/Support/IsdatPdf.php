@@ -281,4 +281,9 @@ class IsdatPDF extends \FPDF {
 		return $this->PageBreakTrigger;
 	}
 	
+	public function setTitle($title, $isUTF8=false) {
+		parent::setTitle($title, $isUTF8);
+		$this->title = $title;
+	}
+	
 }
