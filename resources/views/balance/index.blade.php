@@ -19,34 +19,8 @@
                     </div>
                 </div>
                 <div class="box-body">
-                	<h4>{{ $filter['date']->format('d-m-Y') }}</h4>
-                	<div class="row details">
-						@foreach($balance->getBalance() as $side => $posts)
-	                		<div class="col-xs-6 side side-{{$side}}">
-	                			@foreach( $posts as $total )
-				                	<div class="row post-total">
-				                		<div class="col-xs-8">
-			                				@post($total->getPost())
-			                			</div>
-			                			<div class="col-xs-4 amount">
-			                				@amount($total->getAmount())
-			                			</div>
-			                		</div>
-	                			@endforeach
-	                		</div>
-	                	@endforeach
-                	</div>
-                	<div class="row totals">
-						@foreach($balance->getTotals() as $side => $total)
-	                		<div class="col-xs-6 side side-{{$side}}">
-			                	<div class="row">
-		                			<div class="col-xs-4 col-xs-offset-8 amount">
-		                				@amount($total)
-		                			</div>
-		                		</div>
-	                		</div>
-	                	@endforeach
-                	</div>
+    				<h4>{{ $balance->getDate()->format('d-m-Y') }}</h4>
+                	@include('components/balance')
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col -->

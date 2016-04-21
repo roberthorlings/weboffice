@@ -27,6 +27,12 @@ class TemplateServiceProvider extends ServiceProvider
     		return "&euro; <?php echo number_format((" . $expression . "), 2, ',', '.'); ?>";
     	});
     	
+   		// Register directive to show duration in minutes
+   		Blade::directive('duration', function($expression) {
+   			return "<?php echo floor(" . $expression . " / 60), ':', sprintf('%02d', (" . $expression  . ") % 60); ?>";
+   		});
+    			 
+    	
    		// Register directive to show a large number
    		Blade::directive('number', function($expression) {
    			return "<?php echo number_format((" . $expression . "), 0, ',', '.'); ?>";

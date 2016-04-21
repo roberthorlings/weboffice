@@ -118,10 +118,10 @@
           <h3 class="control-sidebar-heading">General Settings</h3>
 		
 		  <ul>
-			  <li><a href="{{ url('configure/index') }}">General configuration</a></li>
-			  <li><a href="{{ url('post/index') }}">Posts</a></li>
-			  <li><a href="{{ url('post_type/index') }}">Post types</a></li>
-			  <li><a href="{{ url('account/index') }}">Accounts</a></li>
+			  <li><a href="{{ url('configuration') }}">General configuration</a></li>
+			  <li><a href="{{ url('post') }}">Posts</a></li>
+			  <li><a href="{{ url('posttype') }}">Post types</a></li>
+			  <li><a href="{{ url('account') }}">Accounts</a></li>
 		  </ul>
 
         </form>

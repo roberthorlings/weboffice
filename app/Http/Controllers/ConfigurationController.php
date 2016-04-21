@@ -7,6 +7,8 @@ use Weboffice\Http\Controllers\Controller;
 use Flash;
 use Illuminate\Http\Request;
 use Weboffice\Models\Configuration;
+use Weboffice\Repositories\PostRepository;
+use Weboffice\Models\Relation;
 
 class ConfigurationController extends Controller
 {
@@ -16,11 +18,37 @@ class ConfigurationController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(PostRepository $postRepository)
     {
-        $configuration = Configuration::paginate(15);
+    	// Determine currnet configuration
+        $configuration = Configuration::orderBy('categorie_volgorde')->get();
+        $categorizedConfiguration = [];
+        
+        foreach($configuration as $item) {
+        	if(!array_key_exists($item->categorie, $categorizedConfiguration)) {
+        		$categorizedConfiguration[$item->categorie] = [];
+        	}
+        	
+        	$categorizedConfiguration[$item->categorie][] = $item;
+        }
+        
+        // Determine lists to choose from
+        $posts = $postRepository->getListForPostSelect();
+        $relations = Relation::lists('bedrijfsnaam', 'id');
 
-        return view('configuration.index', compact('configuration'));
+        return view('configuration.index', compact('categorizedConfiguration', 'posts', 'relations'));
+    }
+    
+    public function saveAll(Request $request) {
+    	$updatedConfiguration = $request->get('configuration', []);
+    	
+    	foreach($updatedConfiguration as $id => $newValue) {
+    		Configuration::where('id', '=', $id)
+    			->update(['value' => $newValue]);    		
+    	}
+    	
+    	Flash::message( 'Configuration updated!');
+    	return redirect('configuration');
     }
 
     /**
@@ -43,10 +71,9 @@ class ConfigurationController extends Controller
      */
     public function store(Request $request)
     {
-        
         Configuration::create($request->all());
 
-        Flash::message( 'Configuration added!');
+        Flash::message( 'Configuration item added!');
 
         return redirect('configuration');
     }
@@ -94,7 +121,7 @@ class ConfigurationController extends Controller
         $configuration = Configuration::findOrFail($id);
         $configuration->update($request->all());
 
-        Flash::message( 'Configuration updated!');
+        Flash::message( 'Configuration item updated!');
 
         return redirect('configuration');
     }

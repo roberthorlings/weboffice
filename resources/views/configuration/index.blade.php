@@ -13,39 +13,47 @@
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered table-striped table-hover">
-			            <thead>
-			                <tr>
-			                    <th>Name</th><th>Value</th><th>Title</th><th>Actions</th>
-			                </tr>
-			            </thead>
+                	{!! Form::open(['route' => 'configuration.saveConfiguration']) !!}
+			        <table class="table table-bordered table-striped table-hover configuration">
 			            <tbody>
-			            @foreach($configuration as $item)
-			                <tr>
-			                    <td><a href="{{ url('configuration', $item->id) }}">{{ $item->name }}</a></td><td>{{ $item->value }}</td><td>{{ $item->title }}</td>
-			                    <td>
-			                        {!! Form::open([
-			                            'method'=>'DELETE',
-			                            'url' => ['configuration', $item->id],
-			                            'style' => 'display:inline',
-			                            'data-confirm' => 'Are you sure you want to delete this item?'
-			                        ]) !!}
-				                    	<div class="btn-group btn-group-xs">
-					                        <a class="btn btn-default btn-xs" href="{{ url('configuration/' . $item->id . '/edit') }}">
-					                            <i class="fa fa-fw fa-pencil"></i>
-					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
-					                    </div>
-			                        {!! Form::close() !!}
-			                    </td>
-			                </tr>
-			            @endforeach
+                			@foreach($categorizedConfiguration as $category => $items) 
+	                			<tr><td colspan="3">
+	                				{!! Form::button('<i class="fa fa-fw fa-save"></i>', ['class' => 'btn btn-sm btn-primary pull-right', 'type' => 'submit']) !!}
+	                				<h4>{{$category}}</h4>
+	                			</td></tr>
+					            @foreach($items as $item)
+					            	<?php $fieldName = 'configuration[' . $item->id . ']'; ?>
+					                <tr>
+					                    <td>{{ $item->title }}</td>
+					                    <td>
+					                    	@if($item->type == 'text')
+					                    		{{ Form::text( $fieldName, $item->value, ['class' => 'form-control'] ) }}
+					                    	@elseif($item->type == 'textarea')
+					                    		{{ Form::textarea( $fieldName, $item->value, ['class' => 'form-control'] ) }}
+					                    	@elseif($item->type == 'boolean')
+					                    		{{ Form::select( $fieldName, [0 => 'Nee', 1 => 'Ja'], $item->value, ['class' => 'form-control'] ) }}
+					                    	@elseif($item->type == 'post')
+                								{!! Form::postSelect($fieldName, $posts, $item->value, ['class' => 'form-control']) !!} 
+					                    	@elseif($item->type == 'relatie')
+                								{!! Form::select($fieldName, $relations, $item->value, ['class' => 'form-control']) !!} 
+					                    	@endif
+				                    	</td>
+					                    <td>
+					                    	<div class="btn-group btn-group-xs">
+						                        <a class="btn btn-default btn-xs" href="{{ url('configuration/' . $item->id . '/edit') }}">
+						                            <i class="fa fa-fw fa-pencil"></i>
+						                        </a>
+						                    </div>
+					                    </td>
+					                </tr>
+					            @endforeach
+					        @endforeach
 			            </tbody>
 			        </table>
+			        
+                    {!! Form::button('<i class="fa fa-fw fa-save"> Save</i>', ['class' => 'btn btn-primary form-control', 'type' => 'submit']) !!}
+			        {!! Form::close() !!}			        
                 </div><!-- /.box-body -->
-                <div class="box-footer pagination-footer">
-			        <div class="pull-right"> {!! $configuration->render() !!} </div>
-                </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->
         <div class='col-md-4 col-sm-12'>
@@ -59,9 +67,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('configuration/create') }}" class="btn btn-primary btn-sm">Add New Configuration</a><br /><br />
-                	
-                	A form could be added here, although it is out of scope for scaffolding.
+                	<a href="{{ url('configuration/create') }}" class="btn btn-primary btn-sm">Add New configuration item</a><br /><br />
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div><!-- /.col -->

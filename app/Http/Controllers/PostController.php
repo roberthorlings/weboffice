@@ -31,7 +31,7 @@ class PostController extends Controller
     public function create()
     {
     	$lists = [];
-    	$lists["post_type_id"] = \Weboffice\PostType::lists("type", "id");
+    	$lists["post_type_id"] = \Weboffice\Models\PostType::lists("type", "id");
     
         return view('post.create', compact('lists'));
     }
@@ -77,7 +77,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
     	$lists = [];
-    	$lists["post_type_id"] = \Weboffice\PostType::lists("type", "id");
+    	$lists["post_type_id"] = \Weboffice\Models\PostType::lists("type", "id");
 
         return view('post.edit', compact('lists', 'post'));
     }

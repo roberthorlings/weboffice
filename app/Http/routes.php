@@ -86,6 +86,10 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('quote/{id}/pdf', [ 'as' => 'quote.pdf', 'uses' => 'QuoteController@pdf' ]);
 	Route::post('quote/{id}/mark_as_final', [ 'as' => 'quote.mark_as_final', 'uses' => 'QuoteController@markAsFinal']);
 	
+	// Store configuration
+	Route::post('configuration/saveConfiguration', [ 'as' => 'configuration.saveConfiguration', 'uses' => 'ConfigurationController@saveAll']);
+	
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');

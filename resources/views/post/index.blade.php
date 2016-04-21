@@ -31,7 +31,7 @@
 			                            'data-confirm' => 'Are you sure you want to delete this item?'
 			                        ]) !!}
 				                    	<div class="btn-group btn-group-xs">
-					                        <a class="btn btn-default btn-xs" href="{{ url('post' . $item->id . '/edit') }}">
+					                        <a class="btn btn-default btn-xs" href="{{ url('post/' . $item->id . '/edit') }}">
 					                            <i class="fa fa-fw fa-pencil"></i>
 					                        </a>
 				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
