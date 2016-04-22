@@ -63,7 +63,7 @@ Route::group(['middleware' => ['web']], function () {
 	// Financial overviews
 	Route::get('balance', 'BalanceController@index');
 	Route::get('results', 'ResultsController@index');
-	Route::get('ledger',  'LedgerController@index');
+	Route::get('ledger',  [ 'as' => 'ledger.index', 'uses' => 'LedgerController@index']);
 	Route::get('vat', [ 'as' => 'vat.index', 'uses' => 'VATController@index']);
 	Route::post('vat', [ 'as' => 'vat.book', 'uses' => 'VATController@book']);
 	
@@ -88,7 +88,6 @@ Route::group(['middleware' => ['web']], function () {
 	
 	// Store configuration
 	Route::post('configuration/saveConfiguration', [ 'as' => 'configuration.saveConfiguration', 'uses' => 'ConfigurationController@saveAll']);
-	
 	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');

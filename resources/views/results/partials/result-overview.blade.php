@@ -25,7 +25,9 @@
                 			@foreach( $posts as $total )
 			                	<div class="row post-total">
 			                		<div class="col-xs-8">
-		                				@post($total->getPost())
+		                				<a href="{{ route('ledger.index', [ 'post_id' => $total->getPost()->id ]) }}">
+		                					@post($total->getPost())
+		                				</a>
 		                			</div>
 		                			<div class="col-xs-4 amount">
 		                				@amount(-$total->getSignedAmount())

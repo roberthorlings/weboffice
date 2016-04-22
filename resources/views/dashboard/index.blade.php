@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-			        <table class="table table-bordered table-striped table-hover">
+			        <table class="table table-striped table-hover">
 			            <thead>
 			                <tr>
 			                    <th>Description</th><th>Opposing party</th><th class="amount">Amount</th><th>Since</th>
@@ -84,7 +84,7 @@
         <div class='col-md-6'>
             <!-- Box -->
             <div class="box box-secondary results">
-               	@include('results/partials/result-overview', ['collapsed' => false, 'title' => 'Profit and loss', 'statementPart' => $profitAndLossStatement->getResults(), 'totalTitle' => 'Results', 'totalAmount' => $profitAndLossStatement->getResultTotal() ])
+               	@include('results/partials/result-overview', ['collapsed' => false, 'title' => 'Profit and loss ' . $profitAndLossStatement->getEnd()->format('Y'), 'statementPart' => $profitAndLossStatement->getResults(), 'totalTitle' => 'Results', 'totalAmount' => $profitAndLossStatement->getResultTotal() ])
             </div><!-- /.box -->
         </div><!-- /.col -->
         
