@@ -13,6 +13,7 @@ use Weboffice\Models\WorkingHour;
 use Weboffice\Models\Relation;
 use Weboffice\Repositories\RelationRepository;
 use Weboffice\Models\TravelExpense;
+use Weboffice\Repositories\TravelExpenseRepository;
 
 class WorkingHoursController extends Controller
 {
@@ -83,7 +84,7 @@ class WorkingHoursController extends Controller
      *
      * @return Response
      */
-    public function create(RelationRepository $repository, Request $request)
+    public function create(RelationRepository $repository, TravelExpenseRepository $travelExpenseRepository, Request $request)
     {
     	$relations = $repository->getRelationsForWorkingHourEntry();
     	
@@ -95,7 +96,10 @@ class WorkingHoursController extends Controller
     		$defaultValues[$field] = $request->get($field);
     	}
     	
-    	return view('workinghours.create', compact('relations', 'defaultValues'));
+    	// Show a list of most used travel-registrations
+    	$addresses = $travelExpenseRepository->getMostUsedAddresses();
+    	
+    	return view('workinghours.create', compact('relations', 'defaultValues', 'addresses'));
     }
 
     /**
@@ -145,7 +149,7 @@ class WorkingHoursController extends Controller
      *
      * @return Response
      */
-    public function edit($id, RelationRepository $repository)
+    public function edit($id, RelationRepository $repository, TravelExpenseRepository $travelExpenseRepository)
     {
         $workinghour = WorkingHour::with('travelExpense')->findOrFail($id);
         $travelExpense = $workinghour->travelExpense ? $workinghour->travelExpense : new TravelExpense();
@@ -153,7 +157,11 @@ class WorkingHoursController extends Controller
         // Returns all relations, as otherwise the old registrations may not be valid anymore
         $relations = $repository->getRelationsWithProjects(function($query) { return $query->where('type', '<>', Relation::TYPE_SUPPLIER); });
         
-        return view('workinghours.edit', compact('workinghour', 'travelExpense', 'relations'));
+        // Show a list of most used travel-registrations
+        $addresses = $travelExpenseRepository->getMostUsedAddresses();
+         
+        
+        return view('workinghours.edit', compact('workinghour', 'travelExpense', 'relations', 'addresses'));
     }
 
     /**

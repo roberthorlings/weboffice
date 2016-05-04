@@ -78,6 +78,18 @@
 		<div class="box">
 		  <div class="box-header with-border">
 		    <h3 class="box-title">Reiskosten</h3>
+            <div class="box-tools pull-right">
+	             <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
+	             <ul class="dropdown-menu addresses-used-before" role="menu">
+	             	@foreach($addresses as $address)
+	               		<li>
+	               			<a href="#" data-travelmethod="{{$address->wijze}}" data-trip="{{$address->van_naar}}" data-address="{{$address->bezoekadres}}">
+	               				<i class="fa fa-fw fa-bookmark"></i> {{ $address->address['name'] }} ({{ $address->address['city'] }}) - {{ $address->wijze }} 
+	               			</a>
+	               		</li>
+	               	@endforeach
+	             </ul>
+            </div>
 		  </div><!-- /.box-header -->
 		  <div class="box-body">
 	            <div class="form-group {{ $errors->has('TravelExpense[wijze]') ? 'has-error' : ''}}">
@@ -90,7 +102,7 @@
 			    <div class="form-group {{ $errors->has('TravelExpense[van_naar]') ? 'has-error' : ''}}">
 	                {!! Form::label('TravelExpense[van_naar]', 'Van/naar: ', ['class' => 'col-sm-4 control-label']) !!}
 	                <div class="col-sm-8">
-	                    {!! Form::text('TravelExpense[van_naar]', null, ['class' => 'form-control']) !!}
+	                    {!! Form::text('TravelExpense[van_naar]', null, ['class' => 'form-control trip']) !!}
 	                    {!! $errors->first('TravelExpense[van_naar]', '<p class="help-block">:message</p>') !!}
 	                </div>
 	            </div>

@@ -1,8 +1,7 @@
 $(function() {
-	// Add onchange handler for visiting address
-	$('.visiting-address').on('blur', function() {
-		var el = $(this);
-		
+	function retrieveDistance() {
+		var el = $('.visiting-address');
+
 		// Don't do anything on empty value
 		if(el.val() == "")
 			return;
@@ -24,18 +23,38 @@ $(function() {
 					}
 				});
 			})
-		
-	});
+	}
 	
-	// If both travel distance and start are given, automatically enter data in the end
-	$('.travel-start').on('blur', function() {
-		var start = $(this).val();
+	function updateEndOdometer() {
+		var start = $('.travel-start').val();
 		var distance = $('.travel-distance').val();
 		var end = $('.travel-end').val()
 		
 		if( start && distance && !end ) {
 			$('.travel-end').val( parseInt(start) + parseInt(distance) );
 		}
-	});
+	}
+	
+	
+	// Add onchange handler for visiting address
+	$('.visiting-address').on('blur', retrieveDistance);
+	
+	// If both travel distance and start are given, automatically enter data in the end
+	$('.travel-start').on('blur', updateEndOdometer);
+	
+	// Enable choosing an address used before
+	$( ".addresses-used-before li a" ).on( "click", function() {
+		var linkData = $(this).data();
+		
+		// Set address properties
+		$('.travel-method').val(linkData.travelmethod);
+		$('.trip').val(linkData.trip);
+		$('.visiting-address').val(linkData.address);
+
+		// Reset distance to trigger computation
+		$('.travel-distance').val("");
+		
+		retrieveDistance();
+	})
 	
 });
