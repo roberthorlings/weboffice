@@ -55,10 +55,10 @@
 		                {!! Form::label('btw', 'Btw: ', ['class' => 'col-sm-3 control-label']) !!}
 		                <div class="col-sm-9">
                             <div class="checkbox">
-				                <label>{!! Form::radio('btw', '1') !!} Yes</label>
+				                <label>{!! Form::radio('btw', '1', true) !!} Yes</label>
 				            </div>
 				            <div class="checkbox">
-				                <label>{!! Form::radio('btw', '0', true) !!} No</label>
+				                <label>{!! Form::radio('btw', '0') !!} No</label>
 				            </div>
 		                    {!! $errors->first('btw', '<p class="help-block">:message</p>') !!}
 		                </div>
