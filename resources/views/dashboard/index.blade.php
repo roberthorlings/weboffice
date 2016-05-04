@@ -17,7 +17,7 @@
                 		<h4>{{$month}}</h4>
                 		<ul class="workinghour-overview">
 	                		@foreach($items as $item)
-	                			 <li><span class="relation">{{$item['relation']->bedrijfsnaam}}</span> <span class="total">@duration($item['total'])</span></li>
+	                			 <li><span class="relation">{{$item['relation'] ? $item['relation']->bedrijfsnaam : "Other"}}</span> <span class="total">@duration($item['total'])</span></li>
 	                		@endforeach
 	                	</ul>
                 	@endforeach

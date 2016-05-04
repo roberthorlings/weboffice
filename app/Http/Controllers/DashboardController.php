@@ -67,15 +67,16 @@ class DashboardController extends Controller
     	foreach($workingHours as $workingHour) {
     		$month = $workingHour->datum->formatLocalized('%B');
     		$relation = $workingHour->Relation;
+    		$relationId = $relation ? $relation->id : 0;
     		
     		if(!array_key_exists($month, $groupedData))
     			$groupedData[$month] = [];
     		
-    		if(!array_key_exists($relation->id, $groupedData[$month])) {
-    			$groupedData[$month][$relation->id] = ['relation' => $relation, 'total' => 0];
+    		if(!array_key_exists($relationId, $groupedData[$month])) {
+    			$groupedData[$month][$relationId] = ['relation' => $relation, 'total' => 0];
     		}
     		
-    		$groupedData[$month][$relation->id]['total'] += $workingHour->durationInMinutes;
+    		$groupedData[$month][$relationId]['total'] += $workingHour->durationInMinutes;
     	}
     	
     	return $groupedData;
