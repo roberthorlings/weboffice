@@ -144,3 +144,9 @@ table.ledgers tbody tr td { border-width: 0; }
 /* Dashboard working hour overview */
 .workinghour-overview { list-style-type: none; }
 .workinghour-overview .relation { color: #3c8dbc; display: inline-block; width: 300px; }
+
+/* Post overview */
+.table>tbody>tr>td.post-tree-depth-1 { padding-left: 25px; }
+.table>tbody>tr>td.post-tree-depth-2 { padding-left: 50px; }
+.table>tbody>tr>td.post-tree-depth-3 { padding-left: 75px; }
+.table>tbody>tr>td.post-tree-depth-4 { padding-left: 100px; }

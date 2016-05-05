@@ -53,6 +53,22 @@ class Post extends Node
     public function postType()
     {
         return $this->belongsTo('\Weboffice\Models\PostType', 'post_type_id');
-    }    	
+    }
+    
+    /**
+     * Checks whether the current post is the leftmost in its subtree
+     * @return boolean
+     */
+    public function isFirstInSubtree() {
+    	return $this->getLeftSibling() == null;
+    }
 
+    /**
+     * Checks whether the current post is the rightmost in its subtree
+     * @return boolean
+     */
+    public function isLastInSubtree() {
+    	return $this->getRightSibling() == null;
+    }
+    
 }

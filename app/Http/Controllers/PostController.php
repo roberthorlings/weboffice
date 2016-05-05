@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::paginate(15);
+        $post = Post::with('PostType')->orderBy('lft')->get();
 
         return view('post.index', compact('post'));
     }
@@ -32,7 +32,8 @@ class PostController extends Controller
     {
     	$lists = [];
     	$lists["post_type_id"] = \Weboffice\Models\PostType::lists("type", "id");
-    
+    	$lists["parent_id"] = Post::all()->lists("description", "id");
+    	 
         return view('post.create', compact('lists'));
     }
 
@@ -44,9 +45,16 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, ['nummer' => 'required', 'omschrijving' => 'required', ]);
+        
+        // Create the new post itself
+        $post = Post::create($request->except('parent_id'));
 
-        Post::create($request->all());
-
+        // Attach to parent (if requested)
+        $parent = Post::find($request->get("parent_id"));
+        if($parent) {
+        	$post->makeChildOf($parent);
+        }
+        
         Flash::message( 'Post added!');
 
         return redirect('post');
@@ -78,6 +86,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
     	$lists = [];
     	$lists["post_type_id"] = \Weboffice\Models\PostType::lists("type", "id");
+    	$lists["parent_id"] = Post::all()->lists("description", "id");
 
         return view('post.edit', compact('lists', 'post'));
     }
@@ -94,8 +103,19 @@ class PostController extends Controller
         $this->validate($request, ['nummer' => 'required', 'omschrijving' => 'required', ]);
 
         $post = Post::findOrFail($id);
-        $post->update($request->all());
+        $post->update($request->except('parent_id'));
 
+        // Attach to parent (if requested)
+        $newParentId = $request->get('parent_id');
+        if($newParentId != $post->parent_id) {
+        	$parent = Post::find($newParentId);
+        	if($parent) {
+        		$post->makeChildOf($parent);
+        	} else {
+        		$post->makeRoot();
+        	}
+        }
+        
         Flash::message( 'Post updated!');
 
         return redirect('post');
@@ -116,5 +136,61 @@ class PostController extends Controller
 
         return redirect('post');
     }
+    
+    /**
+     * Rebuilds the full tree
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function rebuild() {
+    	Post::rebuild();
+    	
+    	Flash::message( 'Tree of posts has been rebuilt');
+    	return redirect('post');
+    }
+    
+    /**
+     * Moves the given post up the tree
+     *
+     * @param  int  $id
+     *
+     * @return Response
+     */
+    public function moveUp($id)
+    {
+    	$post = Post::findOrFail($id);
+    	
+    	// Check if the item can be moved
+    	if( $post->isFirstInSubtree() ) {
+    		Flash::warning('Post could not be moved up, as it is the first in its subtree');
+    	} else {
+	    	$post->moveLeft();
+	    	Flash::message( 'Post moved!');
+    	}
+    	
+    	return redirect('post');
+    }
+
+    /**
+     * Moves the given post down the tree
+     *
+     * @param  int  $id
+     *
+     * @return Response
+     */
+    public function moveDown($id)
+    {
+    	$post = Post::findOrFail($id);
+
+    	// Check if the item can be moved
+    	if( $post->isLastInSubtree() ) {
+    		Flash::warning('Post could not be moved down, as it is the last in its subtree');
+    	} else {
+    		$post->moveRight();
+    		Flash::message( 'Post moved!');
+    	}
+    	 
+    	return redirect('post');
+    }
+    
 
 }

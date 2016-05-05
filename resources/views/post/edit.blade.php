@@ -13,7 +13,14 @@
 	  </div><!-- /.box-header -->
 	  <div class="box-body">
 
-		                <div class="form-group {{ $errors->has('nummer') ? 'has-error' : ''}}">
+		    <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : ''}}">
+                {!! Form::label('parent_id', 'Parent: ', ['class' => 'col-sm-3 control-label']) !!}
+                <div class="col-sm-6">
+                	{!! Form::postSelect('parent_id', $lists["parent_id"], null, ['class' => 'form-control', 'placeholder' => ' - Root post - ']) !!} 
+                    {!! $errors->first('parent_id', '<p class="help-block">:message</p>') !!}
+                </div>
+            </div>
+		    <div class="form-group {{ $errors->has('nummer') ? 'has-error' : ''}}">
                 {!! Form::label('nummer', 'Nummer: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
                     {!! Form::text('nummer', null, ['class' => 'form-control', 'required' => 'required']) !!}

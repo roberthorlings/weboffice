@@ -89,6 +89,11 @@ Route::group(['middleware' => ['web']], function () {
 	// Store configuration
 	Route::post('configuration/saveConfiguration', [ 'as' => 'configuration.saveConfiguration', 'uses' => 'ConfigurationController@saveAll']);
 	
+	// Extra actions for posts
+	Route::post('post/rebuild', [ 'as' => 'post.rebuild', 'uses' => 'PostController@rebuild']);
+	Route::post('post/{id}/moveUp', [ 'as' => 'post.moveUp', 'uses' => 'PostController@moveUp']);
+	Route::post('post/{id}/moveDown', [ 'as' => 'post.moveDown', 'uses' => 'PostController@moveDown']);
+	
 	// CRUD controllers
 	Route::resource('workinghours', 'WorkingHoursController');
 	Route::resource('posttype', 'PostTypeController');
