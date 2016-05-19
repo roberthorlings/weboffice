@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="box-body">
-                	<a href="{{ url('import') }}" class="btn btn-primary">Import transactions</a>
+                	<a href="{{ url('transaction/import') }}" class="btn btn-primary">Import transactions</a>
                 	<a href="{{ url('transaction/create') }}" class="btn btn-default">Add new Transaction</a>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
