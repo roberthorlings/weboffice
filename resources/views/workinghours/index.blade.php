@@ -105,6 +105,27 @@
                 {!! Form::close() !!}                	
             </div><!-- /.box -->
 
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Statistics</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+               		<ul class="workinghour-overview">
+	                	@foreach($statistics['items'] as $item)
+	               			 <li><span class="relation">{{$item['relation'] ? $item['relation']->bedrijfsnaam : "Other"}}</span> <span class="total">@duration($item['total'])</span></li>
+	               		@endforeach
+               		
+               		    <li class="total-sum"><span class="relation">Total</span> <span class="total">@duration($statistics['total'])</span></li>
+               		
+               		</ul>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+
             <!-- Box -->
             {!! Form::open(['url' => 'workinghours', 'class' => 'form-horizontal', 'id' => 'add-registration']) !!}
             {!! Form::hidden('datum', date('dm')) !!}

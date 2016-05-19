@@ -144,6 +144,8 @@ table.ledgers tbody tr td { border-width: 0; }
 /* Dashboard working hour overview */
 .workinghour-overview { list-style-type: none; }
 .workinghour-overview .relation { color: #3c8dbc; display: inline-block; width: 300px; }
+.workinghour-overview .total { display: inline-block; width: 50px; text-align: right; }
+.workinghour-overview .total-sum { margin-top: 4px; padding-top: 4px; border-top: 1px solid #ccc; }
 
 /* Post overview */
 .table>tbody>tr>td.post-tree-depth-1 { padding-left: 25px; }

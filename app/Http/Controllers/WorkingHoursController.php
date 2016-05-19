@@ -43,8 +43,37 @@ class WorkingHoursController extends Controller
         $workinghours = $query->paginate(30);
         $relations = $repository->getRelationsWithProjects();
         $relationsForEntry = $repository->getRelationsForWorkingHourEntry();
+        $statistics = $this->getStatistics($filter);
         
-        return view('workinghours.index', compact('workinghours', 'relations', 'relationsForEntry', 'filter'));
+        return view('workinghours.index', compact('workinghours', 'relations', 'relationsForEntry', 'filter', 'statistics'));
+    }
+    
+    /**
+     * Returns statistics for all working hour registrations
+     * @param unknown $query
+     */
+    protected function getStatistics($filter) {
+    	$workingHours = WorkingHour::with(['Relation'])
+	    	->where('datum', '>=', $filter['start'])
+    		->where('datum', '<=', $filter['end'])
+    		->get();
+    	
+   		// Group the data by relation
+   		$groupedData = ['items' => [], 'total' => 0];
+   		foreach($workingHours as $workingHour) {
+   			$relation = $workingHour->Relation;
+   			$relationId = $relation ? $relation->id : 0;
+   	
+			if(!array_key_exists($relationId, $groupedData['items'])) {
+				$groupedData['items'][$relationId] = ['relation' => $relation, 'total' => 0];
+			}
+   	
+			$groupedData['items'][$relationId]['total'] += $workingHour->durationInMinutes;
+			$groupedData['total'] += $workingHour->durationInMinutes;
+   		}
+  		 
+   		return $groupedData;
+   	
     }
     
     /**
