@@ -29,14 +29,14 @@
             <div class="form-group {{ $errors->has('bedrag') ? 'has-error' : ''}}">
                 {!! Form::label('bedrag', 'Aanschafwaarde: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::number('bedrag', null, ['class' => 'form-control']) !!}
+                    {!! Form::number('bedrag', null, ['class' => 'form-control', 'step' => 'any']) !!}
                     {!! $errors->first('bedrag', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="form-group {{ $errors->has('restwaarde') ? 'has-error' : ''}}">
                 {!! Form::label('restwaarde', 'Restwaarde: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::number('restwaarde', null, ['class' => 'form-control']) !!}
+                    {!! Form::number('restwaarde', null, ['class' => 'form-control', 'step' => 'any']) !!}
                     {!! $errors->first('restwaarde', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>

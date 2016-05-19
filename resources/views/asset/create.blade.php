@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="form-group {{ $errors->has('bedrag') ? 'has-error' : ''}}">
-                {!! Form::label('bedrag', 'Aanschafwaarde: ', ['class' => 'col-sm-3 control-label']) !!}
+                {!! Form::label('bedrag', 'Aanschafwaarde: ', ['class' => 'col-sm-3 control-label', 'step' => 'any']) !!}
                 <div class="col-sm-6">
                     {!! Form::number('bedrag', null, ['class' => 'form-control']) !!}
                     {!! $errors->first('bedrag', '<p class="help-block">:message</p>') !!}
