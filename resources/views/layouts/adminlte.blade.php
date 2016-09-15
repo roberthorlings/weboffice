@@ -27,6 +27,10 @@
   <!-- Custom css -->
   <link rel="stylesheet" href="{{ asset("/assets/css/weboffice.css") }}">
   
+  <!-- Environment specific css -->
+  <link rel="stylesheet" href="{{ asset("/assets/css/env-" . $appEnvironment . ".css") }}">
+
+  
   @yield('css')  
   
 </head>

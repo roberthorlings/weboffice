@@ -17,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
     {
     	// Set FPDF font path
     	define( 'FPDF_FONTPATH', env('FPDF_FONTPATH', base_path('resources/fonts')));
+    	
+    	view()->composer('layouts.adminlte', function($view) {
+    		$view->with('appEnvironment', \App::environment());
+    	});
     }
 
     /**

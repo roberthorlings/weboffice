@@ -1,0 +1,3 @@
+body .wrapper .main-header .navbar { background-color: #605ca8; }
+body .wrapper .main-header .logo { background-color: #555299; }
+body .wrapper .main-header .navbar a.sidebar-toggle:after { content: "Test environment"; }
