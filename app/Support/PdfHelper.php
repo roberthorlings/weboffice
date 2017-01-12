@@ -262,7 +262,7 @@ class PdfHelper
 	}
 	
 	
-	function kilometerregistratie( $pdf, $relatie, $ritten, $totale_kilometers ) {
+	static function travelexpenses( $pdf, $list, $stats, $total ) {
 		// zet de titels van de kolommen neer
 		$pdf->setFont( "Gill", "B" );
 		$pdf->Cell( 25, 5, "Datum", 0, 0, "L", 1 );
@@ -275,8 +275,8 @@ class PdfHelper
 			
 		// Zet alle regels met specificatie neer
 		$pdf->SetDrawColor( 150 );
-			
-		foreach( $ritten as $rit) {
+		
+		foreach($list as $item) {
 			// Zet eerst een lijn neer
 			$pdf->Cell( 160, 1,"", "T", 2 );
 	
@@ -286,17 +286,17 @@ class PdfHelper
 	
 			$y_regel = $pdf->getY();
 	
-			$pdf->Cell( 25, 5, date( 'd-m-Y', strtotime( $rit['Werktijd']['datum'] ) ) );
+			$pdf->Cell( 25, 5, $item->WorkingHour->datum->format('d-m-Y') );
 	
 			// Zet eerst de omschrijving neer
-			$pdf->MultiCell( 105, 5, $rit['Kilometer']['van_naar'] );
+			$pdf->MultiCell( 105, 5, $item->van_naar );
 	
 			// Zet het bezoekadres iets kleiner en schuin neer
 			$pdf->Cell( 25, 4 );
 			$pdf->setFontSize( $pdf->stdFontSize - 2 );
 			$pdf->setFont( "Gill", "I" );
 	
-			$pdf->MultiCell( 105, 4, $rit[ "Kilometer" ][ "bezoekadres" ] );
+			$pdf->MultiCell( 105, 4, $item->bezoekadres );
 	
 			$pdf->setFont( "Gill" );
 			$pdf->setFontSize( $pdf->stdFontSize );
@@ -306,7 +306,7 @@ class PdfHelper
 	
 			// Zet ook de getallen neer
 			$pdf->setXY( 130 + $pdf->getLeftMargin(), $y_regel );
-			$pdf->Cell( 30, 5, number_format( $rit['totaal' ], 0, '', '.' ) . " km", 0, 1, "R" );
+			$pdf->Cell( 30, 5, number_format( $item->afstand, 0, '', '.' ) . " km", 0, 1, "R" );
 	
 			// Zet ook de kilometerstanden neer, in het grijs en klein
 			$pdf->Cell( 130, 4, '' );
@@ -314,10 +314,10 @@ class PdfHelper
 			$pdf->setFont( "Gill", "I" );
 			$pdf->setTextColor( 128 );
 	
-			if( $rit[ 'Kilometer' ][ 'wijze' ] == 'auto' ):
-			$pdf->Cell( 30, 4, number_format( $rit[ "Kilometer" ][ "km_begin" ], 0, '', '.' ) . ' - ' . number_format( $rit[ 'Kilometer' ][ 'km_eind' ], 0, '', '.' ) , 0, 0, "R" );
+			if( $item->wijze ):
+			$pdf->Cell( 30, 4, number_format( $item->km_begin, 0, '', '.' ) . ' - ' . number_format( $item->km_eind, 0, '', '.' ) , 0, 0, "R" );
 			else:
-			$pdf->Cell( 30, 4, $rit[ 'Kilometer' ][ 'wijze' ], 0, 0, "R" );
+			$pdf->Cell( 30, 4, $item->wijze, 0, 0, "R" );
 			endif;
 	
 			$pdf->setTextColor( 0 );
@@ -331,12 +331,22 @@ class PdfHelper
 		$pdf->Cell( 160, 6,"", "T", 2 );
 	
 		$pdf->SetDrawColor( 0 );
-			
+		$pdf->setFont( "Gill" );
+		
+		foreach($stats as $stat) {
+			$pdf->Cell( 25, 5, "" );
+			$pdf->Cell( 105, 5, "Totaal " . $stat->wijze . ":" );
+			$pdf->Cell( 30, 5, $stat->total . " km", "", 1, "R" );
+				
+		}
+		
+		$pdf->setFont( "Gill", "B" );
+		
 		// Toon het totaal
 		$pdf->Cell( 25, 5, "", "T" );
 		$pdf->Cell( 105, 5, "Totaal:", "T" );
-		$pdf->Cell( 30, 5, $totale_kilometers . " km", "T", 1, "R" );
-	
+		$pdf->Cell( 30, 5, $total . " km", "T", 1, "R" );
+
 		// Zorg voor een klein beetje ruimte
 		$pdf->setFont( "Gill" );
 		$pdf->ln();

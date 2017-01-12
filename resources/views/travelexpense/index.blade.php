@@ -13,10 +13,24 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Travel registration</h3>
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                    </div>
+		            <div class="box-tools pull-right">
+			             <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
+			             
+                        {!! Form::open([
+                            'method'=>'POST',
+                            'url' => route( 'travelexpense.statement', [ 'start' => $filter['start']->format( 'Y-m-d'), 'end' => $filter['end']->format( 'Y-m-d') ]),
+	                        'class' => 'create-statement'
+                        ]) !!}
+                        {!! Form::close() !!}
+			             
+			             <ul class="dropdown-menu" role="menu">
+			             
+		               		<li><a href="{{ route('travelexpense.pdf', [ 'start' => $filter['start']->format( 'Y-m-d'), 'end' => $filter['end']->format( 'Y-m-d') ]) }}">
+		               				<i class="fa fa-fw fa-download"></i> Download PDF
+		               		</a></li>
+                       		<li><a href="#" onClick="$(this).parents('.box-tools').find( 'form.create-statement').submit(); return false;"><i class="fa fa-fw fa-bookmark"></i> Create statement</a></li>
+			             </ul>
+		            </div>                    
                 </div>
                 <div class="box-body">
 			        <table class="table table-bordered table-striped table-hover">
