@@ -30,7 +30,7 @@
             <div class="form-group {{ $errors->has('uurtarief') ? 'has-error' : ''}}">
                 {!! Form::label('uurtarief', 'Uurtarief: ', ['class' => 'col-sm-3 control-label']) !!}
                 <div class="col-sm-6">
-                    {!! Form::number('uurtarief', null, ['class' => 'form-control']) !!}
+                    {!! Form::number('uurtarief', null, ['class' => 'form-control', 'step' => 'any']) !!}
                     {!! $errors->first('uurtarief', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
