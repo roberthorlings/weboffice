@@ -147,25 +147,32 @@ class WorkingHoursController extends Controller {
 	 * @return Response
 	 */
 	public function store(Request $request) {
-		$this->validate ( $request, [ 
+		$this->validate ( $request, [
 				'datum' => 'required',
 				'begintijd' => 'required',
 				'eindtijd' => 'required' 
 		] );
 		
-		$workinghour = WorkingHour::create ( $request->all () );
-		
-		// Check whether the travel expense should be handled
-		// There should only be a travel expense input if distance > 0
-		$travelExpenseInput = $request->get ( 'TravelExpense' );
-		if ($workinghour->kilometers > 0) {
-			$travelExpense = new TravelExpense ();
-			$travelExpense->afstand = $workinghour->kilometers;
-			$travelExpense->fill ( $travelExpenseInput );
-			$workinghour->travelExpense ()->save ( $travelExpense );
-		}
-		
-		Flash::message ( 'WorkingHour added!' );
+        // We allow for multiple dates to be entered at once (comma separated)
+        $baseData = $request->all();
+        $days = explode(',', $baseData['datum']);
+        foreach($days as $day) {
+            $dayData = array_merge($baseData, ['datum' => trim($day)]);
+
+            $workinghour = WorkingHour::create($dayData);
+
+            // Check whether the travel expense should be handled
+            // There should only be a travel expense input if distance > 0
+            $travelExpenseInput = $request->get('TravelExpense');
+            if ($workinghour->kilometers > 0) {
+                $travelExpense = new TravelExpense ();
+                $travelExpense->afstand = $workinghour->kilometers;
+                $travelExpense->fill ( $travelExpenseInput );
+                $workinghour->travelExpense ()->save ( $travelExpense );
+            }
+        }
+
+		Flash::message ( count($days) . ' registration(s) added!' );
 		
 		return redirect ( 'workinghours' );
 	}
