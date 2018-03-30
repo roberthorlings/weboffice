@@ -2,6 +2,7 @@
 
 namespace Weboffice\Http\Controllers;
 
+use Carbon\Carbon;
 use Weboffice\Http\Controllers\Controller;
 use Flash;
 use Illuminate\Http\Request;
@@ -88,7 +89,7 @@ class AssetController extends Controller {
 		$asset = Asset::findOrFail ( $id );
 		$asset->update ( $request->all () );
 		
-		Flash::message ( 'Asset updatd!' );
+		Flash::message ( 'Asset updated!' );
 		
 		return redirect ( 'asset' );
 	}
@@ -107,6 +108,30 @@ class AssetController extends Controller {
 		
 		return redirect ( 'asset' );
 	}
+
+	public function finalizeForm($id) {
+        $asset = Asset::findOrFail ( $id );
+        return view ( 'asset.finalizeForm', compact ( 'asset') );
+    }
+
+    /**
+     * Finalizes the amortization for the given asset from a specific date
+     * @param $id
+     */
+	public function finalize($id, Request $request) {
+        $asset = Asset::findOrFail ( $id );
+
+        $date = new Carbon($request->input ( 'date' ));
+        $remainder = $request->input('remainder', 0);
+        $post_id = intval($request->input('post_id'));
+        $description = $request->input('description');
+
+        $asset->amortization()->finalize($date, $remainder, $post_id, $description);
+
+        Flash::message ( 'Amortization finalized!' );
+
+        return redirect ( 'asset' );
+    }
 	
 	/**
 	 * Show the form for booking statements

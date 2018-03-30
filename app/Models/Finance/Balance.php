@@ -31,7 +31,7 @@ class Balance {
 	 * 
 	 * @var array $balance
 	 */
-	protected $balance = [ 'debet' => [], 'credit' => '' ];
+	protected $balance = [ 'debet' => [], 'credit' => [] ];
 
 	/**
 	 * @var array $balance

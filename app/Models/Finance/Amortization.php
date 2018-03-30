@@ -58,7 +58,7 @@ class Amortization
     	$amount = 0;
     	$relevantStatements = $this->asset->Statements()
     		->with('StatementLines')
-    		->where('omschrijving', 'like', 'Afschrijving%')
+    		->where('omschrijving', 'like', '%afschrijving%')
     		->where('datum', '<=', $date)
     		->get();
     
@@ -143,9 +143,53 @@ class Amortization
      * Checks whether the current amortization has finished
      */
     public function isFinished() {
-    	return $this->getPeriodsToAmortize() == 0;
+    	return $this->asset->finalized || $this->getPeriodsToAmortize() == 0;
     }
-    
+
+    /**
+     * Finalizes this amortization at a given date, with the remainder given
+     *
+     * All bookings after this date will be removed
+     * @param Carbon $date
+     * @param Int $remainder
+     */
+    public function finalize(Carbon $date, float $remainder, int $post_id, string $comments) {
+        // Convert to cents
+        $remainder = round($remainder, 2);
+
+        // Remove remaining statements
+        $this->deleteRemainingStatements($date);
+
+        // Compute the amount to book on the given date
+        $amountToFinalize = $this->asset->bedrag - $this->getAmountAlreadyAmortizedOnDate($date) - $remainder;
+
+        // Create a statement for the final amortization
+        $this->getFinalStatement($date, $amountToFinalize, $remainder, $post_id, $comments)->saveCascaded();
+
+        $this->asset->update(['finalized' => 1, 'restwaarde' => $remainder]);
+    }
+
+    /**
+     * Returns an amortization statement with the given date and amount
+     * @param unknown $date
+     * @param unknown $amount
+     */
+    public function getFinalStatement(Carbon $date, $amount, $remainder, $post_id, $comments = '') {
+        $statement = new Statement(['datum' => $date, 'omschrijving' =>  'Finale afschrijving ' . $this->asset->omschrijving, 'activum_id' => $this->asset->id, 'opmerkingen' => $comments ]);
+
+        $statement->StatementLines->add(new StatementLine(['bedrag' => $amount, 'credit' => 0, 'post_id' => $this->asset->post_kosten ]));
+
+        // If the remainder should be booked somewhere, add it to the statement
+        if($post_id && $remainder) {
+            $statement->StatementLines->add(new StatementLine(['bedrag' => $remainder, 'credit' => 0, 'post_id' => $post_id]));
+            $statement->StatementLines->add(new StatementLine(['bedrag' => $amount + $remainder, 'credit' => 1, 'post_id' => $this->asset->post_afschrijving ]));
+        } else {
+            $statement->StatementLines->add(new StatementLine(['bedrag' => $amount, 'credit' => 1, 'post_id' => $this->asset->post_afschrijving ]));
+        }
+
+        return $statement;
+    }
+
 
     /**
      * Returns an amortization statement with the given date and amount
@@ -153,7 +197,7 @@ class Amortization
      * @param unknown $amount
      */
     public function getStatement(Carbon $date, $amount) {
-    	$statement = new Statement(['datum' => $date, 'omschrijving' => 'Afschrijving ' . $this->asset->omschrijving, 'activum_id' => $this->asset->id ]);
+    	$statement = new Statement(['datum' => $date, 'omschrijving' => 'Afschrijving ' . $this->asset->omschrijving, 'activum_id' => $this->asset->id, 'opmerkingen' => $comments ]);
     	 
     	$statement->StatementLines->add(new StatementLine(['bedrag' => $amount, 'credit' => 0, 'post_id' => $this->asset->post_kosten ]));
     	$statement->StatementLines->add(new StatementLine(['bedrag' => $amount, 'credit' => 1, 'post_id' => $this->asset->post_afschrijving ]));
@@ -218,5 +262,21 @@ class Amortization
     		->orderBy('datum', 'desc')
     		->first();
     }
-    
+
+    /**
+     * Deletes all amortization statements after the given date
+     * @param Carbon $date
+     */
+    private function deleteRemainingStatements(Carbon $date)
+    {
+        $this->asset->Statements()
+            ->where('omschrijving', 'like', 'Afschrijving%')
+            ->where('datum', '>', $date)
+            ->delete();
+
+        // Remove any cached value for the amount amortized
+        // as it may have changed by deleting these records
+        $this->amountAmortized = null;
+    }
+
 }

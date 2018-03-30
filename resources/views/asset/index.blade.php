@@ -33,7 +33,9 @@
 			                    <td>{{ $item->aanschafdatum->format('d-m-Y') }}</td>
 			                    <td class="amount">@amount($item->bedrag)</td>
 			                    <td class="amount">@amount($item->amortization()->getCurrentValue())</td>
-			                    <td class="amount">@amount($item->amortization()->getAmount()) / {{ $item->amortization()->getPeriodDescription() }}</td>
+			                    <td class="amount">@if(!$item->amortization()->isFinished())
+                                    @amount($item->amortization()->getAmount()) / {{ $item->amortization()->getPeriodDescription() }}
+                                @endif</td>
 			                    <td>
 			                    	@if($item->amortization()->isFinished())
 			                    		Amortized
@@ -46,18 +48,23 @@
 			                            'method'=>'DELETE',
 			                            'url' => ['asset', $item->id],
 			                            'style' => 'display:inline',
-			                            'data-confirm' => 'Are you sure you want to delete this item?'
+			                            'data-confirm' => 'Are you sure you want to delete this item?',
+                                        'class' => 'delete-asset'
 			                        ]) !!}
-				                    	<div class="btn-group btn-group-xs">
-					                        <a class="btn btn-default btn-xs" href="{{ url('asset/' . $item->id . '/edit') }}">
-					                            <i class="fa fa-fw fa-pencil"></i>
-					                        </a>
-					                        <a class="btn btn-default btn-xs" href="{{ url('asset/' . $item->id . '/statements') }}">
-					                            <i class="fa fa-fw fa-eur"></i>
-					                        </a>
-				                            {!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs']) !!}
-					                    </div>
 			                        {!! Form::close() !!}
+
+                                    <div class="btn-group">
+                                        <a class="btn btn-default btn-xs" href="{{ url('asset/' . $item->id . '/edit') }}"><i class="fa fa-fw fa-pencil"></i></a>
+                                        <a class="btn btn-default btn-xs" href="{{ url('asset/' . $item->id . '/statements') }}"><i class="fa fa-fw fa-eur"></i></a>
+                                        <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            @if(!$item->amortization()->isFinished())
+                                                <li><a class="" href="{{ url('asset/' . $item->id . '/finalize') }}"><i class="fa fa-fw fa-hourglass-end"></i> Finalize</a></li>
+                                            @endif
+                                            <li><a href="#" class="delete-link" onClick="$(this).parents('td').find( 'form.delete-asset').submit(); return false;"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
+
 			                    </td>
 			                </tr>
 			            @endforeach

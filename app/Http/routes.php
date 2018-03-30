@@ -76,7 +76,9 @@ Route::group ( [
 	// Asset amortization
 	Route::get ( 'asset/{id}/statements', 'AssetController@statements' );
 	Route::post ( 'asset/{id}/statements', 'AssetController@bookStatements' );
-	
+    Route::get ( 'asset/{id}/finalize', 'AssetController@finalizeForm' );
+    Route::post ( 'asset/{id}/finalize', 'AssetController@finalize' );
+
 	// Financial overviews
 	Route::get ( 'balance', 'BalanceController@index' );
 	Route::get ( 'results', 'ResultsController@index' );

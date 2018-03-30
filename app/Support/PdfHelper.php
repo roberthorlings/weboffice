@@ -709,7 +709,7 @@ class PdfHelper
 	
 			if( $pdf->getY() + $deelLH > $pdf->getPageBreakTrigger() ) {
 				$pdf->addPage();
-				self::ledgerTitle( $pdf, $post, $stdLH, true );
+				self::ledgerTitle( $pdf, $ledger->getPost(), $stdLH, true );
 			}
 	
 			// Zet de totaalregel neer

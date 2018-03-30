@@ -28,7 +28,7 @@ class Asset extends Model
      *
      * @var array
      */
-    protected $fillable = ['omschrijving', 'aanschafdatum', 'begin_afschrijving', 'bedrag', 'restwaarde', 'afschrijvingsduur', 'afschrijvingsperiode', 'post_investering', 'post_afschrijving', 'post_kosten'];
+    protected $fillable = ['omschrijving', 'aanschafdatum', 'begin_afschrijving', 'bedrag', 'restwaarde', 'afschrijvingsduur', 'afschrijvingsperiode', 'post_investering', 'post_afschrijving', 'post_kosten', 'finalized'];
 
     protected $dates = [ 'aanschafdatum', 'begin_afschrijving' ];
     
