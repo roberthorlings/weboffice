@@ -17,7 +17,7 @@
 			        <table class="table table-bordered table-striped table-hover projects">
 			            <thead>
 			                <tr>
-			                    <th>Name</th><th>Relation</th><th>Status</th><th>Post</th><th colspan="2">Revenue</th><th></th>
+			                    <th>Name</th><th>Relation</th><th>Status</th><th>Post</th><th>Working hours</th><th colspan="2">Revenue</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>
@@ -35,7 +35,10 @@
 			                    		@post($item->Post)
 			                    	@endif
 			                    </td>
-			                    <td>
+                                <td align="right">
+                                    <span class="total-revenue">@number($item->getTotalWorkingHours())</span>
+                                </td>
+			                    <td align="right">
 									<span class="total-revenue">@amount($item->getTotalRevenue())</span>
 			                    </td>
 			                    <td>
