@@ -19,8 +19,8 @@ class CreateProjectsTable extends Migration
 $table->text('opmerkingen');
 $table->integer('status');
 $table->integer('uurtarief');
-$table->foreign('relatie_id')->references('id')->on('relaties');
-$table->foreign('post_id')->references('id')->on('posten');
+$table->foreign('relatie_id')->references('id')->on('relations');
+$table->foreign('post_id')->references('id')->on('posts');
 
                 $table->timestamps();
             });

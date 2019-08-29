@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
                 $table->string('nummer');
 				$table->string('omschrijving');
 				$table->double('percentage_aftrekbaar');
-				$table->foreign('post_type_id')->references('id')->on('post_types');
+				$table->foreign('post_type_id')->references('id')->on('posttypes');
 
                 $table->timestamps();
             });
