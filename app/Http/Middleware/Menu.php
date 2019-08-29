@@ -68,7 +68,11 @@ class Menu {
 					'route' => 'statement.cost-declaration',
 					'icon' => 'fa-eur' 
 			] );
-			$finances_more->add ( 'Import', [ 
+            $finances_more->add ( 'Specials', [
+                'route' => 'special.index',
+                'icon' => 'fa-magic'
+            ] );
+			$finances_more->add ( 'Import', [
 					'url' => 'transaction/import',
 					'icon' => 'fa-eur' 
 			] )->active ( 'transaction/import' );

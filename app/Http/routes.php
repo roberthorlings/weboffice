@@ -179,4 +179,5 @@ Route::group ( [
 	Route::resource ( 'configuration', 'ConfigurationController' );
 	Route::resource ( 'statement', 'StatementController' );
 	Route::resource ( 'asset', 'AssetController' );
+    Route::resource ( 'special', 'SpecialController' );
 } );
