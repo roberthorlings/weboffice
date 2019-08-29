@@ -7,7 +7,9 @@ use Weboffice\Models\Transaction;
 use Carbon\Carbon;
 
 class RaboCSVImporter extends Importer {
-	function __construct( \SplFileInfo $file ) {
+    const DELIMITER = ",";
+
+    function __construct(\SplFileInfo $file ) {
 		parent::__construct( $file );
 		$this->bank = Account::RABO;
 	}
@@ -17,10 +19,16 @@ class RaboCSVImporter extends Importer {
 	 * @param unknown $fh
 	 */
 	public static function supports(\SplFileObject $file) {
-		// Try Rabobank files: comma separated files with 13 fields a line.
-		$line = $file->fgetcsv(",");
-		if( count( $line ) >= 13 && ( is_numeric( $line[ 0 ] ) || strlen( $line[ 0 ] ) == 18 ) && is_numeric( $line[ 2 ] ) && ( $line[ 3 ] == "D" || $line[ 3 ] == "C" ) ) {
-			if( Importer::accountType($line[ 0 ]) == Account::RABO ) {
+		// Try Rabobank files: comma separated files with 26 fields a line.
+        $expectedHeader = ["IBAN/BBAN","Munt","BIC","Volgnr","Datum","Rentedatum","Bedrag","Saldo na trn","Tegenrekening IBAN/BBAN","Naam tegenpartij","Naam uiteindelijke partij"];
+		$header = $file->fgetcsv(self::DELIMITER);
+
+		// Match the number of fields and the first few headers (the next header contains a special character, and comparison
+        // may be influenced by locale settings)
+		if( count( $header ) == 26 && array_slice($header, 0, count($expectedHeader)) == $expectedHeader ) {
+		    $firstline = $file->fgetcsv(self::DELIMITER);
+
+			if( Importer::accountType($firstline[ 0 ]) == Account::RABO ) {
 				return true;
 			}
 		}
@@ -39,25 +47,30 @@ class RaboCSVImporter extends Importer {
 		
 		// Open the file for reading
 		$file = $this->file->openFile();
-		
+
+		// Skip the first line
+        $header = $file->fgetcsv(self::DELIMITER);
+
 		// Read the parsed lines into memory
-		while($line = $file->fgetcsv(",")) {
-			if( count( $line ) < 13 ) {
+		while($line = $file->fgetcsv(self::DELIMITER)) {
+			if( count( $line ) < 26 ) {
 				continue;
 			}
-			
-			$accountNumber = Account::removeLeadingZeros( $line[ 0 ] );
-			$account = $this->getAccount($accountNumber);
+
+            $account = $this->getAccount($line[0]);
 			
 			if(!$account) {
+			    // TODO: Add logging about skipped line
 				continue;
 			}
 			
 			/*
 				# format Rabobank .csv: 
 				# from account, valuta, date (ISO), Debet or Credit, amount, to account, description, interest date, type of payment (transfer, authorization, ...), ..., additional info, additional info, additional info, additional info,additional info,additional info
-				
-				"0149019637","EUR",20090226,"D",47.55,"0200013777","GELDAUTOM.BUITENLAND",20090227,"gb","","*CITY PLACE ARCADE       >BOSTON","Geldautomaat 13:38 pasnr. 001","USD 60,00 EUR = 1,26183 USD","","",""
+
+                // "IBAN/BBAN","Munt","BIC","Volgnr","Datum","Rentedatum","Bedrag","Saldo na trn","Tegenrekening IBAN/BBAN","Naam tegenpartij","Naam uiteindelijke partij","Naam initiërende partij","BIC tegenpartij","Code","Batch ID","Transactiereferentie","Machtigingskenmerk","Incassant ID","Betalingskenmerk","Omschrijving-1","Omschrijving-2","Omschrijving-3","Reden retour","Oorspr bedrag","Oorspr munt","Koers"
+                // "NL52RABO0147936535","EUR","RABONL2U","000000000000000660","2018-08-06","2018-08-06","+12162,73","+27250,14","NL82RABO0329761234","The Hyve Products B.V.","","","RABONL2U","cb","","","","","","factuur 2018-199"," ","","","","",""
+
 				The output format should be:
 				  Array(
 						"datum"			=> ,
@@ -67,22 +80,20 @@ class RaboCSVImporter extends Importer {
 					)
 			*/
 
-			// The date should be converted from yyyymmdd format to dd-mm-yyyy. This is done
+			// The date should be converted from yyyy-mm-dd format to dd-mm-yyyy. This is done
 			// using the default PHP functions
-			if( is_numeric( $line[ 2 ] ) ) {
-				$date = Carbon::createFromFormat( 'Ymd', $line[ 2 ] );
+            // Use either the date or the interest date
+			if( $line[4] ) {
+				$date = Carbon::createFromFormat( 'Y-m-d', $line[4] );
 			} else {
-				$date = Carbon::createFromFormat( 'Ymd', $line[ 7 ] );
+				$date = Carbon::createFromFormat( 'Y-m-d', $line[5] );
 			}
 			
-			// The amount uses a dot as decimal separator, but it has to multiplied by 100
-			$bedrag = floatval( $line[ 4 ] );
-			
-			// Als het bedrag debet is, dan is het negatief in ons systeem
-			$bedrag = ( ( $line[ 3 ] == 'D' ) ? -1 : 1 ) * $bedrag;
-			
-			// De omschrijving staat in de posities 10 t/m 13
-			$omschrijving = $line[ 10 ] . " " . $line[ 11 ] . " " . $line[ 12 ] . " " . $line[ 13 ];
+			// The amount uses a comma as decimal separator
+            $amount = floatval(str_replace(',', '.', $line[6]));
+
+			// De omschrijving staat in de posities 19 t/m 22
+			$omschrijving = $line[ 19 ] . " " . $line[ 20 ] . " " . $line[ 21 ] . " " . $line[ 22 ];
 			
 			// The description should be sanatized from several ascii characters
 			// Also, double spaces should be converted to one
@@ -90,7 +101,7 @@ class RaboCSVImporter extends Importer {
 			$omschrijving = preg_replace('/ +/', ' ', $omschrijving );
 			
 			// Zoek de tegenrekening op
-			$tegenrekening = Account::removeLeadingZeros( $line[ 5 ] );
+			$tegenrekening = $line[8];
 			
 			// Create transaction object
 			$transactions[] = new Transaction([
@@ -98,10 +109,10 @@ class RaboCSVImporter extends Importer {
 					"datum" => $date,
 					"tegenrekening" => $tegenrekening,
 					"omschrijving" => trim($omschrijving),
-					"bedrag" => $bedrag
+					"bedrag" => $amount
 			]);			
 		}
-		
+
 		return $transactions;
 	}
 	

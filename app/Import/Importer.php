@@ -25,6 +25,7 @@ abstract class Importer {
 	
 	public static $availableImporters = [
 		RaboCSVImporter::class,
+	    RaboTXTImporter::class,
 		RaboMutAscImporter::class,
 		ABNImporter::class,
 		INGImporter::class,
