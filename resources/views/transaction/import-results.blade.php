@@ -21,7 +21,7 @@
 		</ul>
 	  </div><!-- /.box-body -->
 	  <div class="box-footer">
-		<a class="btn btn-primary" href="{{ url('transactions') }}">Back to transactions</a>
+		<a class="btn btn-primary" href="{{ url('transaction') }}">Back to transactions</a>
 	  </div><!-- box-footer -->
 	</div><!-- /.box -->
 
