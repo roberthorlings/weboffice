@@ -43,13 +43,22 @@
 			</div>
 			{!! Form::close() !!}
         @else
-			{!! Form::open([
-					'method'=>'DELETE',
-					'url' => ['transaction', $item->id],
-					'style' => 'display:inline',
-					'data-confirm' => 'Are you sure you want to delete this item?'
-			]) !!}
-			<div class="btn-group btn-group-xs">
+            {!! Form::open([
+                'method'=>'DELETE',
+                'url' => ['transaction', $item->id],
+                'class'  => 'delete',
+                'style' => 'display:inline',
+                'data-confirm' => 'Are you sure you want to delete this item?'
+            ]) !!}
+            {!! Form::close() !!}
+            {!! Form::open([
+                'method'=>'POST',
+                'url' => ['transaction', $item->id, 'assign', 'special'],
+                'class'  => 'special',
+                'style' => 'display: inline',
+            ]) !!}
+            {!! Form::close() !!}
+            <div class="btn-group btn-group-xs">
 				<div class="btn-group">
 	            	<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 	                	<i class="fa fa-fw fa-anchor"></i>
@@ -69,15 +78,23 @@
 					    </li>    
 					    <li>
 					        <a href="{{ url( 'transaction/' . $item->id . '/assign/costs_without_vat' ) }}">Kosten excl. BTW</a>
-					    </li>    
+					    </li>
+                        @if(count($specials)>0)
+                            <li class="divider"></li>
+                            @foreach($specials as $special)
+                                <li>
+                                    <a href="#" onClick="form = $(this).parents('td').find( 'form.special'); form.attr('action', form.attr('action') + '/{{ $special->id}}'); form.submit(); return false;">{{ $special->name }}</a>
+                                </li>
+                            @endforeach
+                        @endif
+                        <li class="divider"></li>
 					    <li>
 					        <a href="{{ url( 'transaction/' . $item->id . '/assign' ) }}">Anders</a>
 					    </li>
 	                </ul>
 	            </div>
-				{!! Form::button('<i class="fa fa-fw fa-trash"></i>', ['class' => 'btn btn-danger btn-xs', 'title' => 'Delete transaction', 'type' => 'submit']) !!}
+                <a class="btn btn-danger btn-xs" href="#" title="Delete transaction" onClick="$(this).parents('td').find( 'form.delete').submit(); return false;"><i class="fa fa-fw fa-trash"></i></a></li>
 			</div>
-			{!! Form::close() !!}
         @endif
         
 	</td>

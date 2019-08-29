@@ -21,7 +21,7 @@
 			        <table class="table table-bordered transactions">
 			            <thead>
 			                <tr>
-			                    <th>Datum</th><th>Rekening</th><th>Omschrijving</th><th class="amount">Bedrag</th><th></th>
+                                <th>Datum</th><th>Rekening</th><th>Omschrijving</th><th>Post</th><th class="amount">Bedrag</th><th></th>
 			                </tr>
 			            </thead>
 			            <tbody>

@@ -11,6 +11,7 @@ use Weboffice\Http\Controllers\Controller;
 use Weboffice\Models\Account;
 use Weboffice\Models\Post;
 use Weboffice\Models\Saldo;
+use Weboffice\Models\Special;
 use Weboffice\Models\Statement;
 use Weboffice\Models\Transaction;
 use Weboffice\Repositories\PostRepository;
@@ -45,8 +46,8 @@ class TransactionController extends Controller {
 		}
 		
 		$transaction = $query->paginate ( 15 );
-		
-		return view ( 'transaction.index', compact ( 'transaction', 'filter' ) );
+		$specials = Special::get();
+		return view ( 'transaction.index', compact ( 'transaction', 'filter', 'specials' ) );
 	}
 	
 	/**
@@ -322,6 +323,32 @@ class TransactionController extends Controller {
 		Flash::message ( 'Transaction booked as private transfer!' );
 		return redirect ( 'transaction' );
 	}
+
+    /**
+     * Stores a transaction as special
+     *
+     * @param unknown $id
+     * @param unknown $request
+     * @param unknown $transactionRepository
+     */
+    public function store_special($id, $special_id, TransactionRepository $transactionRepository) {
+        // Lookup the current transaction
+        $transaction = Transaction::with ( 'Account' )->findOrFail ( $id );
+
+        // Lookup special details
+        $special = Special::findOrFail($special_id);
+
+        // Update or create the statement belonging to this transaction
+        $statement = $transactionRepository->updateStatement ( $transaction, $special->statement_description );
+
+        // The line should be opposing the actual withdrawal or deposit
+        $credit = ! $transaction->isCredited ();
+        $statement->addLine ( $credit, abs ( $transaction->bedrag ), $special->post_id );
+
+        // Redirect the user with a message
+        Flash::message ( 'Transaction booked as special type ' . $special->name . '!' );
+        return redirect ( 'transaction' );
+    }
 	
 	/**
 	 * Update the specified resource in storage.

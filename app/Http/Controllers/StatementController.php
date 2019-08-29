@@ -227,7 +227,7 @@ class StatementController extends Controller {
 		
 		return redirect ( 'statement' );
 	}
-	
+
 	/**
 	 * Stores the given lines with the statement
 	 * 

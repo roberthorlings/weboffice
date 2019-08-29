@@ -45,7 +45,8 @@ Route::group ( [
 	Route::post ( 'transaction/{id}/store_transfer', 'TransactionController@store_transfer' );
 	Route::get ( 'transaction/{id}/assign/private', 'TransactionController@private_transfer' );
 	Route::post ( 'transaction/{id}/store_private', 'TransactionController@store_private' );
-	
+    Route::post ( 'transaction/{id}/assign/special/{special_id}', 'TransactionController@store_special' );
+
 	// Transaction with VAT is a prefilled edit form
 	// Transaction without VAT or other is just the edit form.
 	Route::get ( 'transaction/{id}/assign/costs_with_vat', 'TransactionController@costs_with_vat' );
