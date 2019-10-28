@@ -31,7 +31,7 @@ class ConfigurationController extends Controller {
 		
 		// Determine lists to choose from
 		$posts = $postRepository->getListForPostSelect ();
-		$relations = Relation::lists ( 'bedrijfsnaam', 'id' );
+		$relations = Relation::pluck( 'bedrijfsnaam', 'id' );
 		
 		return view ( 'configuration.index', compact ( 'categorizedConfiguration', 'posts', 'relations' ) );
 	}

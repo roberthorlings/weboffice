@@ -63,7 +63,7 @@
 			                        {!! Form::close() !!}
 			                        
 			                          <div class="btn-group">
-							             <a class="btn btn-default btn-xs" href="{{ route('invoice.edit', [ 'id' => $item->id ]) }}" title="Edit"><i class="fa fa-pencil fa-fw"></i></a></li>
+							             <a class="btn btn-default btn-xs" href="{{ route('invoice.edit', [ 'invoice' => $item->id ]) }}" title="Edit"><i class="fa fa-pencil fa-fw"></i></a></li>
 							             <a class="btn btn-default btn-xs" href="{{ route('invoice.pdf', [ 'id' => $item->id ]) }}" title="Download as PDF"><i class="fa fa-download fa-fw"></i></a></li>
 							             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></button>
 							             <ul class="dropdown-menu" role="menu">

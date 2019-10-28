@@ -27,7 +27,7 @@ class AccountController extends Controller {
 	 */
 	public function create() {
 		$lists = [ ];
-		$lists ["post_id"] = \Weboffice\Models\Post::all ()->lists ( "description", "id" );
+		$lists ["post_id"] = \Weboffice\Models\Post::all ()->pluck ( "description", "id" );
 		
 		return view ( 'account.create', compact ( 'lists' ) );
 	}
@@ -73,7 +73,7 @@ class AccountController extends Controller {
 	public function edit($id) {
 		$account = Account::findOrFail ( $id );
 		$lists = [ ];
-		$lists ["post_id"] = \Weboffice\Models\Post::all ()->lists ( "description", "id" );
+		$lists ["post_id"] = \Weboffice\Models\Post::all ()->pluck( "description", "id" );
 		
 		return view ( 'account.edit', compact ( 'lists', 'account' ) );
 	}

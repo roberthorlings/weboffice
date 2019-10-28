@@ -57,7 +57,7 @@ class TransactionController extends Controller {
 	 */
 	public function create() {
 		$lists = [ ];
-		$lists ["rekening_id"] = \Weboffice\Account::all ()->lists ( "description", "id" );
+		$lists ["rekening_id"] = Account::all()->pluck( "description", "id" );
 		
 		return view ( 'transaction.create', compact ( 'lists' ) );
 	}
@@ -159,7 +159,7 @@ class TransactionController extends Controller {
 		$match = $this->matchTransaction ( $saldos, $transaction );
 		
 		// Create a proper list of open saldos for the view
-		$invoices = $saldos->lists ( 'omschrijving', 'id' );
+		$invoices = $saldos->pluck ( 'omschrijving', 'id' );
 		
 		return view ( 'transaction.assign-invoice', [ 
 				'transaction' => $transaction,
@@ -187,7 +187,7 @@ class TransactionController extends Controller {
 		$match = $this->matchTransaction ( $saldos, $transaction );
 		
 		// Create a proper list of open saldos for the view
-		$saldos = $saldos->lists ( 'omschrijving', 'id' );
+		$saldos = $saldos->pluck ( 'omschrijving', 'id' );
 		
 		// Create a list of accounts
 		$accounts = Account::where ( 'id', '<>', $transaction->rekening_id )->get ();
@@ -203,7 +203,7 @@ class TransactionController extends Controller {
 		
 		return view ( 'transaction.assign-transfer', [ 
 				'transaction' => $transaction,
-				'accounts' => $accounts->lists ( 'description', 'id' ),
+				'accounts' => $accounts->pluck ( 'description', 'id' ),
 				'selected_account_id' => $selected_account_id,
 				'saldos' => $saldos,
 				'selected_saldo_id' => $match ? $match ['id'] : null 

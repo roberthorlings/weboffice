@@ -32,7 +32,7 @@ class AssetController extends Controller {
 	 */
 	public function create() {
 		$lists = [ ];
-		$lists ["posten"] = Post::all ()->lists ( "description", "id" );
+		$lists ["posten"] = Post::all ()->pluck ( "description", "id" );
 		
 		return view ( 'asset.create', compact ( 'lists' ) );
 	}
@@ -73,7 +73,7 @@ class AssetController extends Controller {
 	public function edit($id) {
 		$asset = Asset::findOrFail ( $id );
 		$lists = [ ];
-		$lists ["posten"] = Post::all ()->lists ( "description", "id" );
+		$lists ["posten"] = Post::all ()->pluck ( "description", "id" );
 		
 		return view ( 'asset.edit', compact ( 'lists', 'asset' ) );
 	}
@@ -140,7 +140,7 @@ class AssetController extends Controller {
 	 */
 	public function statements($id) {
 		$asset = Asset::findOrFail ( $id );
-		$relations = Relation::all ()->lists ( "bedrijfsnaam", "id" );
+		$relations = Relation::all ()->pluck ( "bedrijfsnaam", "id" );
 		
 		// Create artificial statements
 		$investmentStatement = $asset->getNewInvestmentStatement ();

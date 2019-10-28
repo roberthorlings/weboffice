@@ -143,8 +143,8 @@ class StatementController extends Controller {
 	 */
 	public function incomingInvoice(PostRepository $postRepository) {
 		$data = $this->getDataForForm ( null, $postRepository );
-		$data ['relations'] = Relation::orderBy ( 'bedrijfsnaam' )->lists ( 'bedrijfsnaam', 'id' );
-		$data ['projects'] = Project::lists ( 'naam', 'id' );
+		$data ['relations'] = Relation::orderBy ( 'bedrijfsnaam' )->pluck ( 'bedrijfsnaam', 'id' );
+		$data ['projects'] = Project::pluck ( 'naam', 'id' );
 		$data ['date'] = Carbon::now ();
 		return view ( 'statement.incoming-invoice', $data );
 	}
@@ -156,7 +156,7 @@ class StatementController extends Controller {
 	 */
 	public function costDeclaration(PostRepository $postRepository) {
 		$data = $this->getDataForForm ( null, $postRepository );
-		$data ['projects'] = Project::lists ( 'naam', 'id' );
+		$data ['projects'] = Project::pluck ( 'naam', 'id' );
 		$data ['date'] = Carbon::now ();
 		return view ( 'statement.cost-declaration', $data );
 	}
@@ -333,7 +333,7 @@ class StatementController extends Controller {
 		
 		// Add a list of posts to choose from
 		$posts = $repository->getListForPostSelect ();
-		$assets = Asset::lists ( 'omschrijving', 'id' );
+		$assets = Asset::pluck ( 'omschrijving', 'id' );
 		
 		return compact ( 'statement', 'numLines', 'preEnteredLines', 'sum', 'posts', 'assets' );
 	}

@@ -36,7 +36,7 @@
 			                    	{{ $item->duration->format("%H:%I") }}
 			                    </td>
 								<td><span class="relatie">{{ $item->Relation ? $item->Relation->bedrijfsnaam : '' }}</span> :: <span class="project">{{ $item->Project ? $item->Project->naam : ''}}</span></td>
-								<td>{{ str_limit($item->opmerkingen, 50, '...') }}</td>
+								<td>{{ \Illuminate\Support\Str::limit($item->opmerkingen, 50, '...') }}</td>
 			                    <td>
 			                    	{{ $item->kilometers > 0 ? $item->kilometers : '' }}
 			                    </td>

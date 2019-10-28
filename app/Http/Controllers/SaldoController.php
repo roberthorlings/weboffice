@@ -42,7 +42,7 @@ class SaldoController extends Controller {
 	 */
 	public function create() {
 		$lists = [ ];
-		$lists ["relatie_id"] = \Weboffice\Relation::lists ( "bedrijfsnaam", "id" );
+		$lists ["relatie_id"] = \Weboffice\Relation::pluck ( "bedrijfsnaam", "id" );
 		
 		return view ( 'saldo.create', compact ( 'lists' ) );
 	}
@@ -86,7 +86,7 @@ class SaldoController extends Controller {
 	public function edit($id) {
 		$saldo = Saldo::findOrFail ( $id );
 		$lists = [ ];
-		$lists ["relatie_id"] = \Weboffice\Relation::lists ( "bedrijfsnaam", "id" );
+		$lists ["relatie_id"] = \Weboffice\Relation::pluck ( "bedrijfsnaam", "id" );
 		
 		return view ( 'saldo.edit', compact ( 'lists', 'saldo' ) );
 	}

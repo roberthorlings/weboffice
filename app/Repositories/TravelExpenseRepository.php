@@ -1,6 +1,7 @@
 <?php
 namespace Weboffice\Repositories;
 
+use Illuminate\Support\Arr;
 use Weboffice\Models\TravelExpense;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
@@ -23,7 +24,7 @@ class TravelExpenseRepository {
 		$query->where( 'datum', '<=', $filter['end']);
 		
 		// Filter on project and relation as well
-		foreach(array_only($filter, ['relatie_id', 'project_id']) as $field => $value) {
+		foreach(Arr::only($filter, ['relatie_id', 'project_id']) as $field => $value) {
 			if($value) {
 				$query->where($field, $value);
 			}

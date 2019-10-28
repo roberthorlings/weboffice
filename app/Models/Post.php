@@ -2,11 +2,22 @@
 
 namespace Weboffice\Models;
 
-use Baum\Node;
+use Kalnoy\Nestedset\NodeTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Node
+class Post extends Model
 {
+    use NodeTrait;
+
+    public function getLftName()
+    {
+        return 'lft';
+    }
+
+    public function getRgtName()
+    {
+        return 'rght';
+    }
 
     /**
      * The database table used by the model.
@@ -60,7 +71,7 @@ class Post extends Node
      * @return boolean
      */
     public function isFirstInSubtree() {
-    	return $this->getLeftSibling() == null;
+    	return $this->getPrevSibling(['id']) == null;
     }
 
     /**
@@ -68,7 +79,7 @@ class Post extends Node
      * @return boolean
      */
     public function isLastInSubtree() {
-    	return $this->getRightSibling() == null;
+    	return $this->getNextSibling(['id']) == null;
     }
     
 }

@@ -2,6 +2,7 @@
 
 namespace Weboffice\Http\Controllers;
 
+use Illuminate\Support\Arr;
 use Weboffice\Http\Controllers\Controller;
 use AppConfig;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class QuoteController extends Controller {
 		$query->where ( 'datum', '<=', $filter ['end'] );
 		
 		// Filter on project and relation as well
-		foreach ( array_only ( $filter, [ 
+		foreach ( Arr::only ( $filter, [
 				'relatie_id',
 				'project_id' 
 		] ) as $field => $value ) {

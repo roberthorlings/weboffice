@@ -2,8 +2,8 @@
 
 namespace Weboffice\Providers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use App;
 use Weboffice\Repositories\ConfigurationRepository;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,10 +16,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
     	// Set FPDF font path
-    	define( 'FPDF_FONTPATH', env('FPDF_FONTPATH', base_path('resources/fonts')));
-    	
+    	if(!defined('FPDF_FONTPATH')) {
+            define('FPDF_FONTPATH', env('FPDF_FONTPATH', base_path('resources/fonts')));
+        }
+
     	view()->composer('layouts.adminlte', function($view) {
-    		$view->with('appEnvironment', \App::environment());
+    		$view->with('appEnvironment', App::environment());
     	});
     }
 

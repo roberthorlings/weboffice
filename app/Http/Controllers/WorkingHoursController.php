@@ -3,6 +3,7 @@
 namespace Weboffice\Http\Controllers;
 
 use Flash;
+use Illuminate\Support\Arr;
 use Session;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -30,7 +31,7 @@ class WorkingHoursController extends Controller {
 		$query->where ( 'datum', '<=', $filter ['end'] );
 		
 		// Filter on project and relation as well
-		foreach ( array_only ( $filter, [ 
+		foreach ( Arr::only ( $filter, [
 				'relatie_id',
 				'project_id' 
 		] ) as $field => $value ) {

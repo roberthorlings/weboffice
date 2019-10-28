@@ -6,6 +6,7 @@ use Weboffice\Http\Controllers\Controller;
 use Flash;
 use Illuminate\Http\Request;
 use Weboffice\Models\Post;
+use Weboffice\Models\PostType;
 
 class PostController extends Controller {
 	
@@ -27,8 +28,8 @@ class PostController extends Controller {
 	 */
 	public function create() {
 		$lists = [ ];
-		$lists ["post_type_id"] = \Weboffice\Models\PostType::lists ( "type", "id" );
-		$lists ["parent_id"] = Post::all ()->lists ( "description", "id" );
+		$lists ["post_type_id"] = PostType::all()->pluck ( "type", "id" );
+		$lists ["parent_id"] = Post::all ()->pluck ( "description", "id" );
 		
 		return view ( 'post.create', compact ( 'lists' ) );
 	}
@@ -50,7 +51,7 @@ class PostController extends Controller {
 		// Attach to parent (if requested)
 		$parent = Post::find ( $request->get ( "parent_id" ) );
 		if ($parent) {
-			$post->makeChildOf ( $parent );
+		    $parent->appendNode($post);
 		}
 		
 		Flash::message ( 'Post added!' );
@@ -81,8 +82,8 @@ class PostController extends Controller {
 	public function edit($id) {
 		$post = Post::findOrFail ( $id );
 		$lists = [ ];
-		$lists ["post_type_id"] = \Weboffice\Models\PostType::lists ( "type", "id" );
-		$lists ["parent_id"] = Post::all ()->lists ( "description", "id" );
+		$lists ["post_type_id"] = PostType::all()->pluck ( "type", "id" );
+		$lists ["parent_id"] = Post::all ()->pluck ( "description", "id" );
 		
 		return view ( 'post.edit', compact ( 'lists', 'post' ) );
 	}
@@ -133,14 +134,14 @@ class PostController extends Controller {
 		
 		return redirect ( 'post' );
 	}
-	
+
 	/**
 	 * Rebuilds the full tree
 	 * 
 	 * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
 	 */
 	public function rebuild() {
-		Post::rebuild ();
+		Post::fixTree();
 		
 		Flash::message ( 'Tree of posts has been rebuilt' );
 		return redirect ( 'post' );
@@ -160,7 +161,7 @@ class PostController extends Controller {
 		if ($post->isFirstInSubtree ()) {
 			Flash::warning ( 'Post could not be moved up, as it is the first in its subtree' );
 		} else {
-			$post->moveLeft ();
+			$post->up();
 			Flash::message ( 'Post moved!' );
 		}
 		
@@ -181,7 +182,7 @@ class PostController extends Controller {
 		if ($post->isLastInSubtree ()) {
 			Flash::warning ( 'Post could not be moved down, as it is the last in its subtree' );
 		} else {
-			$post->moveRight ();
+			$post->down ();
 			Flash::message ( 'Post moved!' );
 		}
 		

@@ -13,7 +13,7 @@ class PostRepository {
 		$options = [];
 		
 		// Fetch roots
-		$rootQuery = Post::roots()->orderBy('nummer');
+		$rootQuery = Post::whereNull('parent_id')->orderBy('nummer');
 		
 		// Filter on numbers, if specified
 		if(is_array($rootNumbers) && count($rootNumbers) > 0) {

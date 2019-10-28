@@ -46,7 +46,7 @@
 		            <div class="form-group {{ $errors->has('relatie_id') ? 'has-error' : ''}}">
 		                {!! Form::label('relatie_id', 'Klant: ', ['class' => 'col-sm-3 control-label']) !!}
 		                <div class="col-sm-9">
-		                    {!! Form::select('relatie_id', $relations->lists('bedrijfsnaam', 'id'), null, ['class' => 'form-control']) !!}
+		                    {!! Form::select('relatie_id', $relations->pluck('bedrijfsnaam', 'id'), null, ['class' => 'form-control']) !!}
 		                    {!! $errors->first('relatie_id', '<p class="help-block">:message</p>') !!}
 		                </div>
 		            </div>		            

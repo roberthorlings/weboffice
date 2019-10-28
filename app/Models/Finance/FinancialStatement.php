@@ -81,7 +81,7 @@ trait FinancialStatement {
 	protected function mergeAmounts() {
 		// Get the post hierarchy. Add only information on the
 		// first level below the roots
-		$posts = Post::all()->toHierarchy();
+		$posts = Post::all()->toTree();
 		foreach( $posts as $root ) {
 			// Any amounts for the root should not be merged, but added itself
 			$this->addAmountToMergedSet($root, $root);

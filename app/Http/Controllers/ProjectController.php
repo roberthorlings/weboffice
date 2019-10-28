@@ -42,7 +42,7 @@ class ProjectController extends Controller {
 	 * @return Response
 	 */
 	public function create(PostRepository $postRepository) {
-		$relations = Relation::lists ( 'bedrijfsnaam', 'id' );
+		$relations = Relation::pluck ( 'bedrijfsnaam', 'id' );
 		$posts = $postRepository->getListForPostSelect ();
 		$statuses = $this->getStatuses ();
 		
@@ -85,7 +85,7 @@ class ProjectController extends Controller {
 	public function edit($id, PostRepository $postRepository) {
 		$project = Project::findOrFail ( $id );
 		
-		$relations = Relation::lists ( 'bedrijfsnaam', 'id' );
+		$relations = Relation::pluck ( 'bedrijfsnaam', 'id' );
 		$posts = $postRepository->getListForPostSelect ();
 		$statuses = $this->getStatuses ();
 		

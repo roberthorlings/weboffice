@@ -5,7 +5,7 @@
 	
 	// Indent projects
 	foreach($relations as $key => $title) {
-		if(starts_with($key, 'project'))
+		if(\Illuminate\Support\Str::StartsWith($key, 'project'))
 			$relations[$key] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $title;
 	}
 	

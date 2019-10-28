@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Flash;
 use AppConfig;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Session;
 use Weboffice\Http\Controllers\Controller;
 use Weboffice\Models\Invoice;
@@ -33,7 +34,7 @@ class InvoiceController extends Controller {
 		$query->where ( 'datum', '<=', $filter ['end'] );
 		
 		// Filter on project and relation as well
-		foreach ( array_only ( $filter, [ 
+		foreach ( Arr::only ( $filter, [
 				'relatie_id',
 				'project_id' 
 		] ) as $field => $value ) {
@@ -392,7 +393,7 @@ class InvoiceController extends Controller {
 		} );
 		
 		// Add a list of open saldos
-		$saldos = Saldo::open ()->lists ( 'omschrijving', 'id' );
+		$saldos = Saldo::open ()->pluck ( 'omschrijving', 'id' );
 		
 		return compact ( 'invoice', 'numLines', 'preEnteredLines', 'sum', 'posts', 'relations', 'saldos', 'relation_project' );
 	}

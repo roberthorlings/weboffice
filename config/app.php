@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'name' => 'Isdat Weboffice',
 
     /*
     |--------------------------------------------------------------------------
@@ -151,13 +152,7 @@ return [
     	/*
     	 * CRUD generation and HTML
     	 */
-    	Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
     	Collective\Html\HtmlServiceProvider::class,
-    		
-    	/*
-    	 * Nested sets
-    	 */
-    	Baum\Providers\BaumServiceProvider::class,
     		
    		/*
    		 * Easy flash messages
